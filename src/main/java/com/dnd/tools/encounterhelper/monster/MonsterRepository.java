@@ -1,7 +1,7 @@
 package com.dnd.tools.encounterhelper.monster;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface MonsterRepository extends JpaRepository<Monster, Long> {
+public interface MonsterRepository extends PagingAndSortingRepository<Monster, Long> {
 
 }

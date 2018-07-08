@@ -1,7 +1,7 @@
 package com.dnd.tools.encounterhelper.monster;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,9 +15,13 @@ public class MonsterApi {
 
   private final MonsterRepository monsterRepository;
 
+  /*
+  Example of paging and sorting:
+  http://localhost:8080/monsters?page=0&size=2&sort=name,desc
+   */
   @GetMapping("/monsters")
-  public List<Monster> findAllCombatants() {
-    return monsterRepository.findAll();
+  public Iterable<Monster> findAllMonsters(Pageable pageable) {
+    return monsterRepository.findAll(pageable);
   }
 
   @GetMapping("/monsters/{monsterId}")
@@ -32,7 +36,7 @@ public class MonsterApi {
   }
 
   @PostMapping("monsters")
-  public Monster createNewCombatant(@RequestBody Monster monster) {
+  public Monster createNewMonster(@RequestBody Monster monster) {
     return monsterRepository.save(monster);
   }
 }
