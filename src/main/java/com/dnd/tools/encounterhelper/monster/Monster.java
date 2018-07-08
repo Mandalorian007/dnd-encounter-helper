@@ -23,28 +23,29 @@ public class Monster {
   private Size size;
   private String type;
   private String subType;
-  private int armourClass;
+  private Integer armourClass;
   private String hitDice; //TODO maybe hitdice class
-  private int hitPoints;
+  private Integer hitPoints;
   private String speed;
 
   // Attributes
-  private int strength;
-  private int dexterity;
-  private int constitution;
-  private int intelligence;
-  private int wisdom;
-  private int charisma;
+  private Integer strength;
+  private Integer dexterity;
+  private Integer constitution;
+  private Integer intelligence;
+  private Integer wisdom;
+  private Integer charisma;
 
   //saves
-  private int strengthSave;
-  private int dexteritySave;
-  private int constitutionSave;
-  private int intelligenceSave;
-  private int wisdomSave;
-  private int charismaSave;
+  private Integer strengthSave;
+  private Integer dexteritySave;
+  private Integer constitutionSave;
+  private Integer intelligenceSave;
+  private Integer wisdomSave;
+  private Integer charismaSave;
 
-  private int perceptionMod;
+  private Integer perceptionMod;
+  private Integer stealth;
   private String damageVulnerabilities;
   private String damageImmunities;
   private String condititonImmunities;
@@ -66,6 +67,12 @@ public class Monster {
       joinColumns = @JoinColumn(name = "monster_id")
   )
   private List<Action> actions;
+
+  @ElementCollection
+  @CollectionTable(
+      joinColumns = @JoinColumn(name = "monster_id")
+  )
+  private List<Action> reactions;
 
   @ElementCollection
   @CollectionTable(

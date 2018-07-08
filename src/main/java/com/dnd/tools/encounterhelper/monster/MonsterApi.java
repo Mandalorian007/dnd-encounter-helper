@@ -31,7 +31,7 @@ public class MonsterApi {
     monsterRepository.deleteById(monsterId);
   }
 
-  @PostMapping("combatants")
+  @PostMapping("monsters")
   public Monster createNewCombatant(@RequestBody Monster monster) {
     return monsterRepository.save(monster);
   }
