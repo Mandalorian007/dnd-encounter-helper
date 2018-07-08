@@ -1,82 +1,80 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
         <title>D&D 5e Encounter Helper</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
-        <!-- Bootstrap and JQuery -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">		
+				
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-
        <!-- Custom StyleSheet -->
         <link rel="stylesheet" href="css/encounter-helper.css"/>
     </head>
     <body>
         <div class="fancy-formating-magic">
-            <h1 class="text-center">D&D Encounter Helper</h1>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Armour Class</th>
-                        <th scope="col">Hit Points</th>
-                        <th scope="col">Initiative</th>
-                        <th scope="col">Remove from Combat</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="combatant : ${combatants}">
-                        <td th:text="${combatant.getName()}"/>
-                        <td th:text="${combatant.getArmourClass()}"/>
-                        <td>
-                            <button type="button" class="btn btn-default btn-sm" data-toggle="modal" th:attr="data-combatant-name=${combatant.name},data-combatant-current-hp=${combatant.currentHp}" data-target="#hpModificationModal">
-                                <span th:remove="tag" th:text="${combatant.getCurrentHp() + ' / ' + combatant.getMaxHp()}"/>
-                                <span class="fas fa-edit"></span>
-                            </button>
-                        </td>
-                        <td th:text="${combatant.getCurrentInitiative()}"/>
-                        <td>
-                            <form action="#" data-th-action="@{/remove-combatant}" data-th-object="${combatantNameModel}" method="post">
-                                <button type="submit" class="btn btn-danger">Remove</button>
-                                <input type="hidden" th:value="${combatant.name}"/>
-                            </form>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="card-deck">
-                <div class="card card-cascade wider">
-                    <div class="card-body">
-                        <h5 class="card-title">Start a new Round</h5>
-                        <p class="card-text">Setup a new round by getting player initatives and re-rolling all enemy initative values.</p>
-                    </div>
-                    <div class="card-footer">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newRoundModal">New Round</button>
-                    </div>
-                </div>
-                <div class="card card-cascade wider">
-                    <div class="card-body">
-                        <h5 class="card-title">Generate fixed stat combatant</h5>
-                        <p class="card-text">Add player character or Npc with fixed stats.</p>
-                    </div>
-                    <div class="card-footer">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#fixedStatCombatantModal">Add Combatant</button>
-                    </div>
-                </div>
-                <div class="card card-cascade wider">
-                    <div class="card-body">
-                        <h5 class="card-title">Generate varied stat enemy(s)</h5>
-                        <p class="card-text">Add enemies with rolled stats.</p>
-                    </div>
-                    <div class="card-footer">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#variableStatNpcsModal">Add Npc(s)</button>
-                    </div>
-                </div>
-            </div>
+			<div class="container-fluid">
+				<h1 class="text-center">D&D Encounter Helper</h1>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Name</th>
+							<th scope="col">Armour Class</th>
+							<th scope="col">Hit Points</th>
+							<th scope="col">Initiative</th>
+							<th scope="col">Remove from Combat</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="combatant : ${combatants}">
+							<td th:text="${combatant.getName()}"/>
+							<td th:text="${combatant.getArmourClass()}"/>
+							<td>
+								<button type="button" class="btn btn-default btn-sm" data-toggle="modal" th:attr="data-combatant-name=${combatant.name},data-combatant-current-hp=${combatant.currentHp}" data-target="#hpModificationModal">
+									<span th:remove="tag" th:text="${combatant.getCurrentHp() + ' / ' + combatant.getMaxHp()}"/>
+									<span class="fas fa-edit"></span>
+								</button>
+							</td>
+							<td th:text="${combatant.getCurrentInitiative()}"/>
+							<td>
+								<form action="#" data-th-action="@{/remove-combatant}" data-th-object="${combatantNameModel}" method="post">
+									<button type="submit" class="btn btn-danger">Remove</button>
+									<input type="hidden" th:value="${combatant.name}"/>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="card-deck">
+					<div class="card card-cascade wider">
+						<div class="card-body">
+							<h5 class="card-title">Start a new Round</h5>
+							<p class="card-text">Setup a new round by getting player initatives and re-rolling all enemy initative values.</p>
+						</div>
+						<div class="card-footer">
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newRoundModal">New Round</button>
+						</div>
+					</div>
+					<div class="card card-cascade wider">
+						<div class="card-body">
+							<h5 class="card-title">Generate fixed stat combatant</h5>
+							<p class="card-text">Add player character or Npc with fixed stats.</p>
+						</div>
+						<div class="card-footer">
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#fixedStatCombatantModal">Add Combatant</button>
+						</div>
+					</div>
+					<div class="card card-cascade wider">
+						<div class="card-body">
+							<h5 class="card-title">Generate varied stat enemy(s)</h5>
+							<p class="card-text">Add enemies with rolled stats.</p>
+						</div>
+						<div class="card-footer">
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#variableStatNpcsModal">Add Npc(s)</button>
+						</div>
+					</div>
+				</div>
+			</div>
         </div>
 
         <!-- Hp Modification Modal -->
@@ -91,12 +89,12 @@
                     </div>
                     <form action="#" th:action="@{/modify-hp}" th:object="${combatantHpModel}" method="post">
                         <div class="modal-body">
-                            <input type="text" class="invisible" id="combatant-name" th:field="*{name}"/>
+                            <input type="hidden" id="combatant-name" th:field="*{name}"/>
                             <input type="text" class="form-control" id="combatant-current-hp" th:field="*{newHp}"/>
                         </div>
                         <div class="modal-footer">
-                            <button type="button reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button submit" class="btn btn-primary">Set Hit Points</button>
+                            <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Set Hit Points</button>
                         </div>
                     </form>
                 </div>
@@ -135,8 +133,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button submit" class="btn btn-primary">Begin new Round</button>
+                            <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Begin new Round</button>
                         </div>
                     </form>
                 </div>
@@ -155,20 +153,34 @@
                     </div>
                     <form action="#" th:action="@{/new-combatant}" th:object="${newCombatantModel}" method="post">
                         <div class="modal-body">
-                            <label for="combatantName">Combatant Name: </label>
-                            <input type="text" class="form-control" id="combatantName" th:field="*{name}">
-                            <label for="armourClass">Armour Class: </label>
-                            <input type="number" class="form-control" id="armourClass" th:field="*{armourClass}">
-                            <label for="maxHp">Maximum Hit Points: </label>
-                            <input type="number" class="form-control" id="maxHp" th:field="*{maxHp}">
-                            <label for="initativeBonus">Initiative Bonus: </label>
-                            <input type="number" class="form-control" id="initativeBonus" th:field="*{initativeBonus}">
-                            <input type="radio" name="isNpc" value="false" th:field="*{npc}" checked> Player<br>
-                            <input type="radio" name="isNpc" value="true" th:field="*{npc}" > NPC<br>
+							<div class="form-group">
+								<label for="combatantName">Combatant Name:</label>
+								<input type="text" class="form-control" id="combatantName" th:field="*{name}">
+							</div>
+							<div class="form-group">
+								<label for="armourClass">Armour Class:</label>
+								<input type="number" class="form-control" id="armourClass" th:field="*{armourClass}">
+							</div>
+							<div class="form-group">
+								<label for="maxHp">Maximum Hit Points:</label>
+								<input type="number" class="form-control" id="maxHp" th:field="*{maxHp}">
+							</div>
+							<div class="form-group">
+								<label for="initativeBonus">Initiative Bonus:</label>
+								<input type="number" class="form-control" id="initativeBonus" th:field="*{initativeBonus}">
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="isNpc" id="player_radio" value="false" th:field="*{npc}" checked>
+								<label class="form-check-label" for="player_radio">Player</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="isNpc" id="npc_radio" value="true" th:field="*{npc}">
+								<label class="form-check-label" for="npc_radio">NPC</label>
+							</div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button submit" class="btn btn-primary">Generate Combatant</button>
+                            <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Generate Combatant</button>
                         </div>
                     </form>
                 </div>
@@ -187,28 +199,47 @@
                     </div>
                     <form action="#" th:action="@{/new-npcs}" th:object="${newVariableStatCombatantModel}" method="post">
                         <div class="modal-body">
-                            <label for="npcName">Npc Name: </label>
-                            <input type="text" class="form-control" id="npcName" th:field="*{name}">
-                            <label for="npcArmourClass">Armour Class: </label>
-                            <input type="number" class="form-control" id="npcArmourClass" th:field="*{armourClass}">
-                            <label for="hitDie">Hit Die: </label>
-                            <input type="number" class="form-control" id="hitDie" th:field="*{hitDie}">
-                            <label for="level">Level (minimum 1): </label>
-                            <input type="number" class="form-control" id="level" th:field="*{level}">
-                            <label for="conMod">Constitution Modifier: </label>
-                            <input type="number" class="form-control" id="conMod" th:field="*{conMod}">
-                            <label for="npcInitativeBonus">Initiative Bonus: </label>
-                            <input type="number" class="form-control" id="npcInitativeBonus" th:field="*{initativeBonus}">
-                            <label for="numberOfEnemies">Number of Enemies: </label>
-                            <input type="number" class="form-control" id="numberOfEnemies" th:field="*{numberOfEnemies}">
+							<div class="form-group">
+								<label for="npcName">Npc Name:</label>
+								<input type="text" class="form-control" id="npcName" th:field="*{name}">
+							</div>
+							<div class="form-group">
+                            	<label for="npcArmourClass">Armour Class:</label>
+                            	<input type="number" class="form-control" id="npcArmourClass" th:field="*{armourClass}">
+							</div>
+							<div class="form-group">
+								<label for="hitDie">Hit Die:</label>
+								<input type="number" class="form-control" id="hitDie" th:field="*{hitDie}">
+							</div>
+							<div class="form-group">
+								<label for="level">Level (minimum 1):</label>
+								<input type="number" class="form-control" id="level" th:field="*{level}">
+							</div>
+							<div class="form-group">
+								<label for="conMod">Constitution Modifier:</label>
+								<input type="number" class="form-control" id="conMod" th:field="*{conMod}">
+							</div>
+							<div class="form-group">
+								<label for="npcInitativeBonus">Initiative Bonus:</label>
+								<input type="number" class="form-control" id="npcInitativeBonus" th:field="*{initativeBonus}">
+							</div>
+							<div class="form-group">
+								<label for="numberOfEnemies">Number of Enemies:</label>
+								<input type="number" class="form-control" id="numberOfEnemies" th:field="*{numberOfEnemies}">
+							</div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button submit" class="btn btn-primary">Generate Combatant</button>
+                            <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Generate Combatant</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+		
+		<!-- Bootstrap and JQuery -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
     </body>
 </html>
