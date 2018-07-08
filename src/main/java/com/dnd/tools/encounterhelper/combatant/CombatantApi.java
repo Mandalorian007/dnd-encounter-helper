@@ -25,6 +25,7 @@ public class CombatantApi {
 
   @GetMapping("/combatants")
   public List<Combatant> findAllCombatants() {
+    // We want to always return this list sorted for initiative
     return combatantRepository.findAll().stream()
         .sorted(
             //Highest Initative roll
