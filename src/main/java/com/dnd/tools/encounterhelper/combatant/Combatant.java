@@ -24,6 +24,4 @@ public class Combatant {
 
     private String comments;
 
-    protected Combatant() {}
-
 }
