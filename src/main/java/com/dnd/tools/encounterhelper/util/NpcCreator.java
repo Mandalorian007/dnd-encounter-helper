@@ -1,5 +1,6 @@
-package com.dnd.tools.encounterhelper.combatant;
+package com.dnd.tools.encounterhelper.util;
 
+import com.dnd.tools.encounterhelper.combatant.Combatant;
 import com.dnd.tools.encounterhelper.util.Die;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class NpcCreator {
-    public static List<Combatant> createTemplatedNpc(int numberOfEnemies, String name, int armourClass, int hitDie, int level, int conMod, int initativeBonus) {
+/*    public static List<Combatant> createTemplatedNpc(int numberOfEnemies, String name, int armourClass, int hitDie, int level, int conMod, int initativeBonus) {
         return IntStream.range(1, numberOfEnemies + 1)
                 .mapToObj(enemyNumber -> new Combatant(
                         // Only add numbers if there will be more than 1 of these enemies created
@@ -27,5 +28,5 @@ public class NpcCreator {
             dieSum += die.roll();
         }
         return conMod * level + dieSum;
-    }
+    }*/
 }
