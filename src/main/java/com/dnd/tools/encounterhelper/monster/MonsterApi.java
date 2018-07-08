@@ -18,6 +18,7 @@ public class MonsterApi {
   /*
   Example of paging and sorting:
   http://localhost:8080/monsters?page=0&size=2&sort=name,desc
+  You can either page or sort independently as well.
    */
   @GetMapping("/monsters")
   public Iterable<Monster> findAllMonsters(Pageable pageable) {
