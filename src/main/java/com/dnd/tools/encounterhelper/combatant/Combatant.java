@@ -16,6 +16,7 @@ public class Combatant {
     private int armourClass;
     private int maxHp;
     private int initativeBonus;
+    private int passivePerception;
     private boolean npc;
     private Long monsterId;
 

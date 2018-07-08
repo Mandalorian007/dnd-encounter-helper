@@ -20,6 +20,7 @@ public class TestDataCombatantLoader implements CommandLineRunner {
     combatant.setArmourClass(28);
     combatant.setMaxHp(1);
     combatant.setInitativeBonus(11);
+    combatant.setPassivePerception(6);
     combatant.setCurrentHp(1);
     combatant.setComments("I am too fast for you!");
     combatant.setNpc(true);
@@ -28,7 +29,8 @@ public class TestDataCombatantLoader implements CommandLineRunner {
     combatant2.setName("BSF");
     combatant2.setArmourClass(18);
     combatant2.setMaxHp(100);
-    combatant2.setInitativeBonus(6);
+    combatant2.setInitativeBonus(5);
+    combatant2.setPassivePerception(13);
     combatant2.setCurrentHp(1);
     combatant2.setComments("Wackamole King");
     combatant2.setNpc(false);
