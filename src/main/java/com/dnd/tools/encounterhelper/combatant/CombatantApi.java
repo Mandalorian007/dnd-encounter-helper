@@ -3,11 +3,14 @@ package com.dnd.tools.encounterhelper.combatant;
 import static java.util.Collections.reverseOrder;
 import static java.util.Comparator.comparing;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CombatantApi {
 
   private final CombatantRepository combatantRepository;
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @GetMapping("/combatants")
   public List<Combatant> findAllCombatants() {
@@ -47,5 +51,16 @@ public class CombatantApi {
   @PostMapping("combatants")
   public Combatant createNewCombatant(@RequestBody Combatant combatant) {
     return combatantRepository.save(combatant);
+  }
+
+  @PatchMapping("combatants/{combatantId}")
+  public Combatant updateCombatant(
+      @PathVariable("combatantId") long combatantId,
+      @RequestBody String fieldToPatch) throws IOException {
+
+    Combatant entity = combatantRepository.findById(combatantId)
+        .orElseThrow(() -> new CombatantNotFoundException(combatantId));
+    Combatant updatedCombatant = objectMapper.readerForUpdating(entity).readValue(fieldToPatch);
+    return combatantRepository.saveAndFlush(updatedCombatant);
   }
 }

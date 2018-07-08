@@ -5,7 +5,9 @@ import com.dnd.tools.encounterhelper.combatant.CombatantRepository;
 import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
+@Component
 @AllArgsConstructor
 public class TestDataCombatantLoader implements CommandLineRunner {
 
