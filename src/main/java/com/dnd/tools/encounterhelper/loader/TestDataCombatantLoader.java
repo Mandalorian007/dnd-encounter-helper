@@ -39,7 +39,7 @@ public class TestDataCombatantLoader implements CommandLineRunner {
     combatant3.setName("The Dude");
     combatant3.setArmourClass(18);
     combatant3.setMaxHp(100);
-    combatant3.setInitativeBonus(5);
+    combatant3.setInitativeBonus(2);
     combatant3.setPassivePerception(13);
     combatant3.setCurrentHp(1);
     combatant3.setComments("Win");
