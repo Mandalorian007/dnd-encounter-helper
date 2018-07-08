@@ -94,7 +94,6 @@ public class EncounterHelperController {
 
     @PostMapping("/new-combatant")
     public ModelAndView newCombatant(@ModelAttribute NewCombatantModel newCombatantModel) {
-        System.out.println(newCombatantModel);
         repository.save(new Combatant(
                 newCombatantModel.getName(),
                 newCombatantModel.getArmourClass(),

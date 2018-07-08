@@ -42,8 +42,8 @@
                         <td th:text="${combatant.getCurrentInitiative()}"/>
                         <td>
                             <form action="#" data-th-action="@{/remove-combatant}" data-th-object="${combatantNameModel}" method="post">
+                                <input type="hidden" th:value="${combatant.getName()}" th:attr="name='name'"/>
                                 <button type="submit" class="btn btn-danger">Remove</button>
-                                <input type="hidden" th:value="${combatant.name}"/>
                             </form>
                     </tr>
                 </tbody>
