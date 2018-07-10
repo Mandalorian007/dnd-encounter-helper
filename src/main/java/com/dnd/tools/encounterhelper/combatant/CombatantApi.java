@@ -76,7 +76,7 @@ public class CombatantApi {
                                                   @Param("count") int count,
                                                   @RequestBody Combatant combatant) {
 
-        return IntStream.range(1, count + 1)
+        return combatantRepository.saveAll(IntStream.range(1, count + 1)
                 .mapToObj(enemyNumber -> {
                     Combatant npc = new Combatant();
                     npc.setName(combatant.getName() + (count != 1 ? "#" + enemyNumber : ""));
@@ -93,7 +93,7 @@ public class CombatantApi {
                     npc.setCurrentInitiative(combatant.getCurrentInitiative());
                     return npc;
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     // Roll NPC hitpoints
