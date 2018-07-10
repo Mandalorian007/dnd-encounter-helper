@@ -1,25 +1,21 @@
 package com.dnd.tools.encounterhelper.combatant;
 
-import static java.util.Collections.reverseOrder;
-import static java.util.Comparator.comparing;
-
 import com.dnd.tools.encounterhelper.util.Die;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static java.util.Collections.reverseOrder;
+import static java.util.Comparator.comparing;
 
 @RestController
 @RequiredArgsConstructor
@@ -68,6 +64,25 @@ public class CombatantApi {
                 .orElseThrow(() -> new CombatantNotFoundException(combatantId));
         Combatant updatedCombatant = objectMapper.readerForUpdating(entity).readValue(fieldToPatch);
         return combatantRepository.saveAndFlush(updatedCombatant);
+    }
+
+    @PostMapping("/combatants/rollinitative")
+    public List<Combatant> rollInitative(@RequestBody Map<Long, Integer> combatantIdAndNewInitiative) {
+        List<Combatant> playerInitativesToUpdate = combatantIdAndNewInitiative.keySet().stream()
+                .map(combatantId -> combatantRepository.getOne(combatantId))
+                .filter(combatant -> !combatant.isNpc())
+                .peek(combatant -> combatant.setCurrentInitiative(combatantIdAndNewInitiative.get(combatant.getId())))
+                .collect(Collectors.toList());
+        Die die = new Die(20);
+        List<Combatant> npcInitativesToUpdate = combatantRepository.findAll().stream()
+                .filter(Combatant::isNpc)
+                .peek(combatant -> combatant.setCurrentInitiative(combatant.getInitativeBonus() + die.roll()))
+                .collect(Collectors.toList());
+
+        List<Combatant> updatesToCombatantInitiative = new ArrayList<>();
+        Stream.of(playerInitativesToUpdate, npcInitativesToUpdate).forEach(updatesToCombatantInitiative::addAll);
+
+        return combatantRepository.saveAll(updatesToCombatantInitiative);
     }
 
     // Typically expecting either a baseHp or a conMod (but both will be used if they are sent)
