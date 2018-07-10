@@ -76,24 +76,25 @@ public class CombatantApi {
                                                   @Param("count") int count,
                                                   @RequestBody Combatant combatant) {
 
-        return combatantRepository.saveAll(IntStream.range(1, count + 1)
-                .mapToObj(enemyNumber -> {
-                    Combatant npc = new Combatant();
-                    npc.setName(combatant.getName() + (count != 1 ? "#" + enemyNumber : ""));
-                    npc.setArmourClass(combatant.getArmourClass());
-                    //Roll hit points for each enemy
-                    int maxHp = getMaxHp(hitDie);
-                    npc.setMaxHp(maxHp);
-                    npc.setCurrentHp(maxHp);
-                    npc.setInitativeBonus(combatant.getInitativeBonus());
-                    npc.setPassivePerception(combatant.getPassivePerception());
-                    // Force NPC status
-                    npc.setNpc(true);
-                    npc.setMonsterId(combatant.getMonsterId());
-                    npc.setCurrentInitiative(combatant.getCurrentInitiative());
-                    return npc;
-                })
-                .collect(Collectors.toList()));
+        return combatantRepository.saveAll(
+                IntStream.range(1, count + 1)
+                    .mapToObj(enemyNumber -> {
+                        Combatant npc = new Combatant();
+                        npc.setName(combatant.getName() + (count != 1 ? "#" + enemyNumber : ""));
+                        npc.setArmourClass(combatant.getArmourClass());
+                        //Roll hit points for each enemy
+                        int maxHp = getMaxHp(hitDie);
+                        npc.setMaxHp(maxHp);
+                        npc.setCurrentHp(maxHp);
+                        npc.setInitativeBonus(combatant.getInitativeBonus());
+                        npc.setPassivePerception(combatant.getPassivePerception());
+                        // Force NPC status
+                        npc.setNpc(true);
+                        npc.setMonsterId(combatant.getMonsterId());
+                        npc.setCurrentInitiative(combatant.getCurrentInitiative());
+                        return npc;
+                    })
+                    .collect(Collectors.toList()));
     }
 
     // Roll NPC hitpoints
