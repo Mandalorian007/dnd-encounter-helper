@@ -1,6 +1,9 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -20,12 +23,12 @@ class App extends React.Component {
     return (
       <div>
         <div>Hi</div>
-        <ul>
+        <List>
           {
             this.state.monsters.map(monster =>
-            <li key={monster.id}>{monster.name}</li>)
+            <ListItem key={monster.id}>{monster.name}</ListItem>)
           }
-        </ul>
+        </List>
       </div>
     )
   }
