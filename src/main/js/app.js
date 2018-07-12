@@ -11,7 +11,8 @@ class App extends React.Component {
     fetch(`http://localhost:8080/monsters`)
       .then(results => results.json())
       .then(data => {
-        this.setState({monsters: data.monsters});
+        console.log(data.content)
+        this.setState({monsters: data.content});
       })
   }
 
@@ -34,6 +35,3 @@ ReactDOM.render(
   <App/>,
   document.getElementById('react')
 );
-
-
-
