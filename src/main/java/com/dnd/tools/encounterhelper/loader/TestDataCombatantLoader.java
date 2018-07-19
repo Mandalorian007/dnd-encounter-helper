@@ -22,6 +22,7 @@ public class TestDataCombatantLoader implements CommandLineRunner {
     combatant.setInitativeBonus(11);
     combatant.setPassivePerception(6);
     combatant.setCurrentHp(1);
+    combatant.setCurrentInitiative(21);
     combatant.setComments("I am too fast for you!");
     combatant.setNpc(true);
 
@@ -32,6 +33,7 @@ public class TestDataCombatantLoader implements CommandLineRunner {
     combatant2.setInitativeBonus(5);
     combatant2.setPassivePerception(13);
     combatant2.setCurrentHp(1);
+    combatant2.setCurrentInitiative(8);
     combatant2.setComments("Wackamole King");
     combatant2.setNpc(false);
 
@@ -42,6 +44,7 @@ public class TestDataCombatantLoader implements CommandLineRunner {
     combatant3.setInitativeBonus(2);
     combatant3.setPassivePerception(13);
     combatant3.setCurrentHp(1);
+    combatant3.setCurrentInitiative(4);
     combatant3.setComments("Win");
     combatant3.setNpc(false);
 
