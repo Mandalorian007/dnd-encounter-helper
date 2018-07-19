@@ -71,7 +71,7 @@ class App extends React.Component {
                       {combatant.name}
                     </TableCell>
                     <TableCell>{combatant.armourClass}</TableCell>
-                    <TableCell>{combatant.currentInitative}</TableCell>
+                    <TableCell>{combatant.currentInitiative}</TableCell>
                     <TableCell>{combatant.currentHp}</TableCell>
                     <TableCell>{combatant.maxHp}</TableCell>
                   </TableRow>
