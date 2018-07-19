@@ -1,7 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,8 +8,29 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
+import { withStyles } from '@material-ui/core/styles'
 
-class App extends React.Component {
+
+const styles = {
+  root: {
+    width: '100%',
+    marginTop: 10,
+    overflowX: 'auto',
+  },
+  table: {
+    minWidth: 700,
+  },
+  npcStyle: {
+    margin: 10,
+    backgroundColor: 'orange',
+  },
+  playerStyle: {
+    margin: 10,
+    backgroundColor: 'blue',
+  },
+};
+
+class CombatantList extends React.Component {
   constructor(props) {
     super(props);
     this.state={combatants: []};
@@ -25,30 +45,11 @@ class App extends React.Component {
   }
 
   render() {
-    const npcStyle = {
-      margin: 10,
-      backgroundColor: 'orange',
-    };
-
-    const playerStyle = {
-      margin: 10,
-      backgroundColor: 'blue',
-    };
-
-    const root = {
-      width: '100%',
-      marginTop: 10,
-      overflowX: 'auto',
-    };
-
-    const table = {
-      minWidth: 700,
-    };
-
+    console.log(this.props.classes)
     return (
       <div>
-        <Paper style={root}>
-          <Table style={table}>
+        <Paper className={this.props.classes.root}>
+          <Table className={this.props.classes.table}>
             <TableHead>
               <TableRow>
                 <TableCell>Type</TableCell>
@@ -64,7 +65,7 @@ class App extends React.Component {
                 return (
                   <TableRow key={combatant.id}>
                     <TableCell>
-                      <Avatar style={combatant.npc ? npcStyle : playerStyle}>
+                      <Avatar className={combatant.npc ? this.props.classes.npcStyle : this.props.classes.playerStyle}>
                         {combatant.npc ? 'N' : 'P'}</Avatar>
                     </TableCell>
                     <TableCell component="th" scope="row">
@@ -85,7 +86,9 @@ class App extends React.Component {
   }
 }
 
+const StyledCombatantList = withStyles(styles)(CombatantList);
+
 ReactDOM.render(
-  <App/>,
+  <StyledCombatantList/>,
   document.getElementById('react')
 );
