@@ -11,7 +11,17 @@ import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles'
 
 
-const styles = {
+
+class App extends React.Component {
+  render() {
+    return <div>
+      <h1>D&D Encounter Helper</h1>
+      <StyledCombatantList/>
+    </div>
+  }
+}
+
+const combatantStyles = {
   root: {
     width: '100%',
     marginTop: 10,
@@ -29,7 +39,6 @@ const styles = {
     backgroundColor: 'blue',
   },
 };
-
 class CombatantList extends React.Component {
   constructor(props) {
     super(props);
@@ -45,7 +54,6 @@ class CombatantList extends React.Component {
   }
 
   render() {
-    console.log(this.props.classes)
     return (
       <div>
         <Paper className={this.props.classes.root}>
@@ -85,10 +93,10 @@ class CombatantList extends React.Component {
     )
   }
 }
+const StyledCombatantList = withStyles(combatantStyles)(CombatantList);
 
-const StyledCombatantList = withStyles(styles)(CombatantList);
 
 ReactDOM.render(
-  <StyledCombatantList/>,
+  <App/>,
   document.getElementById('react')
 );
