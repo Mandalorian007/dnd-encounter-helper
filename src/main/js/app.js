@@ -8,10 +8,10 @@ class App extends React.Component {
   render() {
     return (
       <div>
-      <h1>D&D Encounter Helper</h1>
-      <CombatantList/>
-      <CardGrid/>
-    </div>
+        <h1>D&D Encounter Helper</h1>
+        <CombatantList/>
+        <CardGrid/>
+      </div>
     )
   }
 }
