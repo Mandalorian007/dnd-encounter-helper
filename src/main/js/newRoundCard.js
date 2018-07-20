@@ -6,11 +6,13 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Modal from '@material-ui/core/Modal';
 import Paper from '@material-ui/core/Paper';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 function rand() {
@@ -54,22 +56,31 @@ const cardStyle = theme => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
   },
+  button: {
+    margin: theme.spacing.unit,
+  },
 });
 class NewRoundCardUnstyled extends React.Component {
   constructor(props) {
     super(props);
-    this.state={modalOpen: false};
+    this.state={open: false};
 
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleOpen() {
-    this.setState({modalOpen: true})
+    this.setState({open: true})
   }
 
   handleClose() {
-    this.setState({modalOpen: false})
+    this.setState({open: false})
+  }
+
+  handleSubmit(event) {
+    console.log(event.target);
+    this.handleClose();
   }
 
   render() {
@@ -92,32 +103,39 @@ class NewRoundCardUnstyled extends React.Component {
             <Button size="small" onClick={this.handleOpen}>New Round</Button>
           </CardActions>
         </Card>
-        <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={this.state.modalOpen}
+        <Dialog
+          open={this.state.open}
           onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
         >
-          <Paper style={getModalStyle()} className={this.props.classes.modalPaper}>
-            <Typography variant="title" id="modal-title">
-              Enter new player initiative rolls
-            </Typography>
+          <DialogTitle id="form-dialog-title">Enter new player initiative rolls</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please have the players roll new initiatives and enter them below.  On Submitting npcs will automatically re-roll initiative.
+            </DialogContentText>
             {
-              players.map(player => {
-                return (
-                  <div key={player.id}>
-                    <FormControl>
-                      <InputLabel htmlFor="name-simple">{player.name}</InputLabel>
-                      {/* TODO figure out how to force this to be a number input */}
-                        <Input label={player.name}/>
-                    </FormControl>
-                  </div>
-                )
+              players.map( player => {
+                return <TextField
+                  key={player.id}
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label={player.name}
+                  type="email"
+                  fullWidth
+                />
               })
             }
-            {/* TODO figure out how to get a manage form reset / input  */}
-          </Paper>
-        </Modal>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.handleClose} color="primary">
+              Submit
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     )
   }
