@@ -7,7 +7,10 @@ import com.dnd.tools.encounterhelper.util.Die;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -66,8 +69,40 @@ public class CombatantApi {
 
         Combatant entity = combatantRepository.findById(combatantId)
                 .orElseThrow(() -> new CombatantNotFoundException(combatantId));
+        //TODO consider if this is an HP modification and the current hp < 0
         Combatant updatedCombatant = objectMapper.readerForUpdating(entity).readValue(fieldToPatch);
         return combatantRepository.saveAndFlush(updatedCombatant);
+    }
+
+    @PostMapping("combatants/newRound")
+    public List<Combatant> newRound(@RequestBody Map<Long, Integer> playerIdAndInitiativeRoll) {
+      List<Combatant> combatants = combatantRepository.findAll();
+      List<Combatant> players = combatants.stream()
+          .filter(combatant -> !combatant.isNpc())
+          .collect(Collectors.toList());
+
+      // Make sure all players and no enemy or bad ids were sent to the api
+      if(players.size() != playerIdAndInitiativeRoll.size()) {
+        List<Long> playerIds = players.stream()
+            .map(Combatant::getId)
+            .collect(Collectors.toList());
+        Set<Long> missingPlayers = playerIdAndInitiativeRoll.keySet();
+        missingPlayers.removeAll(playerIds);
+        throw new CombatantNotFoundException(missingPlayers.stream().findFirst().get());
+      }
+
+      // Set new player initiatives
+      combatants.stream()
+          .filter(combatant -> !combatant.isNpc())
+          .forEach(player -> player.setCurrentInitiative(playerIdAndInitiativeRoll.get(player.getId())));
+
+      // Roll new NPC initiatives
+      Die die = new Die(20);
+      combatants.stream()
+          .filter(Combatant::isNpc)
+          .forEach(npc -> npc.setCurrentInitiative(die.roll() + npc.getInitativeBonus()));
+
+      return combatantRepository.saveAll(combatants);
     }
 
     // Typically expecting either a baseHp or a conMod (but both will be used if they are sent)

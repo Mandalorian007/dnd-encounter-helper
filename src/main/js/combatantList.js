@@ -28,19 +28,6 @@ const combatantStyles = theme => ({
   },
 });
 class CombatantListUnstyled extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state={combatants: []};
-  }
-
-  componentDidMount() {
-    fetch(`http://localhost:8080/combatants`)
-      .then(results => results.json())
-      .then(data => {
-        this.setState({combatants: data});
-      })
-  }
-
   render() {
     return (
       <div>
@@ -57,7 +44,7 @@ class CombatantListUnstyled extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.combatants.map(combatant => {
+              {this.props.combatants.map(combatant => {
                 return (
                   <TableRow key={combatant.id}>
                     <TableCell>

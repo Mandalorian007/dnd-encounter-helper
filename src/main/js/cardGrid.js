@@ -23,13 +23,13 @@ class CardGridUnstyled extends React.Component {
       <div className={this.props.classes.root}>
         <Grid container spacing={24}>
           <Grid item xs={12} sm={4}>
-            <NewRoundCard/>
+            <NewRoundCard combatants={this.props.combatants}/>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <NewFixedStatCombatantCard/>
+            <NewFixedStatCombatantCard combatants={this.props.combatants}/>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <NewNpcsFromTemplateCard/>
+            <NewNpcsFromTemplateCard combatants={this.props.combatants}/>
           </Grid>
         </Grid>
       </div>

@@ -8,6 +8,9 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import Paper from '@material-ui/core/Paper';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 
 function rand() {
@@ -70,6 +73,10 @@ class NewRoundCardUnstyled extends React.Component {
   }
 
   render() {
+    const players = this.props.combatants.filter(function(combatant){
+      return combatant.npc != true;
+    });
+
     return (
       <div className={this.props.classes.root}>
         <Card className={this.props.classes.card}>
@@ -93,11 +100,22 @@ class NewRoundCardUnstyled extends React.Component {
         >
           <Paper style={getModalStyle()} className={this.props.classes.modalPaper}>
             <Typography variant="title" id="modal-title">
-              Text in a modal
+              Enter new player initiative rolls
             </Typography>
-            <Typography variant="subheading" id="simple-modal-description">
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+            {
+              players.map(player => {
+                return (
+                  <div key={player.id}>
+                    <FormControl>
+                      <InputLabel htmlFor="name-simple">{player.name}</InputLabel>
+                      {/* TODO figure out how to force this to be a number input */}
+                        <Input label={player.name}/>
+                    </FormControl>
+                  </div>
+                )
+              })
+            }
+            {/* TODO figure out how to get a manage form reset / input  */}
           </Paper>
         </Modal>
       </div>
