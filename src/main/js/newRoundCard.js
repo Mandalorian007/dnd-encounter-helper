@@ -116,6 +116,8 @@ class NewRoundForm extends React.Component {
 
     //TODO figure out why this doesn't close the Dialog
     this.props.close;
+
+    //TODO get the handle new round function passed down here.  Figure out how to do the above first.
   }
 
   render() {
