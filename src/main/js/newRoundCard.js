@@ -51,7 +51,6 @@ class NewRoundCardUnstyled extends React.Component {
 
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleOpen() {
@@ -60,12 +59,6 @@ class NewRoundCardUnstyled extends React.Component {
 
   handleClose() {
     this.setState({open: false})
-  }
-
-  handleSubmit(event) {
-    console.log('Received Submit');
-    console.log(event.target);
-    this.handleClose();
   }
 
   render() {
@@ -79,7 +72,7 @@ class NewRoundCardUnstyled extends React.Component {
             <Typography className={this.props.classes.pos} color="textSecondary">
               This wizard will help you collect all the player initatives and re-roll all npc initatives automatically
             </Typography>
-            <NewRoundForm combatants={this.props.combatants} open={this.state.open} close={this.handleClose}/>
+            <NewRoundForm combatants={this.props.combatants} open={this.state.open} handleClose={this.handleClose}/>
           </CardContent>
           <CardActions>
             <Button size="small" onClick={this.handleOpen}>New Round</Button>
@@ -114,9 +107,6 @@ class NewRoundForm extends React.Component {
     event.preventDefault();
     console.log(this.state.inititatives);
 
-    //TODO figure out why this doesn't close the Dialog
-    this.props.close;
-
     //TODO get the handle new round function passed down here.  Figure out how to do the above first.
   }
 
@@ -128,7 +118,7 @@ class NewRoundForm extends React.Component {
     return (
       <Dialog
         open={this.props.open}
-        onClose={this.props.close}
+        onClose={this.props.handleClose}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Enter new player initiative rolls</DialogTitle>
@@ -136,7 +126,7 @@ class NewRoundForm extends React.Component {
           <DialogContentText>
             Please have the players roll new initiatives and enter them below.  On Submitting npcs will automatically re-roll initiative.
           </DialogContentText>
-          <form id="newRoundForm" onSubmit={this.handleSubmit}>
+          <form id="newRoundForm" onSubmit={(event) => {this.props.handleClose(event), this.handleSubmit(event)}}>
             {
               players.map( player => {
                 const stringId = player.id.toString();
@@ -155,7 +145,7 @@ class NewRoundForm extends React.Component {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.props.close} color="primary" form="newRoundForm" type="reset">
+          <Button onClick={this.props.handleClose} color="primary" form="newRoundForm" type="reset">
             Cancel
           </Button>
           <Button color="primary" form="newRoundForm" type="submit">
