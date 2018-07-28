@@ -89,12 +89,17 @@ class NewRoundForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      inititatives: new Map(),
-    };
+    this.state = this.initialState();
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.initialState = this.initialState.bind(this);
+  }
+
+  initialState() {
+    return {
+      inititatives: new Map(),
+    };
   }
 
   handleChange(event) {
@@ -107,8 +112,12 @@ class NewRoundForm extends React.Component {
     event.preventDefault();
     console.log(this.state.inititatives);
 
+    //TODO call new round method
+
+    // reset the state
+    this.setState(this.initialState);
+    // close the dialog
     this.props.handleClose(event);
-    //TODO get the handle new round function passed down here.  Figure out how to do the above first.
   }
 
   render() {
@@ -127,29 +136,27 @@ class NewRoundForm extends React.Component {
           <DialogContentText>
             Please have the players roll new initiatives and enter them below.  On Submitting npcs will automatically re-roll initiative.
           </DialogContentText>
-          <form id="newRoundForm" onSubmit={(event) => this.handleSubmit(event)}>
-            {
-              players.map( player => {
-                const stringId = player.id.toString();
-                return <TextField
-                  key={player.id}
-                  autoFocus
-                  margin="dense"
-                  id={stringId}
-                  label={player.name}
-                  type="number"
-                  fullWidth
-                  onChange={this.handleChange}
-                />
-              })
-            }
-          </form>
+          {
+            players.map( player => {
+              const stringId = player.id.toString();
+              return <TextField
+                key={player.id}
+                autoFocus
+                margin="dense"
+                id={stringId}
+                label={player.name}
+                type="number"
+                fullWidth
+                onChange={this.handleChange}
+              />
+            })
+          }
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.props.handleClose} color="primary" form="newRoundForm" type="reset">
+          <Button onClick={this.props.handleClose} color="primary">
             Cancel
           </Button>
-          <Button color="primary" form="newRoundForm" type="submit">
+          <Button onClick={this.handleSubmit} color="primary">
             Submit
           </Button>
         </DialogActions>
