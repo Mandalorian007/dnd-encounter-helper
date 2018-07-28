@@ -72,7 +72,7 @@ class NewRoundCardUnstyled extends React.Component {
             <Typography className={this.props.classes.pos} color="textSecondary">
               This wizard will help you collect all the player initatives and re-roll all npc initatives automatically
             </Typography>
-            <NewRoundForm combatants={this.props.combatants} open={this.state.open} handleClose={this.handleClose}/>
+            <NewRoundForm combatants={this.props.combatants} open={this.state.open} handleClose={this.handleClose} newRound={this.props.newRound}/>
           </CardContent>
           <CardActions>
             <Button size="small" onClick={this.handleOpen}>New Round</Button>
@@ -110,9 +110,9 @@ class NewRoundForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log(this.state.inititatives);
 
-    //TODO call new round method
+    // trigger a new round
+    this.props.newRound(this.state.inititatives);
 
     // reset the state
     this.setState(this.initialState);
