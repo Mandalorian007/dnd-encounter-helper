@@ -107,6 +107,7 @@ class NewRoundForm extends React.Component {
     event.preventDefault();
     console.log(this.state.inititatives);
 
+    this.props.handleClose(event);
     //TODO get the handle new round function passed down here.  Figure out how to do the above first.
   }
 
@@ -126,7 +127,7 @@ class NewRoundForm extends React.Component {
           <DialogContentText>
             Please have the players roll new initiatives and enter them below.  On Submitting npcs will automatically re-roll initiative.
           </DialogContentText>
-          <form id="newRoundForm" onSubmit={(event) => {this.props.handleClose(event), this.handleSubmit(event)}}>
+          <form id="newRoundForm" onSubmit={(event) => this.handleSubmit(event)}>
             {
               players.map( player => {
                 const stringId = player.id.toString();
