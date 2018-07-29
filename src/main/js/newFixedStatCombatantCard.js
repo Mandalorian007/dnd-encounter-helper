@@ -73,7 +73,7 @@ class NewFixedStatCombatantCardUnstyled extends React.Component {
             <Typography className={this.props.classes.pos} color="textSecondary">
               This wizard will help you create either a new character or npc and add it to combat
             </Typography>
-            <NewCombatantForm open={this.state.open} handleClose={this.handleClose}/>
+            <NewCombatantForm open={this.state.open} handleClose={this.handleClose} createCombatant={this.props.createCombatant}/>
           </CardContent>
           <CardActions>
             <Button size="small" onClick={this.handleOpen}>New Round</Button>
@@ -123,8 +123,7 @@ class NewCombatantForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    //TODO create a new combatant
-    console.log(this.state.combatant);
+    this.props.createCombatant(this.state.combatant);
 
     // reset the state
     this.setState(this.initialState);

@@ -29,6 +29,13 @@ class App extends React.Component {
 
   createCombatant(combatant) {
     //TODO post call
+    let obj = Array.from(combatant).reduce((obj, [key, value]) => {
+      obj[key] = value;
+      return obj;
+    }, {});
+
+    console.log('Creating combatant!');
+    console.log(obj);
     this.refreshCombatantsState();
   }
 
@@ -70,7 +77,7 @@ class App extends React.Component {
       <div>
         <h1>D&D Encounter Helper</h1>
         <CombatantList combatants={this.state.combatants}/>
-        <CardGrid combatants={this.state.combatants} newRound={this.newRound}/>
+        <CardGrid combatants={this.state.combatants} newRound={this.newRound} createCombatant={this.createCombatant}/>
       </div>
     )
   }
