@@ -189,7 +189,6 @@ class NewCombatantForm extends React.Component {
             fullWidth
             onChange={this.handleChange}
           />
-          {/* NPC Toggle */}
           <FormControlLabel
             control={
               <Switch
