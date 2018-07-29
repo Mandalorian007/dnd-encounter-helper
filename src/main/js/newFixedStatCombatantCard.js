@@ -154,7 +154,6 @@ class NewCombatantForm extends React.Component {
             onChange={this.handleChange}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="armourClass"
             label="armourClass"
@@ -163,7 +162,6 @@ class NewCombatantForm extends React.Component {
             onChange={this.handleChange}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="maxHp"
             label="maxHp"
@@ -172,7 +170,6 @@ class NewCombatantForm extends React.Component {
             onChange={this.handleChange}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="initiativeBonus"
             label="initativeBonus"
@@ -181,7 +178,6 @@ class NewCombatantForm extends React.Component {
             onChange={this.handleChange}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="passivePerception"
             label="passivePerception"
@@ -206,7 +202,6 @@ class NewCombatantForm extends React.Component {
             label="Npc" />
           {/* current initative */}
           <TextField
-            autoFocus
             margin="dense"
             id="comment"
             label="comment"

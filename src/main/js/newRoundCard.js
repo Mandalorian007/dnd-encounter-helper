@@ -140,7 +140,6 @@ class NewRoundForm extends React.Component {
               const stringId = player.id.toString();
               return <TextField
                 key={player.id}
-                autoFocus
                 margin="dense"
                 id={stringId}
                 label={player.name}
