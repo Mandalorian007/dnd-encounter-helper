@@ -76,7 +76,7 @@ class NewFixedStatCombatantCardUnstyled extends React.Component {
             <NewCombatantForm open={this.state.open} handleClose={this.handleClose} createCombatant={this.props.createCombatant}/>
           </CardContent>
           <CardActions>
-            <Button size="small" onClick={this.handleOpen}>New Round</Button>
+            <Button size="small" onClick={this.handleOpen}>New Combatant</Button>
           </CardActions>
         </Card>
       </div>
