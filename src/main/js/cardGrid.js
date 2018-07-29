@@ -26,10 +26,10 @@ class CardGridUnstyled extends React.Component {
             <NewRoundCard combatants={this.props.combatants} newRound={this.props.newRound}/>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <NewFixedStatCombatantCard combatants={this.props.combatants}/>
+            <NewFixedStatCombatantCard />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <NewNpcsFromTemplateCard combatants={this.props.combatants}/>
+            <NewNpcsFromTemplateCard />
           </Grid>
         </Grid>
       </div>
