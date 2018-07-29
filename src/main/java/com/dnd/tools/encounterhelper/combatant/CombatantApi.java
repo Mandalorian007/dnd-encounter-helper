@@ -5,15 +5,12 @@ import static java.util.Comparator.comparing;
 
 import com.dnd.tools.encounterhelper.util.Die;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,16 +31,7 @@ public class CombatantApi {
     @GetMapping("/combatants")
     public List<Combatant> findAllCombatants() {
         // We want to always return this list sorted for initiative
-        return combatantRepository.findAll().stream()
-                .sorted(
-                        //Highest Initative roll
-                        comparing(Combatant::getCurrentInitiative, reverseOrder())
-                                // Second compare on highest Initiative Bonus
-                                .thenComparing(Combatant::getInitativeBonus, reverseOrder())
-                                // Third compare by players before npcs
-                                .thenComparing(Combatant::isNpc)
-                )
-                .collect(Collectors.toList());
+        return initiativeSort(combatantRepository.findAll());
     }
 
     @GetMapping("/combatants/{combatantId}")
@@ -102,7 +90,7 @@ public class CombatantApi {
           .filter(Combatant::isNpc)
           .forEach(npc -> npc.setCurrentInitiative(die.roll() + npc.getInitativeBonus()));
 
-      return combatantRepository.saveAll(combatants);
+      return initiativeSort(combatantRepository.saveAll(combatants));
     }
 
     // Typically expecting either a baseHp or a conMod (but both will be used if they are sent)
@@ -111,7 +99,7 @@ public class CombatantApi {
                                                   @Param("count") int count,
                                                   @RequestBody Combatant combatant) {
 
-        return combatantRepository.saveAll(
+        return initiativeSort(combatantRepository.saveAll(
                 IntStream.range(1, count + 1)
                     .mapToObj(enemyNumber -> {
                         Combatant npc = new Combatant();
@@ -129,7 +117,7 @@ public class CombatantApi {
                         npc.setCurrentInitiative(combatant.getCurrentInitiative());
                         return npc;
                     })
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toList())));
     }
 
     // Roll NPC hitpoints
@@ -139,5 +127,18 @@ public class CombatantApi {
                 .map((increment) -> die.roll())
                 .sum();
         return dieRolls + hitDie.getBaseHp() + (hitDie.numberOfDice * hitDie.getConMod());
+    }
+
+    private List<Combatant> initiativeSort(List<Combatant> combatants) {
+      return combatants.stream()
+          .sorted(
+              //Highest Initative roll
+              comparing(Combatant::getCurrentInitiative, reverseOrder())
+                  // Second compare on highest Initiative Bonus
+                  .thenComparing(Combatant::getInitativeBonus, reverseOrder())
+                  // Third compare by players before npcs
+                  .thenComparing(Combatant::isNpc)
+          )
+          .collect(Collectors.toList());
     }
 }

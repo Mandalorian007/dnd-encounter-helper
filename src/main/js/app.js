@@ -24,13 +24,11 @@ class App extends React.Component {
   refreshCombatantsState() {
     fetch(`http://localhost:8080/combatants`)
       .then(results => results.json())
-      .then(data => {
-        this.setState({combatants: data});
-      })
+      .then(data => this.setState({combatants: data}));
   }
 
   createCombatant(combatant) {
-    //TDO post call
+    //TODO post call
     this.refreshCombatantsState();
   }
 
@@ -50,9 +48,21 @@ class App extends React.Component {
   }
 
   newRound(initiativeMap) {
-    //TODO method with new round
-    console.log(initiativeMap);
-    this.refreshCombatantsState();
+    let obj = Array.from(initiativeMap).reduce((obj, [key, value]) => {
+      obj[key] = value;
+      return obj;
+    }, {});
+
+    fetch(`http://localhost:8080/combatants/newRound`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(obj),
+    })
+      .then(results => results.json())
+      .then(data => this.setState({combatants: data}));
   }
 
   render() {
