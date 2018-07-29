@@ -41,6 +41,7 @@ class CombatantListUnstyled extends React.Component {
                 <TableCell>Current Initiative</TableCell>
                 <TableCell>Current HP</TableCell>
                 <TableCell>Max HP</TableCell>
+                <TableCell>Comments</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -58,6 +59,7 @@ class CombatantListUnstyled extends React.Component {
                     <TableCell>{combatant.currentInitiative}</TableCell>
                     <TableCell>{combatant.currentHp}</TableCell>
                     <TableCell>{combatant.maxHp}</TableCell>
+                    <TableCell>{combatant.comment}</TableCell>
                   </TableRow>
                 );
               })}

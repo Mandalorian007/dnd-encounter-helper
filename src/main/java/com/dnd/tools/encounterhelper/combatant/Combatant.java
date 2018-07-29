@@ -23,6 +23,6 @@ public class Combatant {
     private int currentInitiative;
     private int currentHp;
 
-    private String comments;
+    private String comment;
 
 }
