@@ -28,15 +28,20 @@ class App extends React.Component {
   }
 
   createCombatant(combatant) {
-    //TODO post call
     let obj = Array.from(combatant).reduce((obj, [key, value]) => {
       obj[key] = value;
       return obj;
     }, {});
 
-    console.log('Creating combatant!');
-    console.log(obj);
-    this.refreshCombatantsState();
+    fetch(`http://localhost:8080/combatants`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(obj),
+    })
+      .then(() => this.refreshCombatantsState());
   }
 
   deleteCombatant(combatantId) {
