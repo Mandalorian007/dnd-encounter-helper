@@ -123,7 +123,9 @@ class NewCombatantForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    this.props.createCombatant(this.state.combatant);
+    let combatant = this.state.combatant;
+    combatant.set('currentHp', combatant.get('maxHp'));
+    this.props.createCombatant(combatant);
 
     // reset the state
     this.setState(this.initialState);
