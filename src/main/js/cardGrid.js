@@ -29,7 +29,7 @@ class CardGridUnstyled extends React.Component {
             <NewFixedStatCombatantCard createCombatant={this.props.createCombatant}/>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <NewNpcsFromTemplateCard />
+            <NewNpcsFromTemplateCard createNpcs={this.createNpcs}/>
           </Grid>
         </Grid>
       </div>

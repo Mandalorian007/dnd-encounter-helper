@@ -82,7 +82,12 @@ class App extends React.Component {
       <div>
         <h1>D&D Encounter Helper</h1>
         <CombatantList combatants={this.state.combatants}/>
-        <CardGrid combatants={this.state.combatants} newRound={this.newRound} createCombatant={this.createCombatant}/>
+        <CardGrid
+          combatants={this.state.combatants}
+          newRound={this.newRound}
+          createCombatant={this.createCombatant}
+          createNpcs={this.createNpcs}
+        />
       </div>
     )
   }
