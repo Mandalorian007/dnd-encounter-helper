@@ -3,6 +3,7 @@ const ReactDOM = require('react-dom');
 
 import { CombatantList } from "./combatantList";
 import { CardGrid } from "./cardGrid";
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class App extends React.Component {
   constructor(props) {
@@ -82,6 +83,7 @@ class App extends React.Component {
       <div>
         <h1>D&D Encounter Helper</h1>
         <CombatantList combatants={this.state.combatants}/>
+        {/* TODO convert the cards into a side bar more like inbox does, then make the main page all the stuff*/}
         <CardGrid
           combatants={this.state.combatants}
           newRound={this.newRound}
@@ -94,6 +96,8 @@ class App extends React.Component {
 }
 
 ReactDOM.render(
-  <App/>,
+  <MuiThemeProvider>
+    <App/>
+  </MuiThemeProvider>,
   document.getElementById('react')
 );

@@ -10,8 +10,13 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import Checkbox from '@material-ui/core/Checkbox';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const cardStyle = theme => ({
   root: {
@@ -90,27 +95,34 @@ class NewNpcsFromTemplateCardForm extends React.Component {
 
     this.state = this.initialState();
 
-    this.handleChange = this.handleChange.bind(this);
+    this.searchAdjustment = this.searchAdjustment.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.initialState = this.initialState.bind(this);
   }
 
   initialState() {
     return {
-      npc: new Map(),
+      monsterSearch: {
+        partialName: null,
+        sizes: [],
+        hitPoints: null,
+        armourClass: null,
+        challengeRating: null
+      },
+      monsters: [],
     };
   }
 
-  handleChange(event) {
-    let npc = this.state.npc;
-    npc.set(event.target.id, event.target.value);
-    this.setState({npc: npc});
+  searchAdjustment(event) {
+    event.target.id;
+    event.target.value;
+    //TODO update the search state.
   }
 
   handleSubmit(event) {
     event.preventDefault();
-
-    let npc = this.state.npc;
+    //TODO fun
+    let npc = [];
     this.props.createNpcscreateNpcs(numberOfDice, sizeOfDie, baseHp, conMod, npc);
 
     // reset the state
@@ -128,18 +140,69 @@ class NewNpcsFromTemplateCardForm extends React.Component {
       >
         <DialogTitle id="form-dialog-title">Enter NPC Info</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Please fill out all fields
-          </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="name"
+            label="monster name"
             type="text"
             fullWidth
-            onChange={this.handleChange}
+            onChange={this.searchAdjustment}
           />
+          <List>
+            <ListSubheader>Size</ListSubheader>
+            <ListItem>
+              <FormControlLabel
+                control={
+                  <Checkbox checked/>
+                }
+                label="Tiny"
+              />
+            </ListItem>
+            <ListItem>
+              <FormControlLabel
+                control={
+                  <Checkbox checked/>
+                }
+                label="Small"
+              />
+            </ListItem>
+            <ListItem>
+              <FormControlLabel
+                control={
+                  <Checkbox checked/>
+                }
+                label="Medium"
+              />
+            </ListItem>
+            <ListItem>
+              <FormControlLabel
+                control={
+                  <Checkbox checked/>
+                }
+                label="Large"
+              />
+            </ListItem>
+            <ListItem>
+              <FormControlLabel
+                control={
+                  <Checkbox checked/>
+                }
+                label="Huge"
+              />
+            </ListItem>
+            <ListItem>
+              <FormControlLabel
+                control={
+                  <Checkbox checked/>
+                }
+                label="Gargantuan"
+              />
+            </ListItem>
+          </List>
+          <List>
+            <ListItemText primary="I will be a checkbox + range fancy thing" />
+          </List>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.props.handleClose} color="primary">
@@ -154,48 +217,3 @@ class NewNpcsFromTemplateCardForm extends React.Component {
   }
 }
 
-/*
-const cardStyle = theme => ({
-  root: {
-    padding: theme.spacing.unit * 2,
-  },
-  card: {
-    minWidth: 275,
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    marginBottom: 16,
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-});
-class NewNpcsFromTemplateCardUnstyled extends React.Component {
-  render() {
-    return (
-      <div className={this.props.classes.root}>
-        <Card className={this.props.classes.card}>
-          <CardContent>
-            <Typography className={this.props.classes.title} color="textSecondary">
-              New NPCs from template Wizard
-            </Typography>
-            <Typography className={this.props.classes.pos} color="textSecondary">
-              This wizard will help you create groups of NPCs based off of monster templates
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">New Round</Button>
-          </CardActions>
-        </Card>
-      </div>
-    )
-  }
-}
-export const NewNpcsFromTemplateCard = withStyles(cardStyle)(NewNpcsFromTemplateCardUnstyled);
-
-*/
