@@ -120,7 +120,7 @@ public class CombatantApi {
                     .collect(Collectors.toList())));
     }
 
-    // Roll NPC hitpoints
+    // Roll NPC hitPoints
     private int getMaxHp(HitDie hitDie) {
         Die die = new Die(hitDie.getSizeOfDie());
         int dieRolls = IntStream.rangeClosed(1, hitDie.getNumberOfDice())
