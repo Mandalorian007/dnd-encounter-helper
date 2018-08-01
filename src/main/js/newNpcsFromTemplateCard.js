@@ -74,7 +74,7 @@ class NewNpcsFromTemplateCardUnstyled extends React.Component {
             <NewNpcsFromTemplateCardForm open={this.state.open} handleClose={this.handleClose} createNpcs={this.createNpcs}/>
           </CardContent>
           <CardActions>
-            <Button size="small" onClick={this.handleOpen}>New Combatant</Button>
+            <Button size="small" onClick={this.handleOpen}>NPCs from Template</Button>
           </CardActions>
         </Card>
       </div>
