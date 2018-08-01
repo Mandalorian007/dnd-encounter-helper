@@ -84,6 +84,7 @@ class App extends React.Component {
         <h1>D&D Encounter Helper</h1>
         <CombatantList combatants={this.state.combatants}/>
         {/* TODO convert the cards into a side bar more like inbox does, then make the main page all the stuff*/}
+        {/* TODO component I need is called a "clipped or mini variant drawer: https://material-ui.com/demos/drawers/*/}
         <CardGrid
           combatants={this.state.combatants}
           newRound={this.newRound}

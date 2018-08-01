@@ -12,11 +12,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Checkbox from '@material-ui/core/Checkbox';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Slider from '@material-ui/lab/Slider';
 
 const cardStyle = theme => ({
   root: {
@@ -201,7 +201,33 @@ class NewNpcsFromTemplateCardForm extends React.Component {
             </ListItem>
           </List>
           <List>
-            <ListItemText primary="I will be a checkbox + range fancy thing" />
+            <ListItem>
+              <FormControlLabel
+                control={
+                  <Checkbox />
+                }
+                label="Hit Points"
+              />
+              <Slider value={10} />
+            </ListItem>
+            <ListItem>
+              <FormControlLabel
+                control={
+                  <Checkbox />
+                }
+                label="Armour Class"
+              />
+              <Slider value={10} />
+            </ListItem>
+            <ListItem>
+              <FormControlLabel
+                control={
+                  <Checkbox />
+                }
+                label="Challenge Rating"
+              />
+              <Slider value={10} />
+            </ListItem>
           </List>
         </DialogContent>
         <DialogActions>
