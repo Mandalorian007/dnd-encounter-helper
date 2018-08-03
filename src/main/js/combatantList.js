@@ -12,7 +12,7 @@ import Avatar from '@material-ui/core/Avatar';
 const combatantStyles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing.unit,
     overflowX: 'auto',
   },
   table: {
