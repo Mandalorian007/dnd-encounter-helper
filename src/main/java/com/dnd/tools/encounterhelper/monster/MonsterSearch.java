@@ -15,7 +15,7 @@ public class MonsterSearch {
   @Data
   @AllArgsConstructor
   static class Range {
-    int lowerBound;
-    int upperBound;
+    private int lowerBound;
+    private int upperBound;
   }
 }

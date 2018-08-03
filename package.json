@@ -17,6 +17,7 @@
     "webpack": "^1.12.2",
     "@material-ui/core": "^1.2.1",
     "@material-ui/lab": "^1.0.0-alpha.8",
+    "@material-ui/icons": "^2.0.0",
     "@babel/runtime": "^7.0.0-beta.55",
     "keycode": "^2.2.0",
     "classnames": "^2.2.6"
