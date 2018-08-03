@@ -10,7 +10,9 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { CombatantList } from "./combatantList";
-import { CardGrid } from "./cardGrid";
+import NewRoundForm from "./newRoundForm";
+import NewFixedStatCombatantForm from "./newFixedStatCombatantForm";
+import NewNpcsFromTemplateForm from "./newNpcsFromTemplateForm";
 
 const encounterStyles = theme => ({
   root: {
@@ -38,7 +40,10 @@ const encounterStyles = theme => ({
 class EncounterDrawerUnstyled extends React.Component {
   constructor(props) {
     super(props);
-    this.state={combatants: []};
+    this.state={
+      contentTarget: "combatant",
+      combatants: []
+    };
 
     this.refreshCombatantsState = this.refreshCombatantsState.bind(this);
     this.createCombatant = this.createCombatant.bind(this);
@@ -46,6 +51,9 @@ class EncounterDrawerUnstyled extends React.Component {
     this.updateCombatant = this.updateCombatant.bind(this);
     this.createNpcs = this.createNpcs.bind(this);
     this.newRound = this.newRound.bind(this);
+    this.selectContent = this.selectContent.bind(this);
+    this.getContent = this.getContent.bind(this);
+    this.navigateBack = this.navigateBack.bind(this);
   }
 
   componentDidMount() {
@@ -108,6 +116,30 @@ class EncounterDrawerUnstyled extends React.Component {
       .then(data => this.setState({combatants: data}));
   }
 
+  navigateBack() {
+    this.selectContent("combatant");
+  }
+
+  selectContent(screen) {
+    this.setState({contentTarget: screen});
+  }
+
+  // Display assistance
+  getContent() {
+    if(this.state.contentTarget == "combatant") {
+      return <CombatantList combatants={this.state.combatants}/>;
+    }
+    if(this.state.contentTarget == "new-round") {
+      return <NewRoundForm combatants={this.state.combatants} newRound={this.newRound} navigateBack={this.navigateBack}/>;
+    }
+    if(this.state.contentTarget == "new-combatant") {
+      return <NewFixedStatCombatantForm createCombatant={this.createCombatant} navigateBack={this.navigateBack}/>;
+    }
+    if(this.state.contentTarget == "npc-template") {
+      return <NewNpcsFromTemplateForm createNpcs={this.createNpcs} navigateBack={this.navigateBack}/>;
+    }
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -127,30 +159,27 @@ class EncounterDrawerUnstyled extends React.Component {
         >
           <div className={classes.toolbar} />
           <List>
-            <ListItem button>
+            <ListItem button onClick={() => this.selectContent("combatant")}>
               <ListItemText primary="Combatants" />
             </ListItem>
             <Divider />
-            <ListItem button>
+            <ListItem button onClick={() => this.selectContent("new-round")}>
               <ListItemText primary="New Round" />
             </ListItem>
-            <ListItem button>
+            <Divider />
+            <ListItem button onClick={() => this.selectContent("new-combatant")}>
               <ListItemText primary="New Combatant" />
             </ListItem>
-            <ListItem button>
-              <ListItemText primary="NPC Template" />
+            <Divider />
+            <ListItem button onClick={() => this.selectContent("npc-template")}>
+              <ListItemText primary="Npc Templates" />
             </ListItem>
+            <Divider />
           </List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <CombatantList combatants={this.state.combatants}/>
-          <CardGrid
-            combatants={this.state.combatants}
-            newRound={this.newRound}
-            createCombatant={this.createCombatant}
-            createNpcs={this.createNpcs}
-          />
+          {this.getContent()}
         </main>
       </div>
     )
