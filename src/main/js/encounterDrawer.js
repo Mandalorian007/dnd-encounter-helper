@@ -10,7 +10,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { CombatantList } from "./combatantList";
-import NewRoundForm from "./newRoundForm";
 import NewFixedStatCombatantForm from "./newFixedStatCombatantForm";
 import NewNpcsFromTemplateForm from "./newNpcsFromTemplateForm";
 
