@@ -1,3 +1,5 @@
+import NewRoundForm from "./newRoundForm";
+
 const React = require('react');
 
 import { withStyles } from '@material-ui/core/styles';
@@ -8,6 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
 
 const combatantStyles = theme => ({
   root: {
@@ -28,6 +31,21 @@ const combatantStyles = theme => ({
   },
 });
 class CombatantListUnstyled extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state={open: false};
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+  }
+
+  handleOpen() {
+    this.setState({open: true})
+  }
+
+  handleClose() {
+    this.setState({open: false})
+  }
+
   render() {
     return (
       <div>
@@ -66,6 +84,12 @@ class CombatantListUnstyled extends React.Component {
             </TableBody>
           </Table>
         </Paper>
+        <Button size="small" onClick={this.handleOpen} color="primary">New Round</Button>
+        <NewRoundForm
+          combatants={this.props.combatants}
+          newRound={this.props.newRound}
+          open={this.state.open}
+          handleClose={this.handleClose}/>
       </div>
     )
   }

@@ -53,6 +53,7 @@ class NewCombatantForm extends React.Component {
   render() {
     return (
       <div>
+        }
         <TextField
           autoFocus
           margin="dense"
@@ -109,7 +110,7 @@ class NewCombatantForm extends React.Component {
               onChange={this.handleNpcToggle} />
           }
           label="Npc" />
-        {/* current initative */}
+       {/* current initative*/}
         <TextField
           margin="dense"
           id="comment"

@@ -127,10 +127,7 @@ class EncounterDrawerUnstyled extends React.Component {
   // Display assistance
   getContent() {
     if(this.state.contentTarget == "combatant") {
-      return <CombatantList combatants={this.state.combatants}/>;
-    }
-    if(this.state.contentTarget == "new-round") {
-      return <NewRoundForm combatants={this.state.combatants} newRound={this.newRound} navigateBack={this.navigateBack}/>;
+      return <CombatantList combatants={this.state.combatants} newRound={this.newRound}/>;
     }
     if(this.state.contentTarget == "new-combatant") {
       return <NewFixedStatCombatantForm createCombatant={this.createCombatant} navigateBack={this.navigateBack}/>;
@@ -161,10 +158,6 @@ class EncounterDrawerUnstyled extends React.Component {
           <List>
             <ListItem button onClick={() => this.selectContent("combatant")}>
               <ListItemText primary="Combatants" />
-            </ListItem>
-            <Divider />
-            <ListItem button onClick={() => this.selectContent("new-round")}>
-              <ListItemText primary="New Round" />
             </ListItem>
             <Divider />
             <ListItem button onClick={() => this.selectContent("new-combatant")}>

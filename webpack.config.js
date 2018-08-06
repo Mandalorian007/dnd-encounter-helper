@@ -19,6 +19,11 @@ module.exports = {
           cacheDirectory: true,
           presets: ['es2015', 'react']
         }
+      },
+      {
+        test: /\.css/,
+        loaders: ['style', 'css','postcss-loader'],
+        include: __dirname + '/src/main/css'
       }
     ]
   }
