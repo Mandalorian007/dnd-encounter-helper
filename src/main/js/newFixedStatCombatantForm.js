@@ -53,7 +53,6 @@ class NewCombatantForm extends React.Component {
   render() {
     return (
       <div>
-        }
         <TextField
           autoFocus
           margin="dense"
