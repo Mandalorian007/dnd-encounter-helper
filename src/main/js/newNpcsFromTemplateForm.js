@@ -1,5 +1,7 @@
+const React = require('react');
+
+import { withStyles } from "@material-ui/core/styles/index";
 import MonsterGridListTile from "./monsterGridListTile";
-import '!style-loader!css-loader!rc-slider/assets/index.css';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -11,8 +13,14 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Range from 'rc-slider/lib/Range';
 
-const React = require('react');
-
+const styles = theme => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+  },
+});
 class NewNpcsFromTemplateForm extends React.Component {
   constructor(props) {
     super(props);
@@ -29,17 +37,18 @@ class NewNpcsFromTemplateForm extends React.Component {
   }
 
   componentDidMount() {
-    this.refreshCombatantsState();
+    this.refreshMonsterSearchState(this.state.monsterSearch);
   }
 
-  refreshCombatantsState() {
+  refreshMonsterSearchState(monsterSearch) {
+    console.log(JSON.stringify(monsterSearch));
     fetch(`http://localhost:8080/monsters/search`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({})
+      body: JSON.stringify(monsterSearch)
     })
       .then(results => results.json())
       .then(data => this.setState({ monsters: data }));
@@ -56,18 +65,21 @@ class NewNpcsFromTemplateForm extends React.Component {
       },
       monsters: [],
     };
+    this.refreshMonsterSearchState();
   }
 
   searchNameAdjustment(event) {
+    let monsterSearch = this.state.monsterSearch;
+    monsterSearch.partialName = event.target.value;
     this.setState({
-      monsterSearch: {
-        partialName: event.target.value,
-      }
+      monsterSearch: monsterSearch
     });
+    this.refreshMonsterSearchState(monsterSearch);
   }
 
   searchSizeAdjustment(event) {
-    let sizes = this.state.monsterSearch.sizes;
+    let monsterSearch = this.state.monsterSearch;
+    let sizes = monsterSearch.sizes;
     if (sizes.includes(event.target.id)) {
       sizes = sizes.filter(size => size != event.target.id);
     } else {
@@ -78,6 +90,7 @@ class NewNpcsFromTemplateForm extends React.Component {
         sizes: sizes,
       }
     });
+    this.refreshMonsterSearchState(monsterSearch);
   }
 
   searchCheckedSliderAdjustment(event, checked) {
@@ -85,7 +98,10 @@ class NewNpcsFromTemplateForm extends React.Component {
     console.log(event.target.value);
     console.log(checked);
     //TODO update the search state.
+
+    this.refreshMonsterSearchState(this.state.monsterSearch);
   }
+
 
   handleSubmit(event) {
     event.preventDefault();
@@ -113,16 +129,18 @@ class NewNpcsFromTemplateForm extends React.Component {
       <div>
         <Grid container>
           <Grid item xs={ 10 }>
-            <GridList cellHeight={ 180 }>
-              <GridListTile key="Subheader" cols={ 2 } style={ { height: 'auto' } }>
-                <ListSubheader component="div">Monsters</ListSubheader>
-              </GridListTile>
-              {
-                this.state.monsters.map(monster => {
-                  <MonsterGridListTile monster={ monster }/>
-                })
-              }
-            </GridList>
+            <div className={this.props.classes.root}>
+              <GridList >
+                <GridListTile key="Subheader" cols={ 2 } style={ { height: 'auto' } }>
+                  <ListSubheader component="div">Monsters</ListSubheader>
+                </GridListTile>
+                {
+                  this.state.monsters.map(monster => {
+                    return <MonsterGridListTile key={ monster.name } monster={ monster }/>
+                  })
+                }
+              </GridList>
+            </div>
           </Grid>
           <Grid item xs={ 2 }>
             <TextField
@@ -187,4 +205,4 @@ class NewNpcsFromTemplateForm extends React.Component {
   }
 }
 
-export default NewNpcsFromTemplateForm;
+export default withStyles(styles)(NewNpcsFromTemplateForm);

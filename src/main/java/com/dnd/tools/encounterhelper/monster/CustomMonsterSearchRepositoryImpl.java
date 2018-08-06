@@ -67,7 +67,7 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
       queryBuilder.append(")");
     }
 
-    queryBuilder.append(" LIMIT 10;");
+    queryBuilder.append(" LIMIT 12;");
     String query = queryBuilder.toString();
     Query nativeQuery = entityManager.createNativeQuery(query, Monster.class);
 
