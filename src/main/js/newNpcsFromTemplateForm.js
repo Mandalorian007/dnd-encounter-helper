@@ -11,7 +11,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import Range from 'rc-slider/lib/Range';
+import Slider from 'rc-slider';
 
 const styles = theme => ({
   root: {
@@ -124,6 +124,9 @@ class NewNpcsFromTemplateForm extends React.Component {
   }
 
   render() {
+    const createSliderWithTooltip = Slider.createSliderWithTooltip;
+    const RangeWithTooltip = createSliderWithTooltip(Slider.Range);
+
     const sizes = ["Tiny", "Small", "Medium", "Large", "Huge", "Gargantuan"];
     return (
       <div>
@@ -175,7 +178,7 @@ class NewNpcsFromTemplateForm extends React.Component {
                   }
                   label="Hit Points"
                 />
-                <Range min={ 1 } max={ 700 } defaultValue={ [1, 700] }/>
+                {/*<RangeWithTooltip min={ 1 } max={ 700 } defaultValue={ [1, 700] } />*/}
               </ListItem>
               <ListItem>
                 <FormControlLabel
@@ -184,18 +187,18 @@ class NewNpcsFromTemplateForm extends React.Component {
                   }
                   label="Armour Class"
                 />
-                <Range min={ 5 } max={ 25 } defaultValue={ [5, 25] }/>
+                <RangeWithTooltip min={ 5 } max={ 25 } defaultValue={ [5, 25]} allowCross={false}/>
               </ListItem>
               <ListItem>
                 <FormControlLabel
                   control={
                     <Checkbox id="challenge-rating"
-                              onChange={ this.searchCheckedSliderAdjustment }/>
+                              onChange={ this.searchCheckedSliderAdjustment } />
                   }
                   label="Challenge Rating"
                 />
-                <Range min={ 1 } max={ 34 } defaultValue={ [1, 34] }
-                       tipFormatter={ value => this.getChallengeRatingDisplay(value) }/>
+                {/*<RangeWithTooltip min={ 1 } max={ 34 } defaultValue={ [1, 34] }
+                       tipFormatter={ value => this.getChallengeRatingDisplay(value) }/>*/}
               </ListItem>
             </List>
           </Grid>
