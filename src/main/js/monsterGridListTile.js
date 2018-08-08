@@ -14,10 +14,11 @@ const styles = theme => ({
 class MonsterGridListTile extends React.Component {
   render() {
     const monster = this.props.monster;
+    // This is a "hack and pray" might be nice to actually download all the images from their repo
+    const imageSrc = `https://5etools.com/img/MM/${monster.name}.png`;
     return (
       <GridListTile>
-        { /* TODO some sort of cool image look up?*/ }
-        <img src="https://a.wattpad.com/useravatar/TheAbolethQueen.128.395567.jpg" alt={monster.name} height={300} width={250}/>
+        <img src={imageSrc} alt={monster.name} height={300} width={250}/>
         <GridListTileBar
           title={ monster.name }
           subtitle={
