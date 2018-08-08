@@ -76,7 +76,7 @@ class NewNpcsFromTemplateForm extends React.Component {
     });
     this.refreshMonsterSearchState(monsterSearch);
   }
-
+  // TODO Some sort of broken logic here when removing a monster size without adding a new one
   searchSizeAdjustment(event) {
     let monsterSearch = this.state.monsterSearch;
     let sizes = monsterSearch.sizes;
