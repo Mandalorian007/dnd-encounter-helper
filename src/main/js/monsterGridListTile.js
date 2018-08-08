@@ -35,7 +35,7 @@ class MonsterGridListTile extends React.Component {
             </div>
           }
           actionIcon={
-            <IconButton>
+            <IconButton className={this.props.classes.icon}>
               { /* TODO either a popup or hover over with tons of monster stats formatted nicely*/ }
               <InfoIcon/>
             </IconButton>
