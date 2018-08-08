@@ -5,6 +5,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar'
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+import Popover from '@material-ui/core/Popover';
 
 const styles = theme => ({
   icon: {
@@ -12,6 +13,28 @@ const styles = theme => ({
   },
 });
 class MonsterGridListTile extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      monsterDetails: null,
+    };
+
+    this.handleClick = this.handleClick.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+  }
+
+  handleClick(event) {
+    this.setState({
+      monsterDetails: event.currentTarget,
+    });
+  };
+
+  handleClose() {
+    this.setState({
+      monsterDetails: null,
+    });
+  };
+
   render() {
     const monster = this.props.monster;
     // This is a "hack and pray" might be nice to actually download all the images from their repo
@@ -35,12 +58,26 @@ class MonsterGridListTile extends React.Component {
             </div>
           }
           actionIcon={
-            <IconButton className={this.props.classes.icon}>
-              { /* TODO either a popup or hover over with tons of monster stats formatted nicely*/ }
+            <IconButton className={this.props.classes.icon} onClick={this.handleClick}>
               <InfoIcon/>
             </IconButton>
           }
         />
+        <Popover
+          open={Boolean(this.state.monsterDetails)}
+          anchorEl={this.state.monsterDetails}
+          onClose={this.handleClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+        >
+          <span>{JSON.stringify(monster)}</span>
+        </Popover>
       </GridListTile>
     )
   }
