@@ -71,12 +71,10 @@ class NewNpcsFromTemplateForm extends React.Component {
   searchNameAdjustment(event) {
     let monsterSearch = this.state.monsterSearch;
     monsterSearch.partialName = event.target.value;
-    this.setState({
-      monsterSearch: monsterSearch
-    });
+    this.setState({ monsterSearch: monsterSearch });
     this.refreshMonsterSearchState(monsterSearch);
   }
-  // TODO Some sort of broken logic here when removing a monster size without adding a new one
+
   searchSizeAdjustment(event) {
     let monsterSearch = this.state.monsterSearch;
     let sizes = monsterSearch.sizes;
@@ -85,11 +83,8 @@ class NewNpcsFromTemplateForm extends React.Component {
     } else {
       sizes.push(event.target.id);
     }
-    this.setState({
-      monsterSearch: {
-        sizes: sizes,
-      }
-    });
+    monsterSearch.sizes = sizes;
+    this.setState({ monsterSearch: monsterSearch });
     this.refreshMonsterSearchState(monsterSearch);
   }
 
