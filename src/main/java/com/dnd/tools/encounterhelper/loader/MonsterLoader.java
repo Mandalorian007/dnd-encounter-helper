@@ -140,7 +140,6 @@ public class MonsterLoader implements CommandLineRunner {
           return monster;
         })
         .collect(Collectors.toList());
-
     monsterRepository.saveAll(monsterList);
   }
 

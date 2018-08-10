@@ -1,21 +1,25 @@
 package com.dnd.tools.encounterhelper.combatant;
 
-import com.dnd.tools.encounterhelper.util.Die;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import static java.util.Collections.reverseOrder;
 import static java.util.Comparator.comparing;
+
+import com.dnd.tools.encounterhelper.util.Die;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,16 +31,7 @@ public class CombatantApi {
     @GetMapping("/combatants")
     public List<Combatant> findAllCombatants() {
         // We want to always return this list sorted for initiative
-        return combatantRepository.findAll().stream()
-                .sorted(
-                        //Highest Initative roll
-                        comparing(Combatant::getCurrentInitiative, reverseOrder())
-                                // Second compare on highest Initiative Bonus
-                                .thenComparing(Combatant::getInitativeBonus, reverseOrder())
-                                // Third compare by players before npcs
-                                .thenComparing(Combatant::isNpc)
-                )
-                .collect(Collectors.toList());
+        return initiativeSort(combatantRepository.findAll());
     }
 
     @GetMapping("/combatants/{combatantId}")
@@ -62,27 +57,40 @@ public class CombatantApi {
 
         Combatant entity = combatantRepository.findById(combatantId)
                 .orElseThrow(() -> new CombatantNotFoundException(combatantId));
+        //TODO consider if this is an HP modification and the current hp < 0
         Combatant updatedCombatant = objectMapper.readerForUpdating(entity).readValue(fieldToPatch);
         return combatantRepository.saveAndFlush(updatedCombatant);
     }
 
-    @PostMapping("/combatants/rollinitative")
-    public List<Combatant> rollInitative(@RequestBody Map<Long, Integer> combatantIdAndNewInitiative) {
-        List<Combatant> playerInitativesToUpdate = combatantIdAndNewInitiative.keySet().stream()
-                .map(combatantId -> combatantRepository.getOne(combatantId))
-                .filter(combatant -> !combatant.isNpc())
-                .peek(combatant -> combatant.setCurrentInitiative(combatantIdAndNewInitiative.get(combatant.getId())))
-                .collect(Collectors.toList());
-        Die die = new Die(20);
-        List<Combatant> npcInitativesToUpdate = combatantRepository.findAll().stream()
-                .filter(Combatant::isNpc)
-                .peek(combatant -> combatant.setCurrentInitiative(combatant.getInitativeBonus() + die.roll()))
-                .collect(Collectors.toList());
+    @PostMapping("combatants/newRound")
+    public List<Combatant> newRound(@RequestBody Map<Long, Integer> playerIdAndInitiativeRoll) {
+      List<Combatant> combatants = combatantRepository.findAll();
+      List<Combatant> players = combatants.stream()
+          .filter(combatant -> !combatant.isNpc())
+          .collect(Collectors.toList());
 
-        List<Combatant> updatesToCombatantInitiative = new ArrayList<>();
-        Stream.of(playerInitativesToUpdate, npcInitativesToUpdate).forEach(updatesToCombatantInitiative::addAll);
+      // Make sure all players and no enemy or bad ids were sent to the api
+      if(players.size() != playerIdAndInitiativeRoll.size()) {
+        List<Long> playerIds = players.stream()
+            .map(Combatant::getId)
+            .collect(Collectors.toList());
+        Set<Long> missingPlayers = playerIdAndInitiativeRoll.keySet();
+        missingPlayers.removeAll(playerIds);
+        throw new CombatantNotFoundException(missingPlayers.stream().findFirst().get());
+      }
 
-        return combatantRepository.saveAll(updatesToCombatantInitiative);
+      // Set new player initiatives
+      combatants.stream()
+          .filter(combatant -> !combatant.isNpc())
+          .forEach(player -> player.setCurrentInitiative(playerIdAndInitiativeRoll.get(player.getId())));
+
+      // Roll new NPC initiatives
+      Die die = new Die(20);
+      combatants.stream()
+          .filter(Combatant::isNpc)
+          .forEach(npc -> npc.setCurrentInitiative(die.roll() + npc.getInitativeBonus()));
+
+      return initiativeSort(combatantRepository.saveAll(combatants));
     }
 
     // Typically expecting either a baseHp or a conMod (but both will be used if they are sent)
@@ -91,7 +99,7 @@ public class CombatantApi {
                                                   @Param("count") int count,
                                                   @RequestBody Combatant combatant) {
 
-        return combatantRepository.saveAll(
+        return initiativeSort(combatantRepository.saveAll(
                 IntStream.range(1, count + 1)
                     .mapToObj(enemyNumber -> {
                         Combatant npc = new Combatant();
@@ -109,15 +117,28 @@ public class CombatantApi {
                         npc.setCurrentInitiative(combatant.getCurrentInitiative());
                         return npc;
                     })
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toList())));
     }
 
-    // Roll NPC hitpoints
+    // Roll NPC hitPoints
     private int getMaxHp(HitDie hitDie) {
         Die die = new Die(hitDie.getSizeOfDie());
         int dieRolls = IntStream.rangeClosed(1, hitDie.getNumberOfDice())
                 .map((increment) -> die.roll())
                 .sum();
         return dieRolls + hitDie.getBaseHp() + (hitDie.numberOfDice * hitDie.getConMod());
+    }
+
+    private List<Combatant> initiativeSort(List<Combatant> combatants) {
+      return combatants.stream()
+          .sorted(
+              //Highest Initative roll
+              comparing(Combatant::getCurrentInitiative, reverseOrder())
+                  // Second compare on highest Initiative Bonus
+                  .thenComparing(Combatant::getInitativeBonus, reverseOrder())
+                  // Third compare by players before npcs
+                  .thenComparing(Combatant::isNpc)
+          )
+          .collect(Collectors.toList());
     }
 }
