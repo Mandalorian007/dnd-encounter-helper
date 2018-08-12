@@ -55,8 +55,8 @@ class CombatantListUnstyled extends React.Component {
               <TableRow>
                 <TableCell>Type</TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell>Armour Class</TableCell>
                 <TableCell>Current Initiative</TableCell>
+                <TableCell>Armour Class</TableCell>
                 <TableCell>Current HP</TableCell>
                 <TableCell>Max HP</TableCell>
                 <TableCell>Comments</TableCell>
@@ -73,8 +73,8 @@ class CombatantListUnstyled extends React.Component {
                     <TableCell component="th" scope="row">
                       {combatant.name}
                     </TableCell>
-                    <TableCell>{combatant.armourClass}</TableCell>
                     <TableCell>{combatant.currentInitiative}</TableCell>
+                    <TableCell>{combatant.armourClass}</TableCell>
                     <TableCell>{combatant.currentHp}</TableCell>
                     <TableCell>{combatant.maxHp}</TableCell>
                     <TableCell>{combatant.comment}</TableCell>

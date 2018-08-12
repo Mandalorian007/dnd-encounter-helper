@@ -43,7 +43,7 @@ class MonsterGridListTile extends React.Component {
     const imageSrc = `https://5etools.com/img/MM/${monster.name}.png`;
     return (
       <GridListTile>
-        <img src={imageSrc} alt={monster.name} height={300} width={250}/>
+        <img src={imageSrc} alt={monster.name} height={300} width={250} />
         <GridListTileBar
           title={ monster.name }
           subtitle={

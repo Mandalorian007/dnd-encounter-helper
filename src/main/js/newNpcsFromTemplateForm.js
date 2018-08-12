@@ -19,7 +19,7 @@ const styles = theme => ({
     flexWrap: 'wrap',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
-  },
+  }
 });
 class NewNpcsFromTemplateForm extends React.Component {
   constructor(props) {
@@ -173,7 +173,7 @@ class NewNpcsFromTemplateForm extends React.Component {
                   }
                   label="Hit Points"
                 />
-                {/*<RangeWithTooltip min={ 1 } max={ 700 } defaultValue={ [1, 700] } />*/}
+                <RangeWithTooltip min={ 1 } max={ 700 } defaultValue={ [1, 700] } />
               </ListItem>
               <ListItem>
                 <FormControlLabel
@@ -192,8 +192,8 @@ class NewNpcsFromTemplateForm extends React.Component {
                   }
                   label="Challenge Rating"
                 />
-                {/*<RangeWithTooltip min={ 1 } max={ 34 } defaultValue={ [1, 34] }
-                       tipFormatter={ value => this.getChallengeRatingDisplay(value) }/>*/}
+                <RangeWithTooltip min={ 1 } max={ 33 } defaultValue={ [1, 33] }
+                       tipFormatter={ value => this.getChallengeRatingDisplay(value) }/>
               </ListItem>
             </List>
           </Grid>
