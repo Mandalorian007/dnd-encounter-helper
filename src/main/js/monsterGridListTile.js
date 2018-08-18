@@ -29,7 +29,7 @@ const styles = theme => ({
    imageThumbnail: {
        display: 'flex',
        margin: 'auto',
-       width: '250px',
+       width: '93.5%',
    },
 });
 
