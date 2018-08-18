@@ -5,13 +5,34 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar'
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
-import Popover from '@material-ui/core/Popover';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   icon: {
     color: 'rgba(255, 255, 255, 0.54)',
   },
+   titleBar: {
+      height: 'auto',
+      padding: '5px 5px',
+    },
+   tile: {
+      width: '25%',
+   },
+   subTitle: {
+       lineHeight: 'normal',
+   },
+   imageThumbnail: {
+       display: 'flex',
+       margin: 'auto',
+       width: '93.5%',
+   },
 });
+
 class MonsterGridListTile extends React.Component {
   constructor(props) {
     super(props);
@@ -42,12 +63,19 @@ class MonsterGridListTile extends React.Component {
     //https://5etools.com/5etools.html
     const imageSrc = `https://5etools.com/img/MM/${monster.name}.png`;
     return (
-      <GridListTile>
-        <img src={imageSrc} alt={monster.name} height={300} width={250} />
+      <GridListTile
+       classes={{
+           root: this.props.classes.tile,
+       }}
+      >
+        <img src={imageSrc} alt={monster.name} className={this.props.classes.imageThumbnail} />
         <GridListTileBar
           title={ monster.name }
+          classes={{
+            root: this.props.classes.titleBar,
+          }}
           subtitle={
-            <div>
+            <div className={this.props.classes.subTitle} >
               <span>Size: {monster.size.toLowerCase()}</span>
               <br/>
               <span>Hp: {monster.hitPoints}</span>
@@ -63,21 +91,38 @@ class MonsterGridListTile extends React.Component {
             </IconButton>
           }
         />
-        <Popover
-          open={Boolean(this.state.monsterDetails)}
-          anchorEl={this.state.monsterDetails}
-          onClose={this.handleClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-        >
-          <span>{JSON.stringify(monster)}</span>
-        </Popover>
+
+
+         <Dialog
+                open={Boolean(this.state.monsterDetails)}
+                onClose={this.handleClose}
+                aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">{monster.name}</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Detailed information on {monster.name}
+                  </DialogContentText>
+                  <ul>
+                  <li>Size: {monster.size}</li>
+                  <li>Type: {monster.type}</li>
+                  <li>Armour Class: {monster.armourClass}</li>
+                  <li>Hit Dice: {monster.hitDice}</li>
+                  <li>Hit Points: {monster.hitPoints}</li>
+                  <li>Speed: {monster.speed}</li>
+                  <li>Strength: {monster.strength}</li>
+                  <li>Dexterity: {monster.dexterity}</li>
+                  <li>Constitution: {monster.constitution}</li>
+                  <li>Intelligence: {monster.intelligence}</li>
+                  <li>Wisdom: {monster.wisdom}</li>
+                  <li>Charisma: {monster.charisma}</li>
+                  </ul>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleClose} color="primary">
+                    Ok
+                  </Button>
+                </DialogActions>
+              </Dialog>
       </GridListTile>
     )
   }
