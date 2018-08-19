@@ -3,8 +3,6 @@ const React = require('react');
 import { withStyles } from "@material-ui/core/styles/index";
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar'
-import IconButton from '@material-ui/core/IconButton';
-import InfoIcon from '@material-ui/icons/Info';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -63,12 +61,8 @@ class MonsterGridListTile extends React.Component {
     //https://5etools.com/5etools.html
     const imageSrc = `https://5etools.com/img/MM/${monster.name}.png`;
     return (
-      <GridListTile
-       classes={{
-           root: this.props.classes.tile,
-       }}
-      >
-        <img src={imageSrc} alt={monster.name} className={this.props.classes.imageThumbnail} />
+      <GridListTile classes={{ root: this.props.classes.tile }}>
+        <img src={imageSrc} alt={monster.name} className={this.props.classes.imageThumbnail} onClick={this.handleClick}/>
         <GridListTileBar
           title={ monster.name }
           classes={{
@@ -85,44 +79,37 @@ class MonsterGridListTile extends React.Component {
               <span>CR: {monster.challengeRating}</span>
             </div>
           }
-          actionIcon={
-            <IconButton className={this.props.classes.icon} onClick={this.handleClick}>
-              <InfoIcon/>
-            </IconButton>
-          }
         />
-
-
-         <Dialog
-                open={Boolean(this.state.monsterDetails)}
-                onClose={this.handleClose}
-                aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">{monster.name}</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    Detailed information on {monster.name}
-                  </DialogContentText>
-                  <ul>
-                  <li>Size: {monster.size}</li>
-                  <li>Type: {monster.type}</li>
-                  <li>Armour Class: {monster.armourClass}</li>
-                  <li>Hit Dice: {monster.hitDice}</li>
-                  <li>Hit Points: {monster.hitPoints}</li>
-                  <li>Speed: {monster.speed}</li>
-                  <li>Strength: {monster.strength}</li>
-                  <li>Dexterity: {monster.dexterity}</li>
-                  <li>Constitution: {monster.constitution}</li>
-                  <li>Intelligence: {monster.intelligence}</li>
-                  <li>Wisdom: {monster.wisdom}</li>
-                  <li>Charisma: {monster.charisma}</li>
-                  </ul>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleClose} color="primary">
-                    Ok
-                  </Button>
-                </DialogActions>
-              </Dialog>
+        <Dialog
+          open={ Boolean(this.state.monsterDetails) }
+          onClose={ this.handleClose }
+          aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">{ monster.name }</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Detailed information on { monster.name }
+            </DialogContentText>
+            <ul>
+              <li>Size: { monster.size }</li>
+              <li>Type: { monster.type }</li>
+              <li>Armour Class: { monster.armourClass }</li>
+              <li>Hit Dice: { monster.hitDice }</li>
+              <li>Hit Points: { monster.hitPoints }</li>
+              <li>Speed: { monster.speed }</li>
+              <li>Strength: { monster.strength }</li>
+              <li>Dexterity: { monster.dexterity }</li>
+              <li>Constitution: { monster.constitution }</li>
+              <li>Intelligence: { monster.intelligence }</li>
+              <li>Wisdom: { monster.wisdom }</li>
+              <li>Charisma: { monster.charisma }</li>
+            </ul>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={ this.handleClose } color="primary">
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
       </GridListTile>
     )
   }
