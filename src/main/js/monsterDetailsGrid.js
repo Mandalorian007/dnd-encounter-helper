@@ -77,12 +77,6 @@ class MonsterDetailsGrid extends React.Component {
       )
     }
   }
-  /*
-  Speed
-Damage Invulnerabilities
-Damage Immunities
-ConditionImmunities
-   */
 
   render() {
     const monster = this.props.monster;
@@ -126,6 +120,33 @@ ConditionImmunities
                 monster.speed.split(',').map((speed, index)=> {
                   return <ListItemText key={index} primary={speed}/>;
                 })
+              }
+              <Divider/>
+              <ListSubheader>Damage&nbsp;Invulerabilities</ListSubheader>
+              {
+                (monster.damageInvulerabilities != null)
+                  ? monster.damageInvulerabilities.split(',').map((speed, index)=> {
+                      return <ListItemText key={index} primary={speed}/>;
+                    })
+                  : <div/>
+              }
+              <Divider/>
+              <ListSubheader>Damage&nbsp;Immunities</ListSubheader>
+              {
+                (monster.damageImmunities != null)
+                  ? monster.damageImmunities.split(',').map((speed, index)=> {
+                      return <ListItemText key={index} primary={speed}/>;
+                    })
+                  : <div/>
+              }
+              <Divider/>
+              <ListSubheader>Condition&nbsp;Immunities</ListSubheader>
+              {
+                (monster.conditionImmunities != null)
+                  ?  monster.conditionImmunities.split(',').map((speed, index)=> {
+                      return <ListItemText key={index} primary={speed}/>;
+                    })
+                  : <div/>
               }
             </List>
           </Paper>
