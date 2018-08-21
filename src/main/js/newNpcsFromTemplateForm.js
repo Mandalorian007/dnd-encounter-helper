@@ -150,22 +150,24 @@ class NewNpcsFromTemplateForm extends React.Component {
               fullWidth
               onChange={ this.searchNameAdjustment }
             />
-            <List>
+            <List
+              dense={true}
+            >
               <ListSubheader>Size</ListSubheader>
-              { sizes.map(size => {
-                return (
-                  <ListItem key={ size }>
-                    <FormControlLabel
-                      control={
-                        <Checkbox id={ size } onChange={ this.searchSizeAdjustment }/>
-                      }
-                      label={ size }
-                    />
-                  </ListItem>
-                )
-              }) }
-            </List>
-            <List>
+              {
+                sizes.map(size => {
+                  return (
+                    <ListItem key={ size }>
+                      <FormControlLabel
+                        control={
+                          <Checkbox id={ size } onChange={ this.searchSizeAdjustment }/>
+                        }
+                        label={ size }
+                      />
+                    </ListItem>
+                  )
+                })
+              }
               <ListItem>
                 <FormControlLabel
                   control={
@@ -193,7 +195,7 @@ class NewNpcsFromTemplateForm extends React.Component {
                   label="Challenge Rating"
                 />
                 <RangeWithTooltip min={ 1 } max={ 33 } defaultValue={ [1, 33] }
-                       tipFormatter={ value => this.getChallengeRatingDisplay(value) }/>
+                                  tipFormatter={ value => this.getChallengeRatingDisplay(value) }/>
               </ListItem>
             </List>
           </Grid>
