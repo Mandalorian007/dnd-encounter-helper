@@ -26,10 +26,15 @@ class NewNpcsFromTemplateForm extends React.Component {
     super(props);
 
     this.state = this.initialState();
-//conflicting comment
+
     this.searchNameAdjustment = this.searchNameAdjustment.bind(this);
     this.searchSizeAdjustment = this.searchSizeAdjustment.bind(this);
-    this.searchCheckedSliderAdjustment = this.searchCheckedSliderAdjustment.bind(this);
+    this.searchHitPointsSliderAdjustment = this.searchHitPointsSliderAdjustment.bind(this);
+    this.searchArmourSliderAdjustment = this.searchArmourSliderAdjustment.bind(this);
+    this.searchChallengeSliderAdjustment = this.searchChallengeSliderAdjustment.bind(this);
+    this.onHitPointsSliderChange = this.onHitPointsSliderChange.bind(this);
+    this.onArmourSliderChange = this.onArmourSliderChange.bind(this);
+    this.onChallengeSliderChange = this.onChallengeSliderChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.initialState = this.initialState.bind(this);
     this.getChallengeRatingDisplay = this.getChallengeRatingDisplay.bind(this);
@@ -59,9 +64,21 @@ class NewNpcsFromTemplateForm extends React.Component {
       monsterSearch: {
         partialName: null,
         sizes: [],
-        hitPoints: null,
-        armourClass: null,
-        challengeRating: null
+        hitPoints: {
+            lowerBound: 1,
+            upperBound: 700
+            },
+        armourClass: {
+            lowerBound: 5,
+            upperBound: 25
+            },
+        challengeRating: {
+            lowerBound: 1,
+            upperBound: 33
+            },
+        hitPointsDisabled : '',
+        armourClassDisabled: '',
+        challengeDisabled: ''
       },
       monsters: [],
     };
@@ -88,15 +105,80 @@ class NewNpcsFromTemplateForm extends React.Component {
     this.refreshMonsterSearchState(monsterSearch);
   }
 
-  searchCheckedSliderAdjustment(event, checked) {
-    console.log(event.target.id);
-    console.log(event.target.value);
-    console.log(checked);
-    //TODO update the search state.
+  searchHitPointsSliderAdjustment(event, checked) {
 
+    let monsterSearch = this.state.monsterSearch;
+
+    if (!checked)
+    {
+        monsterSearch.hitPoints = { lowerBound: 1, upperBound: 700};
+        monsterSearch.hitPointsDisabled = '';
+    }
+    else
+    {
+        monsterSearch.hitPointsDisabled = 'enabled';
+    }
+
+    this.setState({ monsterSearch: monsterSearch });
     this.refreshMonsterSearchState(this.state.monsterSearch);
   }
 
+  onHitPointsSliderChange (value) {
+    let monsterSearch = this.state.monsterSearch;
+    monsterSearch.hitPoints = { lowerBound: value[0], upperBound: value[1]};
+    this.setState({ monsterSearch: monsterSearch });
+    this.refreshMonsterSearchState(this.state.monsterSearch);
+  }
+
+  searchArmourSliderAdjustment(event, checked) {
+
+    let monsterSearch = this.state.monsterSearch;
+
+    if (!checked)
+    {
+        monsterSearch.armourClass =  { lowerBound: 5, upperBound: 25};
+        monsterSearch.armourClassDisabled = '';
+    }
+    else
+    {
+        monsterSearch.armourClassDisabled = 'enabled';
+    }
+
+    this.setState({ monsterSearch: monsterSearch });
+    this.refreshMonsterSearchState(this.state.monsterSearch);
+  }
+
+  onArmourSliderChange (value) {
+    let monsterSearch = this.state.monsterSearch;
+    monsterSearch.armourClass = { lowerBound: value[0], upperBound: value[1]};
+    this.setState({ monsterSearch: monsterSearch });
+    this.refreshMonsterSearchState(this.state.monsterSearch);
+  }
+
+  searchChallengeSliderAdjustment(event, checked) {
+
+    let monsterSearch = this.state.monsterSearch;
+
+    if (!checked)
+    {
+        monsterSearch.Challenge =  { lowerBound: 1, upperBound: 33};
+        monsterSearch.ChallengeDisabled = '';
+    }
+    else
+    {
+        monsterSearch.ChallengeDisabled = 'enabled';
+    }
+
+    this.setState({ monsterSearch: monsterSearch });
+    this.refreshMonsterSearchState(this.state.monsterSearch);
+  }
+
+  onChallengeSliderChange (value) {
+    let monsterSearch = this.state.monsterSearch;
+    monsterSearch.Challenge = { lowerBound: value[0], upperBound: value[1]};
+    this.setState({ monsterSearch: monsterSearch });
+    this.refreshMonsterSearchState(this.state.monsterSearch);
+  }
 
   handleSubmit(event) {
     event.preventDefault();
@@ -126,7 +208,7 @@ class NewNpcsFromTemplateForm extends React.Component {
     return (
       <div>
         <Grid container>
-          <Grid item xs={ 10 }>
+          <Grid item xs={ 9 }>
             <div className={this.props.classes.root}>
               <GridList >
                 <GridListTile key="Subheader" cols={ 2 } style={ { height: 'auto' } }>
@@ -140,7 +222,7 @@ class NewNpcsFromTemplateForm extends React.Component {
               </GridList>
             </div>
           </Grid>
-          <Grid item xs={ 2 }>
+          <Grid item xs={ 3 }>
             <TextField
               autoFocus
               margin="dense"
@@ -150,9 +232,7 @@ class NewNpcsFromTemplateForm extends React.Component {
               fullWidth
               onChange={ this.searchNameAdjustment }
             />
-            <List
-              dense={true}
-            >
+            <List>
               <ListSubheader>Size</ListSubheader>
               {
                 sizes.map(size => {
@@ -171,31 +251,30 @@ class NewNpcsFromTemplateForm extends React.Component {
               <ListItem>
                 <FormControlLabel
                   control={
-                    <Checkbox id="hit-points" onChange={ this.searchCheckedSliderAdjustment }/>
+                    <Checkbox id="hit-points" onChange={ this.searchHitPointsSliderAdjustment }/>
                   }
                   label="Hit Points"
                 />
-                <RangeWithTooltip min={ 1 } max={ 700 } defaultValue={ [1, 700] } />
+                <RangeWithTooltip min={ 1 } max={ 700 } defaultValue={ [this.state.monsterSearch.hitPoints.lowerBound, this.state.monsterSearch.hitPoints.upperBound] } allowCross={false} onAfterChange={this.onHitPointsSliderChange} disabled={!this.state.monsterSearch.hitPointsDisabled} />
               </ListItem>
               <ListItem>
                 <FormControlLabel
                   control={
-                    <Checkbox id="armour-class" onChange={ this.searchCheckedSliderAdjustment }/>
+                    <Checkbox id="armour-class" onChange={ this.searchArmourSliderAdjustment }/>
                   }
                   label="Armour Class"
                 />
-                <RangeWithTooltip min={ 5 } max={ 25 } defaultValue={ [5, 25]} allowCross={false}/>
+                <RangeWithTooltip min={ 5 } max={ 25 } defaultValue={ [this.state.monsterSearch.armourClass.lowerBound, this.state.monsterSearch.armourClass.upperBound]} allowCross={false} onAfterChange={this.onArmourSliderChange} disabled={!this.state.monsterSearch.armourClassDisabled} />
               </ListItem>
               <ListItem>
                 <FormControlLabel
                   control={
-                    <Checkbox id="challenge-rating"
-                              onChange={ this.searchCheckedSliderAdjustment } />
+                    <Checkbox id="challenge-rating" onChange={ this.searchChallengeSliderAdjustment } />
                   }
                   label="Challenge Rating"
                 />
-                <RangeWithTooltip min={ 1 } max={ 33 } defaultValue={ [1, 33] }
-                                  tipFormatter={ value => this.getChallengeRatingDisplay(value) }/>
+                <RangeWithTooltip min={ 1 } max={ 33 } defaultValue={ [this.state.monsterSearch.challengeRating.lowerBound, this.state.monsterSearch.challengeRating.upperBound] } allowCross={false} onAfterChange={this.onChallengeSliderChange} disabled={!this.state.monsterSearch.ChallengeDisabled}
+                       tipFormatter={ value => this.getChallengeRatingDisplay(value) }/>
               </ListItem>
             </List>
           </Grid>
