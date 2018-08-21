@@ -26,6 +26,7 @@ class NewNpcsFromTemplateForm extends React.Component {
     super(props);
 
     this.state = this.initialState();
+//conflicting comment
 //testing
 //next commit
     this.searchNameAdjustment = this.searchNameAdjustment.bind(this);
