@@ -77,6 +77,12 @@ class MonsterDetailsGrid extends React.Component {
       )
     }
   }
+  /*
+  Speed
+Damage Invulnerabilities
+Damage Immunities
+ConditionImmunities
+   */
 
   render() {
     const monster = this.props.monster;
@@ -112,6 +118,13 @@ class MonsterDetailsGrid extends React.Component {
               {
                 monster.senses.split(',').map((sense, index)=> {
                   return <ListItemText key={index} primary={sense}/>;
+                })
+              }
+              <Divider/>
+              <ListSubheader>Speed</ListSubheader>
+              {
+                monster.speed.split(',').map((speed, index)=> {
+                  return <ListItemText key={index} primary={speed}/>;
                 })
               }
             </List>
