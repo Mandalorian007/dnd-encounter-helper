@@ -2,12 +2,18 @@ const React = require('react');
 
 import { withStyles } from "@material-ui/core/styles/index";
 import MonsterGridListTile from "./monsterGridListTile";
-import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import Checkbox from '@material-ui/core/Checkbox';
+
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -19,7 +25,18 @@ const styles = theme => ({
     flexWrap: 'wrap',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
-  }
+  },
+   formControl: {
+      margin: theme.spacing.unit * 3,
+      marginBottom: "auto",
+    },
+    ListClass: {
+        marginLeft: "24px",
+    },
+    ListItemClass:{
+        paddingBottom: "0px",
+        paddingLeft: "0px",
+    },
 });
 class NewNpcsFromTemplateForm extends React.Component {
   constructor(props) {
@@ -69,7 +86,7 @@ class NewNpcsFromTemplateForm extends React.Component {
             upperBound: 25
             },
         challengeRating: {
-            lowerBound: 1,
+            lowerBound: 0,
             upperBound: 33
             },
         hitPointsDisabled : '',
@@ -132,7 +149,7 @@ class NewNpcsFromTemplateForm extends React.Component {
     {
         if (!checked)
         {
-            monsterSearch.challengeRating =  { lowerBound: 1, upperBound: 33};
+            monsterSearch.challengeRating =  { lowerBound: 0, upperBound: 33};
             monsterSearch.challengeDisabled = '';
         }
         else
@@ -202,59 +219,67 @@ class NewNpcsFromTemplateForm extends React.Component {
             </div>
           </Grid>
           <Grid item xs={ 3 }>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="monster name"
-              type="text"
-              fullWidth
-              onChange={ this.searchNameAdjustment }
-            />
-            <List>
-              <ListSubheader>Size</ListSubheader>
-              {
-                sizes.map(size => {
-                  return (
-                    <ListItem key={ size }>
-                      <FormControlLabel
-                        control={
-                          <Checkbox id={ size } onChange={ this.searchSizeAdjustment }/>
-                        }
-                        label={ size }
-                      />
-                    </ListItem>
-                  )
-                })
-              }
-              <ListItem>
-                <FormControlLabel
-                  control={
-                    <Checkbox id="hit-points" onChange={ this.searchSliderAdjustment }/>
+            <FormControl fullWidth component="fieldset" className={this.props.classes.formControl}>
+                <InputLabel htmlFor="name">Monster Name</InputLabel>
+                <Input id="name" onChange={ this.searchNameAdjustment } style={{marginRight: "24px" }}/>
+            </FormControl>
+            <FormControl component="fieldset" className={this.props.classes.formControl}>
+                <FormLabel component="legend">Size</FormLabel>
+                <FormGroup>
+                  {
+                    sizes.map(size => {
+                      return (
+                          <FormControlLabel
+                            key={ size }
+                            control={
+                              <Checkbox id={ size } onChange={ this.searchSizeAdjustment }/>
+                            }
+                            label={ size }
+                          />
+                      )
+                    })
                   }
-                  label="Hit Points"
-                />
-                <RangeWithTooltip min={ 1 } max={ 700 } defaultValue={ [this.state.monsterSearch.hitPoints.lowerBound, this.state.monsterSearch.hitPoints.upperBound] } allowCross={false} onAfterChange={(v) => this.onSliderChange('hit-points', v)} disabled={!this.state.monsterSearch.hitPointsDisabled} />
-              </ListItem>
-              <ListItem>
-                <FormControlLabel
-                  control={
-                    <Checkbox id="armour-class" onChange={ this.searchSliderAdjustment }/>
-                  }
-                  label="Armour Class"
-                />
-                <RangeWithTooltip min={ 5 } max={ 25 } defaultValue={ [this.state.monsterSearch.armourClass.lowerBound, this.state.monsterSearch.armourClass.upperBound]} allowCross={false} onAfterChange={(v) => this.onSliderChange('armour-class', v)} disabled={!this.state.monsterSearch.armourClassDisabled} />
-              </ListItem>
-              <ListItem>
-                <FormControlLabel
-                  control={
-                    <Checkbox id="challenge-rating" onChange={ this.searchSliderAdjustment } />
-                  }
-                  label="Challenge Rating"
-                />
-                <RangeWithTooltip min={ 1 } max={ 33 } defaultValue={ [this.state.monsterSearch.challengeRating.lowerBound, this.state.monsterSearch.challengeRating.upperBound] } allowCross={false} onAfterChange={(v) => this.onSliderChange('challenge-rating', v)} disabled={!this.state.monsterSearch.challengeDisabled}
+                </FormGroup>
+            </FormControl>
+
+            <List className={this.props.classes.ListClass}>
+                <ListItem className={this.props.classes.ListItemClass}>
+                    <FormLabel component="legend">Hit Points</FormLabel>
+                </ListItem>
+                <ListItem style={{padding: "0px"}}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox id="hit-points" onChange={ this.searchSliderAdjustment }/>
+                      }
+                      label=""
+                    />
+                    <RangeWithTooltip min={ 1 } max={ 700 } defaultValue={ [this.state.monsterSearch.hitPoints.lowerBound, this.state.monsterSearch.hitPoints.upperBound] } allowCross={false} onAfterChange={(v) => this.onSliderChange('hit-points', v)} disabled={!this.state.monsterSearch.hitPointsDisabled} />
+                </ListItem>
+                <ListItem className={this.props.classes.ListItemClass}>
+                    <FormLabel component="legend">Armour Class</FormLabel>
+                </ListItem>
+                <ListItem style={{padding: "0px"}}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox id="armour-class" onChange={ this.searchSliderAdjustment }/>
+                      }
+                      label=""
+                    />
+                    <RangeWithTooltip min={ 5 } max={ 25 } defaultValue={ [this.state.monsterSearch.armourClass.lowerBound, this.state.monsterSearch.armourClass.upperBound]} allowCross={false} onAfterChange={(v) => this.onSliderChange('armour-class', v)} disabled={!this.state.monsterSearch.armourClassDisabled} />
+                </ListItem>
+                <ListItem className={this.props.classes.ListItemClass}>
+                    <FormLabel component="legend">Challenge Rating</FormLabel>
+                </ListItem>
+                <ListItem style={{padding: "0px"}}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox id="challenge-rating" onChange={ this.searchSliderAdjustment } />
+                      }
+                      label=""
+                    />
+                    <RangeWithTooltip min={ 0 } max={ 33 } defaultValue={ [this.state.monsterSearch.challengeRating.lowerBound, this.state.monsterSearch.challengeRating.upperBound] } allowCross={false} onAfterChange={(v) => this.onSliderChange('challenge-rating', v)} disabled={!this.state.monsterSearch.challengeDisabled}
                        tipFormatter={ value => this.getChallengeRatingDisplay(value) }/>
-              </ListItem>
+                </ListItem>
             </List>
           </Grid>
         </Grid>
