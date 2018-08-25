@@ -53,6 +53,7 @@ class EncounterDrawerUnstyled extends React.Component {
     this.selectContent = this.selectContent.bind(this);
     this.getContent = this.getContent.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -87,9 +88,34 @@ class EncounterDrawerUnstyled extends React.Component {
     this.refreshCombatantsState();
   }
 
-  updateCombatant(combatant) {
-    //TODO patch call
-    this.refreshCombatantsState();
+  updateCombatant(index, data) {
+      fetch('http://localhost:8080/combatants/' + this.state.combatants[index].id, {
+          method: 'PATCH',
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+      }).catch(err => err)
+      .then(() => this.refreshCombatantsState());
+  }
+
+  handleChange(index, dataType, value) {
+    let data;
+    const newState = this.state.combatants.map((item, i) => {
+        if (i == index) {
+            data = {[dataType]: value};
+            return {...item, [dataType]: value};
+        }
+        return item;
+    });
+    console.log(newState);
+
+    this.setState({
+       combatants: newState
+    });
+
+    if (!isNaN(value))
+        this.updateCombatant(index, data);
   }
 
   createNpcs(numberOfDice, sizeOfDie, baseHp, conMod, combatant) {
@@ -126,7 +152,7 @@ class EncounterDrawerUnstyled extends React.Component {
   // Display assistance
   getContent() {
     if(this.state.contentTarget == "combatant") {
-      return <CombatantList combatants={this.state.combatants} newRound={this.newRound}/>;
+      return <CombatantList combatants={this.state.combatants} newRound={this.newRound} handleChange={this.handleChange}/>;
     }
     if(this.state.contentTarget == "new-combatant") {
       return <NewFixedStatCombatantForm createCombatant={this.createCombatant} navigateBack={this.navigateBack}/>;
