@@ -11,6 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import * as math from 'mathjs';
 
 const combatantStyles = theme => ({
   root: {
@@ -33,9 +34,17 @@ const combatantStyles = theme => ({
 class CombatantListUnstyled extends React.Component {
   constructor(props) {
     super(props);
-    this.state={open: false};
+    this.state={
+        open: false,
+        combatants: []
+    };
+
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.refreshCombatantsState = this.refreshCombatantsState.bind(this);
+    this.updateCombatant = this.updateCombatant.bind(this);
   }
 
   handleOpen() {
@@ -44,6 +53,52 @@ class CombatantListUnstyled extends React.Component {
 
   handleClose() {
     this.setState({open: false})
+  }
+
+  componentDidMount() {
+    this.refreshCombatantsState();
+  }
+
+  refreshCombatantsState() {
+    fetch(`http://localhost:8080/combatants`)
+      .then(results => results.json())
+      .then(data => this.setState({combatants: data}));
+  }
+
+  updateCombatant(index, data) {
+    fetch('http://localhost:8080/combatants/' + this.state.combatants[index].id, {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).catch(err => err);
+  }
+
+  handleKeyPress(index, dataType, e) {
+      if (e.keyCode === 13) {
+        let x = math.eval(e.target.value);
+        this.handleChange(index, dataType, x)
+      }
+   }
+
+  handleChange(index, dataType, value) {
+    let data;
+    const newState = this.state.combatants.map((item, i) => {
+        if (i == index) {
+            data = {[dataType]: value};
+            return {...item, [dataType]: value};
+        }
+        return item;
+    });
+    console.log(newState);
+
+    this.setState({
+       combatants: newState
+    });
+
+    if (!isNaN(value))
+        this.updateCombatant(index, data);
   }
 
   render() {
@@ -63,7 +118,7 @@ class CombatantListUnstyled extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.props.combatants.map(combatant => {
+              {this.state.combatants.map((combatant, index) => {
                 return (
                   <TableRow key={combatant.id}>
                     <TableCell>
@@ -75,7 +130,8 @@ class CombatantListUnstyled extends React.Component {
                     </TableCell>
                     <TableCell>{combatant.currentInitiative}</TableCell>
                     <TableCell>{combatant.armourClass}</TableCell>
-                    <TableCell>{combatant.currentHp}</TableCell>
+                    <TableCell><input type='text' onChange={(e) => this.handleChange(index, "currentHp", e.target.value)}
+                                     value={this.state.combatants[index].currentHp}  onKeyDown={(e) => this.handleKeyPress(index, "currentHp", e)} /></TableCell>
                     <TableCell>{combatant.maxHp}</TableCell>
                     <TableCell>{combatant.comment}</TableCell>
                   </TableRow>

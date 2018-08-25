@@ -12,16 +12,17 @@
   ],
   "author": "Matt & Stephen",
   "dependencies": {
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0",
-    "webpack": "^1.12.2",
-    "material-ui": "^0.20.2",
     "@material-ui/core": "^1.2.1",
     "@material-ui/icons": "^2.0.1",
-    "rc-slider": "^8.6.1",
     "css-loader": "^1.0.0",
+    "material-ui": "^0.20.2",
+    "mathjs": "^5.1.1",
+    "postcss-loader": "^2.1.6",
+    "rc-slider": "^8.6.1",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
     "style-loader": "^0.21.0",
-    "postcss-loader": "^2.1.6"
+    "webpack": "^1.12.2"
   },
   "scripts": {
     "watch": "webpack --watch -d"
@@ -31,6 +32,7 @@
     "babel-loader": "^6.2.7",
     "babel-polyfill": "^6.16.0",
     "babel-preset-es2015": "^6.18.0",
-    "babel-preset-react": "^6.16.0"
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.24.1"
   }
 }
