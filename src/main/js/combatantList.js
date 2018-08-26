@@ -55,8 +55,8 @@ class CombatantListUnstyled extends React.Component {
 
   handleKeyPress(combatantId, dataType, e) {
       if (e.keyCode === 13) {
-        let x = math.eval(e.target.value);
-        this.handleChange(combatantId, dataType, x)
+        let value = math.eval(e.target.value);
+        this.handleChange(combatantId, dataType, value)
       }
   }
 
