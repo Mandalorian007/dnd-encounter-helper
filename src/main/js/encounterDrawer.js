@@ -53,6 +53,8 @@ class EncounterDrawerUnstyled extends React.Component {
     this.selectContent = this.selectContent.bind(this);
     this.getContent = this.getContent.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.getOrZero = this.getOrZero.bind(this);
   }
 
   componentDidMount() {
@@ -139,6 +141,14 @@ class EncounterDrawerUnstyled extends React.Component {
     }
     if(this.state.contentTarget == "npc-template") {
       return <NewNpcsFromTemplateForm createNpcs={this.createNpcs} navigateBack={this.navigateBack}/>;
+    }
+  }
+
+  getOrZero(number) {
+    if(number == null) {
+      return 0;
+    } else {
+      return number;
     }
   }
 
