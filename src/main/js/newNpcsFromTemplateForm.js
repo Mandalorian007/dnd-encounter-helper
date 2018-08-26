@@ -86,7 +86,7 @@ class NewNpcsFromTemplateForm extends React.Component {
             upperBound: 25
             },
         challengeRating: {
-            lowerBound: 0,
+            lowerBound: 1,
             upperBound: 33
             },
         hitPointsDisabled : '',
@@ -277,7 +277,7 @@ class NewNpcsFromTemplateForm extends React.Component {
                       }
                       label=""
                     />
-                    <RangeWithTooltip min={ 0 } max={ 33 } defaultValue={ [this.state.monsterSearch.challengeRating.lowerBound, this.state.monsterSearch.challengeRating.upperBound] } allowCross={false} onAfterChange={(v) => this.onSliderChange('challenge-rating', v)} disabled={!this.state.monsterSearch.challengeDisabled}
+                    <RangeWithTooltip min={ 1 } max={ 33 } defaultValue={ [this.state.monsterSearch.challengeRating.lowerBound, this.state.monsterSearch.challengeRating.upperBound] } allowCross={false} onAfterChange={(v) => this.onSliderChange('challenge-rating', v)} disabled={!this.state.monsterSearch.challengeDisabled}
                        tipFormatter={ value => this.getChallengeRatingDisplay(value) }/>
                 </ListItem>
             </List>
