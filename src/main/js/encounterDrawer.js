@@ -100,9 +100,23 @@ class EncounterDrawerUnstyled extends React.Component {
       .then(() => this.refreshCombatantsState());
   }
 
-  createNpcs(numberOfDice, sizeOfDie, baseHp, conMod, combatant) {
-    //TODO createNpcsWithTemplate call
-    this.refreshCombatantsState();
+ createNpcs(numberOfDice, sizeOfDie, baseHp, conMod, enemyCount, combatant) {
+    const url = 'http://localhost:8080/combatants/npcs/hitdie/'
+      + this.getOrZero(numberOfDice)
+        + '/' + this.getOrZero(sizeOfDie)
+        + '/' + this.getOrZero(baseHp)
+        + '/' + this.getOrZero(conMod)
+        + '?count=' + this.getOrZero(enemyCount);
+     fetch(url, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(combatant),
+    }).catch(err => err)
+    .then(() => this.refreshCombatantsState());
+     this.refreshCombatantsState();
   }
 
   newRound(initiativeMap) {
