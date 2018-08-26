@@ -59,7 +59,6 @@ class NewNpcsFromTemplateForm extends React.Component {
   }
 
   refreshMonsterSearchState(monsterSearch) {
-    console.log(JSON.stringify(monsterSearch));
     fetch(`http://localhost:8080/monsters/search`, {
       method: 'POST',
       headers: {
@@ -253,7 +252,17 @@ class NewNpcsFromTemplateForm extends React.Component {
                       }
                       label=""
                     />
-                    <RangeWithTooltip min={ 1 } max={ 700 } defaultValue={ [this.state.monsterSearch.hitPoints.lowerBound, this.state.monsterSearch.hitPoints.upperBound] } allowCross={false} onAfterChange={(v) => this.onSliderChange('hit-points', v)} disabled={!this.state.monsterSearch.hitPointsDisabled} />
+                    <RangeWithTooltip
+                        min={ 1 }
+                        max={ 700 }
+                        defaultValue={[
+                            this.state.monsterSearch.hitPoints.lowerBound,
+                            this.state.monsterSearch.hitPoints.upperBound
+                        ]}
+                        allowCross={false}
+                        onAfterChange={(v) => this.onSliderChange('hit-points', v)}
+                        disabled={!this.state.monsterSearch.hitPointsDisabled}
+                    />
                 </ListItem>
                 <ListItem className={this.props.classes.ListItemClass}>
                     <FormLabel component="legend">Armour Class</FormLabel>
@@ -265,7 +274,17 @@ class NewNpcsFromTemplateForm extends React.Component {
                       }
                       label=""
                     />
-                    <RangeWithTooltip min={ 5 } max={ 25 } defaultValue={ [this.state.monsterSearch.armourClass.lowerBound, this.state.monsterSearch.armourClass.upperBound]} allowCross={false} onAfterChange={(v) => this.onSliderChange('armour-class', v)} disabled={!this.state.monsterSearch.armourClassDisabled} />
+                    <RangeWithTooltip
+                        min={ 5 }
+                        max={ 25 }
+                        defaultValue={[
+                            this.state.monsterSearch.armourClass.lowerBound,
+                            this.state.monsterSearch.armourClass.upperBound
+                        ]}
+                        allowCross={false}
+                        onAfterChange={(v) => this.onSliderChange('armour-class', v)}
+                        disabled={!this.state.monsterSearch.armourClassDisabled}
+                    />
                 </ListItem>
                 <ListItem className={this.props.classes.ListItemClass}>
                     <FormLabel component="legend">Challenge Rating</FormLabel>
@@ -277,8 +296,18 @@ class NewNpcsFromTemplateForm extends React.Component {
                       }
                       label=""
                     />
-                    <RangeWithTooltip min={ 1 } max={ 33 } defaultValue={ [this.state.monsterSearch.challengeRating.lowerBound, this.state.monsterSearch.challengeRating.upperBound] } allowCross={false} onAfterChange={(v) => this.onSliderChange('challenge-rating', v)} disabled={!this.state.monsterSearch.challengeDisabled}
-                       tipFormatter={ value => this.getChallengeRatingDisplay(value) }/>
+                    <RangeWithTooltip
+                        min={ 1 }
+                        max={ 33 }
+                        defaultValue={[
+                            this.state.monsterSearch.challengeRating.lowerBound,
+                            this.state.monsterSearch.challengeRating.upperBound
+                        ]}
+                        allowCross={false}
+                        onAfterChange={(v) => this.onSliderChange('challenge-rating', v)}
+                        disabled={!this.state.monsterSearch.challengeDisabled}
+                        tipFormatter={ value => this.getChallengeRatingDisplay(value) }
+                    />
                 </ListItem>
             </List>
           </Grid>
