@@ -88,8 +88,8 @@ class EncounterDrawerUnstyled extends React.Component {
     this.refreshCombatantsState();
   }
 
-  updateCombatant(url, data) {
-      fetch(url, {
+  updateCombatant(combatantId, data) {
+      fetch('http://localhost:8080/combatants/' + combatantId, {
           method: 'PATCH',
           body: JSON.stringify(data),
           headers: {
@@ -114,10 +114,7 @@ class EncounterDrawerUnstyled extends React.Component {
     });
 
     if (!isNaN(value))
-    {
-        let url = 'http://localhost:8080/combatants/' + combatantId;
-        this.updateCombatant(url, data);
-    }
+        this.updateCombatant(combatantId, data);
   }
 
   createNpcs(numberOfDice, sizeOfDie, baseHp, conMod, combatant) {
