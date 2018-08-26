@@ -51,10 +51,10 @@ class CombatantListUnstyled extends React.Component {
     this.setState({open: false})
   }
 
-  handleKeyPress(index, dataType, e) {
+  handleKeyPress(combatantId, dataType, e) {
       if (e.keyCode === 13) {
         let x = math.eval(e.target.value);
-        this.props.handleChange(index, dataType, x)
+        this.props.handleChange(combatantId, dataType, x)
       }
    }
 
@@ -75,7 +75,7 @@ class CombatantListUnstyled extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.props.combatants.map((combatant, index) => {
+              {this.props.combatants.map(combatant => {
                 return (
                   <TableRow key={combatant.id}>
                     <TableCell>
@@ -87,8 +87,8 @@ class CombatantListUnstyled extends React.Component {
                     </TableCell>
                     <TableCell>{combatant.currentInitiative}</TableCell>
                     <TableCell>{combatant.armourClass}</TableCell>
-                    <TableCell><input type='text' onChange={(e) => this.props.handleChange(index, "currentHp", e.target.value)}
-                                     value={this.props.combatants[index].currentHp}  onKeyDown={(e) => this.handleKeyPress(index, "currentHp", e)} /></TableCell>
+                    <TableCell><input type='text' onChange={(e) => this.props.handleChange(combatant.id, "currentHp", e.target.value)}
+                                     value={combatant.currentHp}  onKeyDown={(e) => this.handleKeyPress(combatant.id, "currentHp", e)} /></TableCell>
                     <TableCell>{combatant.maxHp}</TableCell>
                     <TableCell>{combatant.comment}</TableCell>
                   </TableRow>

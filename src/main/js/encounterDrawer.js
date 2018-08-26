@@ -88,8 +88,8 @@ class EncounterDrawerUnstyled extends React.Component {
     this.refreshCombatantsState();
   }
 
-  updateCombatant(index, data) {
-      fetch('http://localhost:8080/combatants/' + this.state.combatants[index].id, {
+  updateCombatant(url, data) {
+      fetch(url, {
           method: 'PATCH',
           body: JSON.stringify(data),
           headers: {
@@ -99,23 +99,25 @@ class EncounterDrawerUnstyled extends React.Component {
       .then(() => this.refreshCombatantsState());
   }
 
-  handleChange(index, dataType, value) {
+  handleChange(combatantId, dataType, value) {
     let data;
-    const newState = this.state.combatants.map((item, i) => {
-        if (i == index) {
+    const newState = this.state.combatants.map(item => {
+        if (item.id == combatantId) {
             data = {[dataType]: value};
             return {...item, [dataType]: value};
         }
         return item;
     });
-    console.log(newState);
 
     this.setState({
        combatants: newState
     });
 
     if (!isNaN(value))
-        this.updateCombatant(index, data);
+    {
+        let url = 'http://localhost:8080/combatants/' + combatantId;
+        this.updateCombatant(url, data);
+    }
   }
 
   createNpcs(numberOfDice, sizeOfDie, baseHp, conMod, combatant) {
