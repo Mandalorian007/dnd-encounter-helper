@@ -119,7 +119,7 @@ class MonsterGridListTile extends React.Component {
                             control={
                                 <Checkbox onChange={ this.toggleRollHp }/>
                             }
-                            label="Roll Monster Hp: "
+                            label="Roll Monster Hp"
                         />
                     </DialogContent>
                     <DialogActions>
