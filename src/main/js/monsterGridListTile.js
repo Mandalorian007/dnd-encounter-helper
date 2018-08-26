@@ -41,9 +41,11 @@ class MonsterGridListTile extends React.Component {
 
         this.initialState = this.initialState.bind(this);
         this.handleClick = this.handleClick.bind(this);
-        this.handleClose = this.handleClose.bind(this);
         this.changeNumberOfEnemies = this.changeNumberOfEnemies.bind(this);
         this.toggleRollHp = this.toggleRollHp.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.getModifier = this.getModifier.bind(this);
     }
 
     initialState() {
@@ -54,15 +56,14 @@ class MonsterGridListTile extends React.Component {
         }
     }
 
+    getModifier(abilityScore) {
+        return Math.floor((abilityScore-10)/2);
+    }
+
     handleClick(event) {
         this.setState({
             monsterDetails: event.currentTarget,
         });
-    };
-
-    handleClose() {
-        console.log(this.state);
-        this.setState(this.initialState);
     };
 
     changeNumberOfEnemies(event) {
@@ -75,6 +76,35 @@ class MonsterGridListTile extends React.Component {
         this.setState({
            rollHp: !this.state.rollHp,
         });
+    }
+
+    handleClose() {
+        this.setState(this.initialState);
+    };
+
+    handleSubmit() {
+        const componentState = this.state;
+        const monster = this.props.monster;
+        const hitDice = monster.hitDice.split("d");
+        var combatantInfo = {
+            name: monster.name,
+            armourClass: monster.armourClass,
+            initativeBonus: this.getModifier(monster.dexterity),
+            passivePerception: monster.perceptionMod,
+            npc: true,
+            monsterId: monster.id,
+        };
+
+        if(componentState.rollHp) {
+            //Roll Hp
+            this.props.createNpcs(hitDice[0], hitDice[1], null, this.getModifier(monster.constitution), componentState.numberOfEnemies, combatantInfo);
+        } else {
+            //Fixed Hp
+            this.props.createNpcs(null, null, monster.hitPoints, null, componentState.numberOfEnemies, combatantInfo);
+        }
+
+        this.handleClose();
+        this.props.navigateBack();
     }
 
     render() {
@@ -123,8 +153,11 @@ class MonsterGridListTile extends React.Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleClose} color="primary">
-                            Ok
+                        <Button onClick={this.handleSubmit} color="primary">
+                            Create Monsters
+                        </Button>
+                        <Button onClick={this.handleClose} color="secondary">
+                            Cancel
                         </Button>
                     </DialogActions>
                 </Dialog>

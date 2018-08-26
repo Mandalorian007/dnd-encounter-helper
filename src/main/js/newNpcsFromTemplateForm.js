@@ -211,7 +211,7 @@ class NewNpcsFromTemplateForm extends React.Component {
                 </GridListTile>
                 {
                   this.state.monsters.map(monster => {
-                    return <MonsterGridListTile key={ monster.name } monster={ monster }/>
+                    return <MonsterGridListTile key={ monster.name } monster={ monster } createNpcs={this.props.createNpcs} navigateBack={this.props.navigateBack}/>
                   })
                 }
               </GridList>

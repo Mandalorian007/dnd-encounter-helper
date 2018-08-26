@@ -53,6 +53,7 @@ class EncounterDrawerUnstyled extends React.Component {
     this.selectContent = this.selectContent.bind(this);
     this.getContent = this.getContent.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
+    this.getOrZero = this.getOrZero.bind(this);
   }
 
   componentDidMount() {
@@ -92,8 +93,25 @@ class EncounterDrawerUnstyled extends React.Component {
     this.refreshCombatantsState();
   }
 
-  createNpcs(numberOfDice, sizeOfDie, baseHp, conMod, combatant) {
-    //TODO createNpcsWithTemplate call
+  createNpcs(numberOfDice, sizeOfDie, baseHp, conMod, enemyCount, combatant) {
+    const url = 'http://localhost:8080/combatants/npcs/hitdie/'
+      + this.getOrZero(numberOfDice)
+        + '/' + this.getOrZero(sizeOfDie)
+        + '/' + this.getOrZero(baseHp)
+        + '/' + this.getOrZero(conMod)
+        + '?count=' + this.getOrZero(enemyCount);
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(combatant),
+    }).catch(err => err)
+    .then(() => this.refreshCombatantsState());
+
+
     this.refreshCombatantsState();
   }
 
@@ -133,6 +151,14 @@ class EncounterDrawerUnstyled extends React.Component {
     }
     if(this.state.contentTarget == "npc-template") {
       return <NewNpcsFromTemplateForm createNpcs={this.createNpcs} navigateBack={this.navigateBack}/>;
+    }
+  }
+
+  getOrZero(number) {
+    if(number == null) {
+      return 0;
+    } else {
+      return number;
     }
   }
 
