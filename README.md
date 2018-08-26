@@ -65,6 +65,4 @@ Upcoming features:
 - Edit Combatant Stats
     - HP modifications by + or -
 - Details option modal for monsters & players on main page
-- Create combatants from monsterTemplates (variable and non-variable hp)
-- Fix null values in DB
 - Search by name should be any match not just start of word
