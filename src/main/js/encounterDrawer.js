@@ -53,7 +53,6 @@ class EncounterDrawerUnstyled extends React.Component {
     this.selectContent = this.selectContent.bind(this);
     this.getContent = this.getContent.bind(this);
     this.navigateBack = this.navigateBack.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -99,24 +98,6 @@ class EncounterDrawerUnstyled extends React.Component {
       .then(() => this.refreshCombatantsState());
   }
 
-  handleChange(combatantId, dataType, value) {
-    let data;
-    const newState = this.state.combatants.map(item => {
-        if (item.id == combatantId) {
-            data = {[dataType]: value};
-            return {...item, [dataType]: value};
-        }
-        return item;
-    });
-
-    this.setState({
-       combatants: newState
-    });
-
-    if (!isNaN(value))
-        this.updateCombatant(combatantId, data);
-  }
-
   createNpcs(numberOfDice, sizeOfDie, baseHp, conMod, combatant) {
     //TODO createNpcsWithTemplate call
     this.refreshCombatantsState();
@@ -151,7 +132,7 @@ class EncounterDrawerUnstyled extends React.Component {
   // Display assistance
   getContent() {
     if(this.state.contentTarget == "combatant") {
-      return <CombatantList combatants={this.state.combatants} newRound={this.newRound} handleChange={this.handleChange}/>;
+      return <CombatantList combatants={this.state.combatants} newRound={this.newRound} updateCombatant={this.updateCombatant}/>;
     }
     if(this.state.contentTarget == "new-combatant") {
       return <NewFixedStatCombatantForm createCombatant={this.createCombatant} navigateBack={this.navigateBack}/>;

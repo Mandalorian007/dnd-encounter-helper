@@ -31,6 +31,7 @@ const combatantStyles = theme => ({
     backgroundColor: 'blue',
   },
 });
+
 class CombatantListUnstyled extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +42,7 @@ class CombatantListUnstyled extends React.Component {
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleOpen() {
@@ -54,9 +56,14 @@ class CombatantListUnstyled extends React.Component {
   handleKeyPress(combatantId, dataType, e) {
       if (e.keyCode === 13) {
         let x = math.eval(e.target.value);
-        this.props.handleChange(combatantId, dataType, x)
+        this.handleChange(combatantId, dataType, x)
       }
-   }
+  }
+
+  handleChange(combatantId, dataType, value) {
+    let data = {[dataType]: value};
+    this.props.updateCombatant(combatantId, data);
+  }
 
   render() {
     return (
@@ -72,6 +79,8 @@ class CombatantListUnstyled extends React.Component {
                 <TableCell>Current HP</TableCell>
                 <TableCell>Max HP</TableCell>
                 <TableCell>Comments</TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -85,12 +94,19 @@ class CombatantListUnstyled extends React.Component {
                     <TableCell component="th" scope="row">
                       {combatant.name}
                     </TableCell>
-                    <TableCell>{combatant.currentInitiative}</TableCell>
-                    <TableCell>{combatant.armourClass}</TableCell>
+                    <TableCell><input type='text' onChange={(e) => this.props.handleChange(combatant.id, "currentInitiative", e.target.value)}
+                                     value={combatant.currentInitiative} /></TableCell>
+                    <TableCell><input type='text' onChange={(e) => this.props.handleChange(combatant.id, "armourClass", e.target.value)}
+                                     value={combatant.armourClass} /></TableCell>
                     <TableCell><input type='text' onChange={(e) => this.props.handleChange(combatant.id, "currentHp", e.target.value)}
-                                     value={combatant.currentHp}  onKeyDown={(e) => this.handleKeyPress(combatant.id, "currentHp", e)} /></TableCell>
+                                     value={combatant.currentHp} onKeyDown={(e) => this.handleKeyPress(combatant.id, "currentHp", e)} /></TableCell>
                     <TableCell>{combatant.maxHp}</TableCell>
-                    <TableCell>{combatant.comment}</TableCell>
+                    <TableCell><input type='text' onChange={(e) => this.props.handleChange(combatant.id, "passivePerception", e.target.value)}
+                                     value={combatant.passivePerception} /></TableCell>
+                    <TableCell><input type='text' onChange={(e) => this.props.handleChange(combatant.id, "comment", e.target.value)}
+                                     value={combatant.comment} /></TableCell>
+                    <TableCell>delete</TableCell>
+                    <TableCell>info</TableCell>
                   </TableRow>
                 );
               })}
