@@ -31,79 +31,67 @@ const combatantStyles = ({  spacing }: Theme) => createStyles({
   },
 });
 class CombatantList extends React.Component<any, any> {
-  constructor(props) {
-    super(props);
-    this.state={
-        open: false,
-    };
+    constructor(props) {
+        super(props);
+        this.state={open: false};
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+    }
 
-    this.handleOpen = this.handleOpen.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-  }
+    handleOpen() {
+        this.setState({open: true})
+    }
 
-  handleOpen() {
-    this.setState({open: true})
-  }
+    handleClose() {
+        this.setState({open: false})
+    }
 
-  handleClose() {
-    this.setState({open: false})
-  }
-
-  handleKeyPress(index, dataType, e) {
-      if (e.keyCode === 13) {
-        let x = math.eval(e.target.value);
-        this.props.handleChange(index, dataType, x)
-      }
-   }
-
-  render() {
-    return (
-      <div>
-        <Paper className={this.props.classes.root}>
-          <Table className={this.props.classes.table}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Type</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Current Initiative</TableCell>
-                <TableCell>Armour Class</TableCell>
-                <TableCell>Current HP</TableCell>
-                <TableCell>Max HP</TableCell>
-                <TableCell>Comments</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.props.combatants.map((combatant, index) => {
-                return (
-                  <TableRow key={combatant.id}>
-                    <TableCell>
-                      <Avatar className={combatant.npc ? this.props.classes.npcStyle : this.props.classes.playerStyle}>
-                        {combatant.npc ? 'N' : 'P'}</Avatar>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {combatant.name}
-                    </TableCell>
-                    <TableCell>{combatant.currentInitiative}</TableCell>
-                    <TableCell>{combatant.armourClass}</TableCell>
-                    <TableCell><input type='text' onChange={(e) => this.props.handleChange(index, "currentHp", e.target.value)}
-                                     value={this.props.combatants[index].currentHp}  onKeyDown={(e) => this.handleKeyPress(index, "currentHp", e)} /></TableCell>
-                    <TableCell>{combatant.maxHp}</TableCell>
-                    <TableCell>{combatant.comment}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </Paper>
-        <Button size="small" onClick={this.handleOpen} color="primary">New Round</Button>
-        <NewRoundForm
-          combatants={this.props.combatants}
-          newRound={this.props.newRound}
-          open={this.state.open}
-          handleClose={this.handleClose}/>
-      </div>
-    )
-  }
+    render() {
+        return (
+            <div>
+                <Paper className={this.props.classes.root}>
+                    <Table className={this.props.classes.table}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Type</TableCell>
+                                <TableCell>Name</TableCell>
+                                <TableCell>Current Initiative</TableCell>
+                                <TableCell>Armour Class</TableCell>
+                                <TableCell>Current HP</TableCell>
+                                <TableCell>Max HP</TableCell>
+                                <TableCell>Comments</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {this.props.combatants.map(combatant => {
+                                return (
+                                    <TableRow key={combatant.id}>
+                                        <TableCell>
+                                            <Avatar className={combatant.npc ? this.props.classes.npcStyle : this.props.classes.playerStyle}>
+                                                {combatant.npc ? 'N' : 'P'}</Avatar>
+                                        </TableCell>
+                                        <TableCell component="th" scope="row">
+                                            {combatant.name}
+                                        </TableCell>
+                                        <TableCell>{combatant.currentInitiative}</TableCell>
+                                        <TableCell>{combatant.armourClass}</TableCell>
+                                        <TableCell>{combatant.currentHp}</TableCell>
+                                        <TableCell>{combatant.maxHp}</TableCell>
+                                        <TableCell>{combatant.comment}</TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                </Paper>
+                <Button size="small" onClick={this.handleOpen} color="primary">New Round</Button>
+                <NewRoundForm
+                    combatants={this.props.combatants}
+                    newRound={this.props.newRound}
+                    open={this.state.open}
+                    handleClose={this.handleClose}/>
+            </div>
+        )
+    }
 }
 export default withStyles(combatantStyles)(CombatantList);
