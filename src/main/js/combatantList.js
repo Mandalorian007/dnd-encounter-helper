@@ -11,6 +11,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Clear';
+import InfoIcon from '@material-ui/icons/Info';
 import * as math from 'mathjs';
 
 const combatantStyles = theme => ({
@@ -30,7 +32,37 @@ const combatantStyles = theme => ({
     margin: 10,
     backgroundColor: 'blue',
   },
+  button: {
+        margin: '10px',
+        width: '40px',
+        height: '40px',
+  },
+  row: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.background.default,
+    },
+  },
 });
+const CustomTableCell = withStyles(theme => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    padding: '5px',
+    textAlign: 'center',
+  },
+  body: {
+    '&:last-child': {
+        paddingRight: '5px',
+    },
+    "&> input[type='text']": {
+        width: '100px',
+    },
+    "&> textarea": {
+        width: '300px',
+    },
+    padding: '5px',
+  },
+}))(TableCell);
 
 class CombatantListUnstyled extends React.Component {
   constructor(props) {
@@ -72,41 +104,48 @@ class CombatantListUnstyled extends React.Component {
           <Table className={this.props.classes.table}>
             <TableHead>
               <TableRow>
-                <TableCell>Type</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Current Initiative</TableCell>
-                <TableCell>Armour Class</TableCell>
-                <TableCell>Current HP</TableCell>
-                <TableCell>Max HP</TableCell>
-                <TableCell>Comments</TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
+                <CustomTableCell>Type</CustomTableCell>
+                <CustomTableCell>Name</CustomTableCell>
+                <CustomTableCell>Current Initiative</CustomTableCell>
+                <CustomTableCell>Armour Class</CustomTableCell>
+                <CustomTableCell>Current HP / Max HP</CustomTableCell>
+                <CustomTableCell>Perception</CustomTableCell>
+                <CustomTableCell>Comments</CustomTableCell>
+                <CustomTableCell></CustomTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {this.props.combatants.map(combatant => {
                 return (
-                  <TableRow key={combatant.id}>
-                    <TableCell>
+                  <TableRow className={this.props.classes.row} key={combatant.id}>
+                    <CustomTableCell>
                       <Avatar className={combatant.npc ? this.props.classes.npcStyle : this.props.classes.playerStyle}>
                         {combatant.npc ? 'N' : 'P'}</Avatar>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
+                    </CustomTableCell>
+                    <CustomTableCell component="th" scope="row">
                       {combatant.name}
-                    </TableCell>
-                    <TableCell><input type='text' onChange={(e) => this.props.handleChange(combatant.id, "currentInitiative", e.target.value)}
-                                     value={combatant.currentInitiative} /></TableCell>
-                    <TableCell><input type='text' onChange={(e) => this.props.handleChange(combatant.id, "armourClass", e.target.value)}
-                                     value={combatant.armourClass} /></TableCell>
-                    <TableCell><input type='text' onChange={(e) => this.props.handleChange(combatant.id, "currentHp", e.target.value)}
-                                     value={combatant.currentHp} onKeyDown={(e) => this.handleKeyPress(combatant.id, "currentHp", e)} /></TableCell>
-                    <TableCell>{combatant.maxHp}</TableCell>
-                    <TableCell><input type='text' onChange={(e) => this.props.handleChange(combatant.id, "passivePerception", e.target.value)}
-                                     value={combatant.passivePerception} /></TableCell>
-                    <TableCell><input type='text' onChange={(e) => this.props.handleChange(combatant.id, "comment", e.target.value)}
-                                     value={combatant.comment} /></TableCell>
-                    <TableCell>delete</TableCell>
-                    <TableCell>info</TableCell>
+                    </CustomTableCell>
+                    <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "currentInitiative", e.target.value)}
+                                     value={combatant.currentInitiative} /></CustomTableCell>
+                    <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "armourClass", e.target.value)}
+                                     value={combatant.armourClass} /></CustomTableCell>
+                    <CustomTableCell>
+                    <input type='text' onChange={(e) => this.handleChange(combatant.id, "currentHp", e.target.value)}
+                                     value={combatant.currentHp} onKeyDown={(e) => this.handleKeyPress(combatant.id, "currentHp", e)} />
+                    <span style={{paddingLeft: "10px"}}>/{combatant.maxHp}</span>
+                    </CustomTableCell>
+                    <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "passivePerception", e.target.value)}
+                                     value={combatant.passivePerception} /></CustomTableCell>
+                    <CustomTableCell><textarea onChange={(e) => this.handleChange(combatant.id, "comment", e.target.value)}
+                                     value={combatant.comment} /></CustomTableCell>
+                    <CustomTableCell>
+                        <Button variant="fab" color="secondary" className={this.props.classes.button} onClick={(e) => this.props.deleteCombatant(combatant.id)}>
+                            <DeleteIcon />
+                        </Button>
+                        <Button variant="fab" className={this.props.classes.button}>
+                            <InfoIcon />
+                        </Button>
+                    </CustomTableCell>
                   </TableRow>
                 );
               })}

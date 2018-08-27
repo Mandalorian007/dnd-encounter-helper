@@ -84,8 +84,14 @@ class EncounterDrawerUnstyled extends React.Component {
   }
 
   deleteCombatant(combatantId) {
-    //TODO delete call
-    this.refreshCombatantsState();
+      fetch('http://localhost:8080/combatants/' + combatantId, {
+          method: 'DELETE',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+      }).catch(err => err)
+      .then(() => this.refreshCombatantsState());
   }
 
   updateCombatant(combatantId, data) {
@@ -93,6 +99,7 @@ class EncounterDrawerUnstyled extends React.Component {
           method: 'PATCH',
           body: JSON.stringify(data),
           headers: {
+            'Accept': 'application/json',
             'Content-Type': 'application/json'
           }
       }).catch(err => err)
@@ -115,7 +122,6 @@ class EncounterDrawerUnstyled extends React.Component {
         body: JSON.stringify(combatant),
     }).catch(err => err)
     .then(() => this.refreshCombatantsState());
-     this.refreshCombatantsState();
   }
 
   newRound(initiativeMap) {
@@ -147,7 +153,7 @@ class EncounterDrawerUnstyled extends React.Component {
   // Display assistance
   getContent() {
     if(this.state.contentTarget == "combatant") {
-      return <CombatantList combatants={this.state.combatants} newRound={this.newRound} updateCombatant={this.updateCombatant}/>;
+      return <CombatantList combatants={this.state.combatants} newRound={this.newRound} updateCombatant={this.updateCombatant} deleteCombatant={this.deleteCombatant}/>;
     }
     if(this.state.contentTarget == "new-combatant") {
       return <NewFixedStatCombatantForm createCombatant={this.createCombatant} navigateBack={this.navigateBack}/>;
