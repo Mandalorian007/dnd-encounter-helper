@@ -48,7 +48,9 @@ const CustomTableCell = withStyles(theme => ({
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
     padding: '5px',
-    textAlign: 'center',
+    '&:first-child': {
+        textAlign: 'center',
+    },
   },
   body: {
     '&:last-child': {
@@ -59,6 +61,7 @@ const CustomTableCell = withStyles(theme => ({
     },
     "&> textarea": {
         width: '300px',
+        verticalAlign: 'middle',
     },
     padding: '5px',
   },
@@ -75,6 +78,7 @@ class CombatantListUnstyled extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.computeClass = this.computeClass.bind(this);
   }
 
   handleOpen() {
@@ -86,6 +90,21 @@ class CombatantListUnstyled extends React.Component {
   }
 
   handleKeyPress(combatantId, dataType, e) {
+
+       let newItem = 1;
+       if (!isNaN(e.target.value)){
+          this.props.combatants.map(item => {
+              if (combatantId == item.id) {
+                  newItem = item.maxHp;
+              }
+          });
+
+          let val = math.eval(e.target.value / newItem);
+          let textClass = this.computeClass(val);
+          let newStyle = "0px 0px 40px 12px " + textClass;
+          document.getElementById('row' + combatantId).style.boxShadow = newStyle;
+       }
+
       if (e.keyCode === 13) {
         let value = math.eval(e.target.value);
         this.handleChange(combatantId, dataType, value)
@@ -94,7 +113,17 @@ class CombatantListUnstyled extends React.Component {
 
   handleChange(combatantId, dataType, value) {
     let data = {[dataType]: value};
-    this.props.updateCombatant(combatantId, data);
+    if (!isNaN(value) || dataType == "comment")
+        this.props.updateCombatant(combatantId, data);
+  }
+
+  computeClass(val) {
+    if (val < 0.33)
+        return 'red';
+    else if (val < 0.66)
+        return 'orange';
+    else
+        return 'green';
   }
 
   render() {
@@ -130,13 +159,13 @@ class CombatantListUnstyled extends React.Component {
                     <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "armourClass", e.target.value)}
                                      value={combatant.armourClass} /></CustomTableCell>
                     <CustomTableCell>
-                    <input type='text' onChange={(e) => this.handleChange(combatant.id, "currentHp", e.target.value)}
+                    <input type='text' id={"row" + combatant.id} onChange={(e) => this.handleChange(combatant.id, "currentHp", e.target.value)}
                                      value={combatant.currentHp} onKeyDown={(e) => this.handleKeyPress(combatant.id, "currentHp", e)} />
                     <span style={{paddingLeft: "10px"}}>/{combatant.maxHp}</span>
                     </CustomTableCell>
                     <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "passivePerception", e.target.value)}
                                      value={combatant.passivePerception} /></CustomTableCell>
-                    <CustomTableCell><textarea onChange={(e) => this.handleChange(combatant.id, "comment", e.target.value)}
+                    <CustomTableCell><textarea rows={3} onChange={(e) => this.handleChange(combatant.id, "comment", e.target.value)}
                                      value={combatant.comment} /></CustomTableCell>
                     <CustomTableCell>
                         <Button variant="fab" color="secondary" className={this.props.classes.button} onClick={(e) => this.props.deleteCombatant(combatant.id)}>
