@@ -84,24 +84,36 @@ class EncounterDrawerUnstyled extends React.Component {
   }
 
   deleteCombatant(combatantId) {
-    //TODO delete call
-    this.refreshCombatantsState();
+      fetch('http://localhost:8080/combatants/' + combatantId, {
+          method: 'DELETE',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+      }).catch(err => err)
+      .then(() => this.refreshCombatantsState());
   }
 
-  updateCombatant(combatant) {
-    //TODO patch call
-    this.refreshCombatantsState();
+  updateCombatant(combatantId, data) {
+      fetch('http://localhost:8080/combatants/' + combatantId, {
+          method: 'PATCH',
+          body: JSON.stringify(data),
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+      }).catch(err => err)
+      .then(() => this.refreshCombatantsState());
   }
 
-  createNpcs(numberOfDice, sizeOfDie, baseHp, conMod, enemyCount, combatant) {
+ createNpcs(numberOfDice, sizeOfDie, baseHp, conMod, enemyCount, combatant) {
     const url = 'http://localhost:8080/combatants/npcs/hitdie/'
       + this.getOrZero(numberOfDice)
         + '/' + this.getOrZero(sizeOfDie)
         + '/' + this.getOrZero(baseHp)
         + '/' + this.getOrZero(conMod)
         + '?count=' + this.getOrZero(enemyCount);
-
-    fetch(url, {
+     fetch(url, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -110,9 +122,6 @@ class EncounterDrawerUnstyled extends React.Component {
         body: JSON.stringify(combatant),
     }).catch(err => err)
     .then(() => this.refreshCombatantsState());
-
-
-    this.refreshCombatantsState();
   }
 
   newRound(initiativeMap) {
@@ -144,7 +153,7 @@ class EncounterDrawerUnstyled extends React.Component {
   // Display assistance
   getContent() {
     if(this.state.contentTarget == "combatant") {
-      return <CombatantList combatants={this.state.combatants} newRound={this.newRound}/>;
+      return <CombatantList combatants={this.state.combatants} newRound={this.newRound} updateCombatant={this.updateCombatant} deleteCombatant={this.deleteCombatant}/>;
     }
     if(this.state.contentTarget == "new-combatant") {
       return <NewFixedStatCombatantForm createCombatant={this.createCombatant} navigateBack={this.navigateBack}/>;
