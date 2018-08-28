@@ -84,13 +84,26 @@ class EncounterDrawer extends React.Component<any, any> {
     }
 
     deleteCombatant(combatantId) {
-        //TODO delete call
-        this.refreshCombatantsState();
+        fetch('http://localhost:8080/combatants/' + combatantId, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).catch(err => err)
+            .then(() => this.refreshCombatantsState());
     }
 
-    updateCombatant(combatant) {
-        //TODO patch call
-        this.refreshCombatantsState();
+    updateCombatant(combatantId, data) {
+        fetch('http://localhost:8080/combatants/' + combatantId, {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).catch(err => err)
+            .then(() => this.refreshCombatantsState());
     }
 
     createNpcs(numberOfDice, sizeOfDie, baseHp, conMod, enemyCount, combatant) {
@@ -110,9 +123,6 @@ class EncounterDrawer extends React.Component<any, any> {
             body: JSON.stringify(combatant),
         }).catch(err => err)
             .then(() => this.refreshCombatantsState());
-
-
-        this.refreshCombatantsState();
     }
 
     newRound(initiativeMap) {
@@ -144,7 +154,7 @@ class EncounterDrawer extends React.Component<any, any> {
     // Display assistance
     getContent() {
         if(this.state.contentTarget == "combatant") {
-            return <CombatantList combatants={this.state.combatants} newRound={this.newRound}/>;
+            return <CombatantList combatants={this.state.combatants} newRound={this.newRound} updateCombatant={this.updateCombatant} deleteCombatant={this.deleteCombatant}/>;
         }
         if(this.state.contentTarget == "new-combatant") {
             return <NewFixedStatCombatantForm createCombatant={this.createCombatant} navigateBack={this.navigateBack}/>;
