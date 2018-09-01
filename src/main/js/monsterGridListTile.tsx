@@ -8,8 +8,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
 import MonsterDetailsGrid from "./monsterDetailsGrid"
+import createStyles from "@material-ui/core/styles/createStyles";
 
-const styles = theme => ({
+const styles = createStyles({
    titleBar: {
       height: 'auto',
       padding: '5px 5px',
@@ -27,8 +28,12 @@ const styles = theme => ({
    },
 });
 
-class MonsterGridListTile extends React.Component<any, any> {
-  constructor(props) {
+interface State {
+    monsterDetails: any; //TODO figure out type
+}
+
+class MonsterGridListTile extends React.Component<any, State> {
+  constructor(props: any) {
     super(props);
     this.state = {
       monsterDetails: null,

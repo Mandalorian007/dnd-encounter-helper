@@ -5,40 +5,40 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
-class NewCombatantForm extends React.Component<any, any> {
-  constructor(props) {
+interface State {
+    combatant: Map<string, any>;
+}
+
+class NewCombatantForm extends React.Component<any, State> {
+  constructor(props: any) {
     super(props);
 
     this.state = this.initialState();
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.initialState = this.initialState.bind(this);
-    this.handleNpcToggle = this.handleNpcToggle.bind(this);
   }
 
-  initialState() {
+  initialState = () => {
     let combatant = new Map();
     combatant.set('isNpc', false);
     return {
       combatant: combatant,
     };
-  }
+  };
 
-  handleChange(event) {
+  handleChange = (event) => {
     let combatant = this.state.combatant;
     combatant.set(event.target.id, event.target.value);
     this.setState({combatant: combatant});
-  }
+  };
 
-  handleNpcToggle() {
+  handleNpcToggle = () => {
     let combatant = this.state.combatant;
     combatant.set('isNpc', !combatant.get('isNpc'));
     this.setState({
       combatant: combatant,
     });
-  }
+  };
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
 
     let combatant = this.state.combatant;
@@ -48,7 +48,7 @@ class NewCombatantForm extends React.Component<any, any> {
     // reset the state
     this.setState(this.initialState);
     this.props.navigateBack();
-  }
+  };
 
   render() {
     return (

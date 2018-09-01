@@ -4,7 +4,14 @@
     "noImplicitAny": false,
     "module": "commonjs",
     "target": "es6",
-    "jsx": "react"
+    "jsx": "react",
+    "lib": [
+      "es2016.array.include",
+      "dom",
+      "es6",
+      "es2016",
+      "es2017"
+    ]
   },
   "exclude": [
     "node_modules"

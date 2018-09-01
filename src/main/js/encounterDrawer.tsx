@@ -36,37 +36,32 @@ const encounterStyles = ({ zIndex, palette, spacing, mixins }: Theme) => createS
   },
   toolbar: mixins.toolbar,
 });
-class EncounterDrawer extends React.Component<any, any> {
-    constructor(props) {
+
+interface State {
+    contentTarget: string;
+    combatants: Combatant[];
+}
+
+class EncounterDrawer extends React.Component<any, State> {
+    constructor(props: any) {
         super(props);
-        this.state={
+        this.state = {
             contentTarget: "combatant",
             combatants: []
         };
-
-        this.refreshCombatantsState = this.refreshCombatantsState.bind(this);
-        this.createCombatant = this.createCombatant.bind(this);
-        this.deleteCombatant = this.deleteCombatant.bind(this);
-        this.updateCombatant = this.updateCombatant.bind(this);
-        this.createNpcs = this.createNpcs.bind(this);
-        this.newRound = this.newRound.bind(this);
-        this.selectContent = this.selectContent.bind(this);
-        this.getContent = this.getContent.bind(this);
-        this.navigateBack = this.navigateBack.bind(this);
-        this.getOrZero = this.getOrZero.bind(this);
-    }
+    };
 
     componentDidMount() {
         this.refreshCombatantsState();
-    }
+    };
 
-    refreshCombatantsState() {
+    refreshCombatantsState = () => {
         fetch(`http://localhost:8080/combatants`)
             .then(results => results.json())
             .then(data => this.setState({combatants: data}));
-    }
+    };
 
-    createCombatant(combatant) {
+    createCombatant = (combatant) => {
         let obj = Array.from(combatant).reduce((obj, [key, value]) => {
             obj[key] = value;
             return obj;
@@ -81,9 +76,9 @@ class EncounterDrawer extends React.Component<any, any> {
             body: JSON.stringify(obj),
         })
             .then(() => this.refreshCombatantsState());
-    }
+    };
 
-    deleteCombatant(combatantId) {
+    deleteCombatant = (combatantId) => {
         fetch('http://localhost:8080/combatants/' + combatantId, {
             method: 'DELETE',
             headers: {
@@ -92,9 +87,9 @@ class EncounterDrawer extends React.Component<any, any> {
             }
         }).catch(err => err)
             .then(() => this.refreshCombatantsState());
-    }
+    };
 
-    updateCombatant(combatantId, data) {
+    updateCombatant = (combatantId, data) => {
         fetch('http://localhost:8080/combatants/' + combatantId, {
             method: 'PATCH',
             body: JSON.stringify(data),
@@ -104,9 +99,9 @@ class EncounterDrawer extends React.Component<any, any> {
             }
         }).catch(err => err)
             .then(() => this.refreshCombatantsState());
-    }
+    };
 
-    createNpcs(numberOfDice, sizeOfDie, baseHp, conMod, enemyCount, combatant) {
+    createNpcs = (numberOfDice, sizeOfDie, baseHp, conMod, enemyCount, combatant) => {
         const url = 'http://localhost:8080/combatants/npcs/hitdie/'
             + this.getOrZero(numberOfDice)
             + '/' + this.getOrZero(sizeOfDie)
@@ -123,9 +118,9 @@ class EncounterDrawer extends React.Component<any, any> {
             body: JSON.stringify(combatant),
         }).catch(err => err)
             .then(() => this.refreshCombatantsState());
-    }
+    };
 
-    newRound(initiativeMap) {
+    newRound = (initiativeMap) => {
         let obj = Array.from(initiativeMap).reduce((obj, [key, value]) => {
             obj[key] = value;
             return obj;
@@ -141,18 +136,18 @@ class EncounterDrawer extends React.Component<any, any> {
         })
             .then(results => results.json())
             .then(data => this.setState({combatants: data}));
-    }
+    };
 
-    navigateBack() {
+    navigateBack = () => {
         this.selectContent("combatant");
-    }
+    };
 
-    selectContent(screen) {
+    selectContent = (screen) => {
         this.setState({contentTarget: screen});
-    }
+    };
 
     // Display assistance
-    getContent() {
+    getContent = () => {
         if(this.state.contentTarget == "combatant") {
             return <CombatantList combatants={this.state.combatants} newRound={this.newRound} updateCombatant={this.updateCombatant} deleteCombatant={this.deleteCombatant}/>;
         }
@@ -162,15 +157,15 @@ class EncounterDrawer extends React.Component<any, any> {
         if(this.state.contentTarget == "npc-template") {
             return <NewNpcsFromTemplateForm createNpcs={this.createNpcs} navigateBack={this.navigateBack}/>;
         }
-    }
+    };
 
-    getOrZero(number) {
+    getOrZero = (number) => {
         if(number == null) {
             return 0;
         } else {
             return number;
         }
-    }
+    };
 
     render() {
         const { classes } = this.props;
@@ -185,9 +180,7 @@ class EncounterDrawer extends React.Component<any, any> {
                 </AppBar>
                 <Drawer
                     variant="permanent"
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
+                    classes={{ paper: classes.drawerPaper }}
                 >
                     <div className={classes.toolbar} />
                     <List>
