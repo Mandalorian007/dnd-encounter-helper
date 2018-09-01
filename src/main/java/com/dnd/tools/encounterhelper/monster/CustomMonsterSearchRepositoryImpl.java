@@ -17,7 +17,7 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
     StringBuilder queryBuilder = new StringBuilder();
 
     queryBuilder.append("SELECT * FROM Monster m");
-    queryBuilder.append(" WHERE LOWER(m.NAME) LIKE '");
+    queryBuilder.append(" WHERE LOWER(m.NAME) LIKE '%");
     String partialName = monsterSearch.getPartialName() == null ? "" : monsterSearch.getPartialName();
     queryBuilder.append(partialName.toLowerCase());
     queryBuilder.append("%'");
