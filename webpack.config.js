@@ -4,8 +4,8 @@ module.exports = {
   entry: './src/main/js/app.tsx',
   cache: true,
   output: {
-    path: __dirname + "src/main/resources/static/built",
-    filename: 'bundle.js'
+    path: __dirname,
+    filename: './src/main/resources/static/built/bundle.js'
   },
   resolve: {
       extensions: [".ts", ".tsx", ".js"]

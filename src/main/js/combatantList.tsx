@@ -67,8 +67,8 @@ const tableStyle = ({ palette }: Theme) => createStyles({
     },
 });
 
-const CustomTableCell = withStyles(tableStyle)(({ classes }: TableCellProps) => (
-    <TableCell classes={classes} />
+const CustomTableCell = withStyles(tableStyle)(({ classes, children }: TableCellProps) => (
+    <TableCell classes={classes}>{children}</TableCell>
 ));
 
 class CombatantList extends React.Component<any, any> {
