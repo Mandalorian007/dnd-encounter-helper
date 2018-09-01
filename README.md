@@ -63,4 +63,3 @@ Upcoming features:
 - Filter by alignment (need to add this if we do this)
 - Fix HP modifications by + or -
 - Details option modal for monsters & players on main page
-- Search by name should be any match not just start of word
