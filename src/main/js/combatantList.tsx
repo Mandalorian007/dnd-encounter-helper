@@ -71,29 +71,27 @@ const CustomTableCell = withStyles(tableStyle)(({ classes, children }: TableCell
     <TableCell classes={classes}>{children}</TableCell>
 ));
 
-class CombatantList extends React.Component<any, any> {
-    constructor(props) {
+interface State {
+    open: boolean;
+}
+
+class CombatantList extends React.Component<any, State> {
+    constructor(props: any) {
         super(props);
         this.state={
             open: false,
         };
+    };
 
-        this.handleOpen = this.handleOpen.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-        this.handleKeyPress = this.handleKeyPress.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.computeClass = this.computeClass.bind(this);
-    }
-
-    handleOpen() {
+    handleOpen = () => {
         this.setState({open: true})
-    }
+    };
 
-    handleClose() {
+    handleClose = () => {
         this.setState({open: false})
-    }
+    };
 
-    handleKeyPress(combatantId, dataType, e) {
+    handleKeyPress = (combatantId, dataType, e) =>{
 
         let newItem = 1;
         if (!isNaN(e.target.value)){
@@ -113,22 +111,22 @@ class CombatantList extends React.Component<any, any> {
             let value = math.eval(e.target.value);
             this.handleChange(combatantId, dataType, value)
         }
-    }
+    };
 
-    handleChange(combatantId, dataType, value) {
+    handleChange = (combatantId, dataType, value) => {
         let data = {[dataType]: value};
         if (!isNaN(value) || dataType == "comment")
             this.props.updateCombatant(combatantId, data);
-    }
+    };
 
-    computeClass(val) {
+    computeClass= (val) => {
         if (val < 0.33)
             return 'red';
         else if (val < 0.66)
             return 'orange';
         else
             return 'green';
-    }
+    };
 
     render() {
         return (

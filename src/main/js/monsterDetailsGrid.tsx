@@ -12,28 +12,26 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+import createStyles from "@material-ui/core/styles/createStyles";
 
 
-const styles = theme => ({
+const styles = createStyles({
   imageThumbnail: {
     display: 'flex',
     margin: 'auto',
     width: '93.5%',
   },
 });
-class MonsterDetailsGrid extends React.Component<any, any> {
-    constructor(props) {
+class MonsterDetailsGrid extends React.Component<any, {}> {
+    constructor(props: any) {
         super(props);
+    };
 
-        this.getActions = this.getActions.bind(this);
-        this.getModifier = this.getModifier.bind(this);
-    }
-
-    getModifier(abilityScore) {
+    getModifier = (abilityScore) => {
         return Math.floor((abilityScore-10)/2);
-    }
+    };
 
-    getActions(actionList, subHeaderName) {
+    getActions = (actionList, subHeaderName) => {
         if (Array.isArray(actionList) && actionList.length) {
             return (
                 <div>
@@ -76,7 +74,7 @@ class MonsterDetailsGrid extends React.Component<any, any> {
                 </div>
             )
         }
-    }
+    };
 
     render() {
         const monster = this.props.monster;

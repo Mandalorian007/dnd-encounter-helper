@@ -38,40 +38,44 @@ const styles = ({ palette, spacing }: Theme) => createStyles({
         paddingLeft: "0px",
     },
 });
-class NewNpcsFromTemplateForm extends React.Component<any, any> {
-    constructor(props) {
+
+interface State {
+    monsterSearch: MonsterSearch;
+    toggleOptions: ToggleOptions;
+    monsters: Monster[];
+}
+
+interface MonsterSearch {
+    partialName?: string;
+    sizes?: Size[];
+    hitPoints: Range;
+    armourClass: Range;
+    challengeRating: Range;
+}
+
+interface Range {
+    lowerBound: number;
+    upperBound: number;
+}
+
+interface ToggleOptions {
+    hitPointsDisabled: string,
+    armourClassDisabled: string,
+    challengeDisabled: string,
+}
+
+class NewNpcsFromTemplateForm extends React.Component<any, State> {
+    constructor(props: any) {
         super(props);
 
         this.state = this.initialState();
-
-        this.searchNameAdjustment = this.searchNameAdjustment.bind(this);
-        this.searchSizeAdjustment = this.searchSizeAdjustment.bind(this);
-        this.searchSliderAdjustment = this.searchSliderAdjustment.bind(this);
-        this.onSliderChange = this.onSliderChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.initialState = this.initialState.bind(this);
-        this.getChallengeRatingDisplay = this.getChallengeRatingDisplay.bind(this);
-        this.getChallengeRatingAPI = this.getChallengeRatingAPI.bind(this);
-    }
+    };
 
     componentDidMount() {
         this.refreshMonsterSearchState(this.state.monsterSearch);
-    }
+    };
 
-    refreshMonsterSearchState(monsterSearch) {
-        fetch(`http://localhost:8080/monsters/search`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(monsterSearch)
-        })
-            .then(results => results.json())
-            .then(data => this.setState({ monsters: data }));
-    }
-
-    initialState() {
+    initialState = () => {
         return {
             monsterSearch: {
                 partialName: null,
@@ -88,47 +92,65 @@ class NewNpcsFromTemplateForm extends React.Component<any, any> {
                     lowerBound: 1,
                     upperBound: 33
                 },
+            },
+            toggleOptions: {
                 hitPointsDisabled : '',
                 armourClassDisabled: '',
-                challengeDisabled: ''
+                challengeDisabled: '',
             },
             monsters: [],
         };
-    }
+    };
 
-    searchNameAdjustment(event) {
+    refreshMonsterSearchState = (monsterSearch) => {
+        fetch(`http://localhost:8080/monsters/search`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(monsterSearch)
+        })
+            .then(results => results.json())
+            .then(data => this.setState({ monsters: data }));
+    };
+
+    searchNameAdjustment = (event) => {
         let monsterSearch = this.state.monsterSearch;
         monsterSearch.partialName = event.target.value;
         this.setState({ monsterSearch: monsterSearch });
         this.refreshMonsterSearchState(monsterSearch);
-    }
+    };
 
-    searchSizeAdjustment(event) {
+    searchSizeAdjustment = (searchSize: Size) => {
         let monsterSearch = this.state.monsterSearch;
         let sizes = monsterSearch.sizes;
-        if (sizes.includes(event.target.id)) {
-            sizes = sizes.filter(size => size != event.target.id);
+
+        console.log(searchSize);
+        if (sizes.includes(searchSize)) {
+            sizes = sizes.filter(size => size != searchSize);
         } else {
-            sizes.push(event.target.id);
+            sizes.push(searchSize);
         }
         monsterSearch.sizes = sizes;
         this.setState({ monsterSearch: monsterSearch });
         this.refreshMonsterSearchState(monsterSearch);
-    }
+    };
 
-    searchSliderAdjustment(event, checked) {
+    searchSliderAdjustment = (event, checked) =>{
         let monsterSearch = this.state.monsterSearch;
+        let toggleOptions = this.state.toggleOptions;
 
         if (event.target.id == "armour-class")
         {
             if (!checked)
             {
                 monsterSearch.armourClass =  { lowerBound: 5, upperBound: 25};
-                monsterSearch.armourClassDisabled = '';
+                toggleOptions.armourClassDisabled = '';
             }
             else
             {
-                monsterSearch.armourClassDisabled = 'enabled';
+                toggleOptions.armourClassDisabled = 'enabled';
             }
         }
         else if (event.target.id == "hit-points")
@@ -136,11 +158,11 @@ class NewNpcsFromTemplateForm extends React.Component<any, any> {
             if (!checked)
             {
                 monsterSearch.hitPoints = { lowerBound: 1, upperBound: 700};
-                monsterSearch.hitPointsDisabled = '';
+                toggleOptions.hitPointsDisabled = '';
             }
             else
             {
-                monsterSearch.hitPointsDisabled = 'enabled';
+                toggleOptions.hitPointsDisabled = 'enabled';
             }
         }
         else if (event.target.id == "challenge-rating")
@@ -148,19 +170,19 @@ class NewNpcsFromTemplateForm extends React.Component<any, any> {
             if (!checked)
             {
                 monsterSearch.challengeRating =  { lowerBound: 0, upperBound: 33};
-                monsterSearch.challengeDisabled = '';
+                toggleOptions.challengeDisabled = '';
             }
             else
             {
-                monsterSearch.challengeDisabled = 'enabled';
+                toggleOptions.challengeDisabled = 'enabled';
             }
         }
 
         this.setState({ monsterSearch: monsterSearch });
         this.refreshMonsterSearchState(this.state.monsterSearch);
-    }
+    };
 
-    onSliderChange (name, value) {
+    onSliderChange = (name, value) => {
         let monsterSearch = this.state.monsterSearch;
 
         if (name == "armour-class")
@@ -172,27 +194,17 @@ class NewNpcsFromTemplateForm extends React.Component<any, any> {
 
         this.setState({ monsterSearch: monsterSearch });
         this.refreshMonsterSearchState(this.state.monsterSearch);
-    }
+    };
 
-    handleSubmit(event) {
-        event.preventDefault();
-        //TODO fun
-        let npc = [];
-        //this.props.createNpcscreateNpcs(numberOfDice, sizeOfDie, baseHp, conMod, npc);
-
-        // reset the state
-        this.setState(this.initialState);
-    }
-
-    getChallengeRatingDisplay(pos) {
+    getChallengeRatingDisplay = (pos) =>{
         const cr = ["0", "1/3", "1/4", "1/2", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"];
         return cr[pos - 1];
-    }
+    };
 
-    getChallengeRatingAPI(start, end) {
+    getChallengeRatingAPI = (start, end) => {
         const cr = [0.0, 0.125, 0.25, 0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0];
         return cr.slice(start - 1, end - 1);
-    }
+    };
 
     render() {
         const createSliderWithTooltip = Slider.createSliderWithTooltip;
@@ -225,12 +237,12 @@ class NewNpcsFromTemplateForm extends React.Component<any, any> {
                             <FormLabel component="legend">Size</FormLabel>
                             <FormGroup>
                                 {
-                                    sizes.map(size => {
+                                    sizes.map((size: Size) => {
                                         return (
                                             <FormControlLabel
                                                 key={ size }
                                                 control={
-                                                    <Checkbox id={ size } onChange={ this.searchSizeAdjustment }/>
+                                                    <Checkbox id={ size } onChange={ () => this.searchSizeAdjustment(size) }/>
                                                 }
                                                 label={ size }
                                             />
@@ -260,7 +272,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, any> {
                                     ]}
                                     allowCross={false}
                                     onAfterChange={(v) => this.onSliderChange('hit-points', v)}
-                                    disabled={!this.state.monsterSearch.hitPointsDisabled}
+                                    disabled={!this.state.toggleOptions.hitPointsDisabled}
                                 />
                             </ListItem>
                             <ListItem className={this.props.classes.ListItemClass}>
@@ -282,7 +294,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, any> {
                                     ]}
                                     allowCross={false}
                                     onAfterChange={(v) => this.onSliderChange('armour-class', v)}
-                                    disabled={!this.state.monsterSearch.armourClassDisabled}
+                                    disabled={!this.state.toggleOptions.armourClassDisabled}
                                 />
                             </ListItem>
                             <ListItem className={this.props.classes.ListItemClass}>
@@ -304,7 +316,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, any> {
                                     ]}
                                     allowCross={false}
                                     onAfterChange={(v) => this.onSliderChange('challenge-rating', v)}
-                                    disabled={!this.state.monsterSearch.challengeDisabled}
+                                    disabled={!this.state.toggleOptions.challengeDisabled}
                                     tipFormatter={ value => this.getChallengeRatingDisplay(value) }
                                 />
                             </ListItem>

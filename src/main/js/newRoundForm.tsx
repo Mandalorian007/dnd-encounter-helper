@@ -8,25 +8,29 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-class NewRoundForm extends React.Component<any, any> {
+interface State {
+    inititatives: Map<string, number>;
+}
+
+class NewRoundForm extends React.Component<any, State> {
   constructor(props) {
     super(props);
     this.state = this.initialState();
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.initialState = this.initialState.bind(this);
-  }
-  initialState() {
+  };
+
+  initialState = () => {
     return {
       inititatives: new Map(),
     };
-  }
-  handleChange(event) {
+  };
+
+  handleChange = (event) => {
     let inititatives = this.state.inititatives;
     inititatives.set(event.target.id, event.target.value);
     this.setState({inititatives: inititatives});
-  }
-  handleSubmit(event) {
+  };
+
+  handleSubmit = (event) => {
     event.preventDefault();
     // trigger a new round
     this.props.newRound(this.state.inititatives);
@@ -34,7 +38,8 @@ class NewRoundForm extends React.Component<any, any> {
     this.setState(this.initialState);
     // close the dialog
     this.props.handleClose(event);
-  }
+  };
+
   render() {
     const players = this.props.combatants.filter(function(combatant){
       return combatant.npc != true;
