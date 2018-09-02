@@ -13,6 +13,10 @@ import DeleteIcon from '@material-ui/icons/Clear';
 import InfoIcon from '@material-ui/icons/Info';
 import NewRoundForm from "./newRoundForm";
 import * as math from 'mathjs';
+import DialogContent from "@material-ui/core/DialogContent/DialogContent";
+import MonsterDetailsGrid from "./monsterDetailsGrid";
+import DialogActions from "@material-ui/core/DialogActions/DialogActions";
+import Dialog from "@material-ui/core/Dialog/Dialog";
 
 const combatantStyles = ({ palette, spacing }: Theme) => createStyles({
     root: {
@@ -73,6 +77,7 @@ const CustomTableCell = withStyles(tableStyle)(({ classes, children }: TableCell
 
 interface State {
     open: boolean;
+    monster?: Monster;
 }
 
 class CombatantList extends React.Component<any, State> {
@@ -80,6 +85,7 @@ class CombatantList extends React.Component<any, State> {
         super(props);
         this.state={
             open: false,
+            monster: null,
         };
     };
 
@@ -89,6 +95,16 @@ class CombatantList extends React.Component<any, State> {
 
     handleClose = () => {
         this.setState({open: false})
+    };
+
+    getMonsterDetails = (monsterId: string) => {
+        fetch(`http://localhost:8080/monsters/` + monsterId)
+            .then(results => results.json())
+            .then(data => this.setState({monster: data}));
+    };
+
+    handleMonsterDetailsClose = () => {
+      this.setState({monster: null});
     };
 
     handleKeyPress = (combatantId, dataType, e) =>{
@@ -128,6 +144,15 @@ class CombatantList extends React.Component<any, State> {
             return 'green';
     };
 
+    getDetailContent = () => {
+        if(this.state.monster != null) {
+            return <MonsterDetailsGrid
+                monster={this.state.monster}
+                imageSrc={`https://5etools.com/img/MM/${this.state.monster.name}.png`}
+            />;
+        }
+    };
+
     render() {
         return (
             <div>
@@ -156,8 +181,7 @@ class CombatantList extends React.Component<any, State> {
                                         <CustomTableCell component="th" scope="row">
                                             {combatant.name}
                                         </CustomTableCell>
-                                        <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "currentInitiative", e.target.value)}
-                                                                value={combatant.currentInitiative} /></CustomTableCell>
+                                        <CustomTableCell><input type='text' value={combatant.currentInitiative} /></CustomTableCell>
                                         <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "armourClass", e.target.value)}
                                                                 value={combatant.armourClass} /></CustomTableCell>
                                         <CustomTableCell>
@@ -170,10 +194,10 @@ class CombatantList extends React.Component<any, State> {
                                         <CustomTableCell><textarea rows={3} onChange={(e) => this.handleChange(combatant.id, "comment", e.target.value)}
                                                                    value={combatant.comment} /></CustomTableCell>
                                         <CustomTableCell>
-                                            <Button variant="fab" color="secondary" className={this.props.classes.button} onClick={(e) => this.props.deleteCombatant(combatant.id)}>
+                                            <Button variant="fab" color="secondary" className={this.props.classes.button} onClick={() => this.props.deleteCombatant(combatant.id)}>
                                                 <DeleteIcon />
                                             </Button>
-                                            <Button variant="fab" className={this.props.classes.button}>
+                                            <Button variant="fab" className={this.props.classes.button} onClick={() => this.getMonsterDetails(combatant.monsterId)} disabled={!Boolean(combatant.monsterId)}>
                                                 <InfoIcon />
                                             </Button>
                                         </CustomTableCell>
@@ -189,6 +213,21 @@ class CombatantList extends React.Component<any, State> {
                     newRound={this.props.newRound}
                     open={this.state.open}
                     handleClose={this.handleClose}/>
+
+                <Dialog
+                    open={ Boolean(this.state.monster) }
+                    onClose={ this.handleMonsterDetailsClose }
+                    aria-labelledby="form-dialog-title"
+                    aria-describedby="form-dialog-description">
+                    <DialogContent>
+                        {this.getDetailContent()}
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={ this.handleMonsterDetailsClose } color="primary">
+                            Ok
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         )
     }
