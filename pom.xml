@@ -82,6 +82,7 @@
 				<executions>
 					<execution>
 						<id>install node and npm</id>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>install-node-and-npm</goal>
 						</goals>
@@ -91,6 +92,7 @@
 					</execution>
 					<execution>
 						<id>npm install</id>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>npm</goal>
 						</goals>
@@ -109,5 +111,45 @@
 		</plugins>
 	</build>
 
+    <profiles>
+        <profile>
+            <id>Docker</id>
+            <!--  docker run -p 8080:8080 -t mandalorian007/encounter-helper -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <version>1.4.4</version>
+                        <!-- make sure you  "Expose daemon to tcp://localhost:2375 without TLS" in Docker settings -->
+                        <dependencies>
+                            <!-- Required to be added manually no longer present in jdk -->
+                            <dependency>
+                                <groupId>javax.activation</groupId>
+                                <artifactId>activation</artifactId>
+                                <version>1.1.1</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <repository>mandalorian007/${project.artifactId}</repository>
+                            <buildArgs>
+                                <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                            </buildArgs>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>default</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                    <goal>push</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
