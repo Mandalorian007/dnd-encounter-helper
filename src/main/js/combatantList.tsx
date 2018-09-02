@@ -182,7 +182,7 @@ class CombatantList extends React.Component<any, State> {
                                         <CustomTableCell component="th" scope="row">
                                             {combatant.name}
                                         </CustomTableCell>
-                                        <CustomTableCell><input type='text' value={combatant.currentInitiative} /></CustomTableCell>
+                                        <CustomTableCell>{combatant.currentInitiative}</CustomTableCell>
                                         <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "armourClass", e.target.value)}
                                                                 value={combatant.armourClass} /></CustomTableCell>
                                         <CustomTableCell>
