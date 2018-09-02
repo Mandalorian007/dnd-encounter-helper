@@ -131,7 +131,8 @@
                             </dependency>
                         </dependencies>
                         <configuration>
-                            <repository>mandalorian007/${project.artifactId}</repository>
+                            <repository>gcr.io/encounter-helper/${project.artifactId}</repository>
+							<tag>v1</tag>
                             <buildArgs>
                                 <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                             </buildArgs>

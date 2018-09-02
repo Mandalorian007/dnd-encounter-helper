@@ -17,6 +17,7 @@ import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import MonsterDetailsGrid from "./monsterDetailsGrid";
 import DialogActions from "@material-ui/core/DialogActions/DialogActions";
 import Dialog from "@material-ui/core/Dialog/Dialog";
+import {API_ROOT} from "./api-config";
 
 const combatantStyles = ({ palette, spacing }: Theme) => createStyles({
     root: {
@@ -98,7 +99,7 @@ class CombatantList extends React.Component<any, State> {
     };
 
     getMonsterDetails = (monsterId: string) => {
-        fetch(`http://localhost:8080/monsters/` + monsterId)
+        fetch(`${API_ROOT}/monsters/` + monsterId)
             .then(results => results.json())
             .then(data => this.setState({monster: data}));
     };
