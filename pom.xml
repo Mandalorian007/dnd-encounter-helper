@@ -114,9 +114,26 @@
     <profiles>
         <profile>
             <id>Docker</id>
-            <!--  docker run -p 8080:8080 -t mandalorian007/encounter-helper -->
             <build>
                 <plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>buildnumber-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>create-timestamp</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>create-timestamp</goal>
+								</goals>
+								<configuration>
+									<timezone>UTC</timezone>
+									<timestampFormat>yyyyMMdd'T'HHmmss</timestampFormat>
+									<timestampPropertyName>buildTimestamp</timestampPropertyName>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
                     <plugin>
                         <groupId>com.spotify</groupId>
                         <artifactId>dockerfile-maven-plugin</artifactId>
@@ -132,7 +149,7 @@
                         </dependencies>
                         <configuration>
                             <repository>gcr.io/encounter-helper/${project.artifactId}</repository>
-							<tag>v1</tag>
+							<tag>v1-${buildTimestamp}</tag>
                             <buildArgs>
                                 <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                             </buildArgs>
