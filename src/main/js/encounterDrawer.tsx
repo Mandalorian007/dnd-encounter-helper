@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import CombatantList from "./combatantList";
 import NewFixedStatCombatantForm from "./newFixedStatCombatantForm";
 import NewNpcsFromTemplateForm from "./newNpcsFromTemplateForm";
+import {API_ROOT} from "./api-config";
 
 const encounterStyles = ({ zIndex, palette, spacing, mixins }: Theme) => createStyles({
   root: {
@@ -56,7 +57,7 @@ class EncounterDrawer extends React.Component<any, State> {
     };
 
     refreshCombatantsState = () => {
-        fetch(`http://localhost:8080/combatants`)
+        fetch(`${API_ROOT}/combatants`)
             .then(results => results.json())
             .then(data => this.setState({combatants: data}));
     };
@@ -67,7 +68,7 @@ class EncounterDrawer extends React.Component<any, State> {
             return obj;
         }, {});
 
-        fetch(`http://localhost:8080/combatants`, {
+        fetch(`${API_ROOT}/combatants`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -79,7 +80,7 @@ class EncounterDrawer extends React.Component<any, State> {
     };
 
     deleteCombatant = (combatantId) => {
-        fetch('http://localhost:8080/combatants/' + combatantId, {
+        fetch(`${API_ROOT}/combatants/` + combatantId, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -90,7 +91,7 @@ class EncounterDrawer extends React.Component<any, State> {
     };
 
     updateCombatant = (combatantId, data) => {
-        fetch('http://localhost:8080/combatants/' + combatantId, {
+        fetch(`${API_ROOT}/combatants/` + combatantId, {
             method: 'PATCH',
             body: JSON.stringify(data),
             headers: {
@@ -102,7 +103,7 @@ class EncounterDrawer extends React.Component<any, State> {
     };
 
     createNpcs = (numberOfDice, sizeOfDie, baseHp, conMod, enemyCount, combatant) => {
-        const url = 'http://localhost:8080/combatants/npcs/hitdie/'
+        const url = `${API_ROOT}/combatants/npcs/hitdie/`
             + this.getOrZero(numberOfDice)
             + '/' + this.getOrZero(sizeOfDie)
             + '/' + this.getOrZero(baseHp)
@@ -126,7 +127,7 @@ class EncounterDrawer extends React.Component<any, State> {
             return obj;
         }, {});
 
-        fetch(`http://localhost:8080/combatants/newRound`, {
+        fetch(`${API_ROOT}/combatants/newRound`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
