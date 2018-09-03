@@ -102,6 +102,10 @@ class EncounterDrawer extends React.Component<any, State> {
             .then(() => this.refreshCombatantsState());
     };
 
+    updateState = (data) => {
+        this.setState({combatants: data});
+    };
+
     createNpcs = (numberOfDice, sizeOfDie, baseHp, conMod, enemyCount, combatant) => {
         const url = `${API_ROOT}/combatants/npcs/hitdie/`
             + this.getOrZero(numberOfDice)
@@ -150,7 +154,7 @@ class EncounterDrawer extends React.Component<any, State> {
     // Display assistance
     getContent = () => {
         if(this.state.contentTarget == "combatant") {
-            return <CombatantList combatants={this.state.combatants} newRound={this.newRound} updateCombatant={this.updateCombatant} deleteCombatant={this.deleteCombatant}/>;
+            return <CombatantList combatants={this.state.combatants} newRound={this.newRound} updateCombatant={this.updateCombatant} updateState={this.updateState} deleteCombatant={this.deleteCombatant}/>;
         }
         if(this.state.contentTarget == "new-combatant") {
             return <NewFixedStatCombatantForm createCombatant={this.createCombatant} navigateBack={this.navigateBack}/>;

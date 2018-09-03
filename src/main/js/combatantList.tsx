@@ -109,21 +109,6 @@ class CombatantList extends React.Component<any, State> {
     };
 
     handleKeyPress = (combatantId, dataType, e) =>{
-
-        let newItem = 1;
-        if (!isNaN(e.target.value)){
-            this.props.combatants.map(item => {
-                if (combatantId == item.id) {
-                    newItem = item.maxHp;
-                }
-            });
-
-            let val = math.eval(e.target.value / newItem);
-            let textClass = this.computeClass(val);
-            let newStyle = "0px 0px 40px 12px " + textClass;
-            document.getElementById('row' + combatantId).style.boxShadow = newStyle;
-        }
-
         if (e.keyCode === 13) {
             let value = math.eval(e.target.value);
             this.handleChange(combatantId, dataType, value)
@@ -132,8 +117,36 @@ class CombatantList extends React.Component<any, State> {
 
     handleChange = (combatantId, dataType, value) => {
         let data = {[dataType]: value};
-        if (!isNaN(value) || dataType == "comment")
+
+        if (!isNaN(value) || dataType == "comment") {
             this.props.updateCombatant(combatantId, data);
+        }
+        else {
+            const newState = this.props.combatants.map(item => {
+                if (item.id == combatantId) {
+                    return {...item, [dataType]: value};
+                }
+                return item;
+            });
+
+            this.props.updateState(newState);
+        }
+
+        if (dataType == "currentHp") {
+            let maxHp = 1;
+            if (!isNaN(value)){
+                this.props.combatants.map(item => {
+                    if (combatantId == item.id) {
+                        maxHp = item.maxHp;
+                    }
+                });
+
+                let val = math.eval(value / maxHp);
+                let color = this.computeClass(val);
+                let newStyle = "0px 0px 40px 12px " + color;
+                document.getElementById('row' + combatantId).style.boxShadow = newStyle;
+            }
+        }
     };
 
     computeClass= (val) => {
