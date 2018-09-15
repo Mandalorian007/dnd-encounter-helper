@@ -1,19 +1,13 @@
 import * as React from "react";
 
 import { withStyles } from "@material-ui/core/styles/index";
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Grid from '@material-ui/core/Grid';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import InfoIcon from '@material-ui/icons/Info';
 import createStyles from "@material-ui/core/styles/createStyles";
 
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 const styles = createStyles({
   imageThumbnail: {
@@ -21,10 +15,71 @@ const styles = createStyles({
     margin: 'auto',
     width: '93.5%',
   },
+  popupImageThumbnail: {
+    position: 'absolute',
+    top: '0.1em',
+    right: '0.1em',
+    float: 'right',
+    width: 'auto',
+    maxWidth: '6em',
+    height: 'auto',
+    fontSize: '1.8em',
+  },
+  name: {
+    color: '#922610',
+    float: 'left',
+    fontSize: '1.8em',
+    fontVariant: 'small-caps',
+  },
+  divider: {
+	background: '#922610',
+	height: '2px',
+	margin: '5px 0px',
+  },
+  table: {
+    minWidth: 550,
+  },
+  row: {
+    height: 'auto',
+  },
+  tableCell: {
+    border: 'none',
+    padding: '3px',
+  },
+  blue: {
+    color:'#337ab7',
+  },
+  titles: {
+      fontSize: '1.2em',
+      fontVariant: 'small-caps',
+      borderBottom: '2px solid #922610',
+      color: '#922610',
+      verticalAlign: 'bottom !important',
+      paddingLeft: '0.2em',
+  },
+  InlineStats: {
+     marginBottom: '1em',
+  },
+  EntryTitle: {
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+  },
 });
-class MonsterDetailsGrid extends React.Component<any, {}> {
+
+interface State {
+    expandedRows?: any;
+}
+
+class MonsterDetailsGrid extends React.Component<any, State> {
     constructor(props: any) {
         super(props);
+        this.state = this.initialState();
+    };
+
+    initialState = () => {
+        return {
+            expandedRows : [],
+        }
     };
 
     getModifier = (abilityScore) => {
@@ -32,142 +87,215 @@ class MonsterDetailsGrid extends React.Component<any, {}> {
     };
 
     getActions = (actionList, subHeaderName) => {
+        const rowId = "row-data-" + subHeaderName;
         if (Array.isArray(actionList) && actionList.length) {
-            return (
-                <div>
-                    <Divider/>
-                    <ListSubheader>{subHeaderName}</ListSubheader>
-                    {
-                        actionList.map(action => {
-                            return (
-                                <ListItem key={action.name}>
-                                    <ListItemText
-                                        primary={
-                                            action.name
-                                            + "\u{00a0}\u{00a0}\u{00a0}\u{00a0}\u{00a0}"
-                                            + ((action.attackBonus != null && action.attackBonus != 0)
-                                                    ? "Attack Bonus: " + action.attackBonus + " "
-                                                    : ""
-                                            )
-                                            + '\u{00a0}\u{00a0}\u{00a0}\u{00a0}\u{00a0}' +
-                                            (
-                                                (action.damageDice != null && action.damageDice != "")
-                                                    ? " Damage:\u{00a0}" + action.damageDice +
-                                                    (
-                                                        action.damageBonus != null
-                                                            ? "+" + action.damageBonus
-                                                            : ""
-                                                    )
-                                                    : ""
-                                            )
-                                        }
-                                    />
-                                    <ListItemSecondaryAction>
-                                        <IconButton>
-                                            <InfoIcon />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            )
-                        })
-                    }
-                </div>
-            )
+
+            const itemRows = [
+                <TableRow className={this.props.classes.row} key={rowId} onClick={() => this.handleRowClick(rowId)}>
+                    <TableCell className={`this.props.classes.tableCell ${this.props.classes.titles}`} colSpan={6}>
+                        <span>{subHeaderName}</span>
+                    </TableCell>
+                </TableRow>
+            ];
+
+            if(this.state.expandedRows.includes(rowId)) {
+                itemRows.push(
+                    <TableRow className={this.props.classes.row} key={rowId}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        {
+                            actionList.map(action => {
+                                return (
+                                    <div className={this.props.classes.InlineStats}>
+                                        <span className={this.props.classes.EntryTitle}>{action.name}. </span><span>{action.description}</span>
+                                    </div>
+                                )
+                            })
+                        }
+                        </TableCell>
+                    </TableRow>
+                );
+            }
+
+            return itemRows;
         }
     };
+
+    handleRowClick(rowId) {
+        const currentExpandedRows = this.state.expandedRows;
+        const isRowCurrentlyExpanded = currentExpandedRows.includes(rowId);
+
+        const newExpandedRows = isRowCurrentlyExpanded ?
+			currentExpandedRows.filter(id => id !== rowId) :
+			currentExpandedRows.concat(rowId);
+
+        this.setState({expandedRows : newExpandedRows});
+    }
 
     render() {
         const monster = this.props.monster;
         return (
-            <Grid container spacing={24}>
-                <Grid item xs={4}>
-                    <Paper>
-                        <img src={this.props.imageSrc} alt={monster.name} className={this.props.classes.imageThumbnail}/>
-                        <Divider/>
-                        <List dense={true}>
-                            <ListSubheader>Basic</ListSubheader>
-                            <ListItemText primary={"Hit\u{00a0}Points:\u{00a0}" + monster.hitPoints + "(" + monster.hitDice + "+" + this.getModifier(monster.constitution) * monster.challengeRating + ")"}/>
-                            <ListItemText primary={"Armour\u{00a0}Class:\u{00a0}" + monster.armourClass}/>
-                            <ListItemText primary={"Challenge\u{00a0}Rating:\u{00a0}" + monster.challengeRating}/>
-                            <Divider/>
-                            <ListSubheader>Ability Scores</ListSubheader>
-                            <ListItemText primary={"Strength:\u{00a0}" + monster.strength} />
-                            <ListItemText primary={"Dexterity:\u{00a0}" + monster.dexterity} />
-                            <ListItemText primary={"Constitution:\u{00a0}" + monster.constitution} />
-                            <ListItemText primary={"Intelligence:\u{00a0}" + monster.intelligence} />
-                            <ListItemText primary={"Wisdom:\u{00a0}" + monster.wisdom} />
-                            <ListItemText primary={"Charisma:\u{00a0}" + monster.charisma} />
-                            <Divider/>
-                            <ListSubheader>Saving Throws</ListSubheader>
-                            <ListItemText primary={"Strength\u{00a0}Save:\u{00a0}" + ((monster.strengthSave != null) ? monster.strengthSave: this.getModifier(monster.strength))} />
-                            <ListItemText primary={"Dexterity\u{00a0}Save:\u{00a0}" + ((monster.dexteritySave != null) ? monster.dexteritySave: this.getModifier(monster.dexterity))} />
-                            <ListItemText primary={"Constitution\u{00a0}Save:\u{00a0}" + ((monster.constitutionSave != null) ? monster.constitutionSave: this.getModifier(monster.constitution))} />
-                            <ListItemText primary={"Intelligence\u{00a0}Save:\u{00a0}" + ((monster.intelligenceSave != null) ? monster.intelligenceSave: this.getModifier(monster.intelligence))} />
-                            <ListItemText primary={"Wisdom\u{00a0}Save:\u{00a0}" + ((monster.wisdomSave != null) ? monster.wisdomSave: this.getModifier(monster.wisdom))} />
-                            <ListItemText primary={"Charisma\u{00a0}Save:\u{00a0}" + ((monster.charismaSave != null) ? monster.charismaSave: this.getModifier(monster.charisma))} />
-                            <Divider/>
-                            <ListSubheader>Senses</ListSubheader>
-                            {
-                                monster.senses.split(',').map((sense, index)=> {
-                                    return <ListItemText key={index} primary={sense}/>;
-                                })
-                            }
-                            <Divider/>
-                            <ListSubheader>Speed</ListSubheader>
-                            {
-                                monster.speed.split(',').map((speed, index)=> {
-                                    return <ListItemText key={index} primary={speed}/>;
-                                })
-                            }
-                            <Divider/>
-                            <ListSubheader>Damage&nbsp;Invulerabilities</ListSubheader>
-                            {
-                                (monster.damageInvulerabilities != null)
-                                    ? monster.damageInvulerabilities.split(',').map((speed, index)=> {
-                                        return <ListItemText key={index} primary={speed}/>;
-                                    })
-                                    : <div/>
-                            }
-                            <Divider/>
-                            <ListSubheader>Damage&nbsp;Immunities</ListSubheader>
-                            {
-                                (monster.damageImmunities != null)
-                                    ? monster.damageImmunities.split(',').map((speed, index)=> {
-                                        return <ListItemText key={index} primary={speed}/>;
-                                    })
-                                    : <div/>
-                            }
-                            <Divider/>
-                            <ListSubheader>Condition&nbsp;Immunities</ListSubheader>
-                            {
-                                (monster.conditionImmunities != null)
-                                    ?  monster.conditionImmunities.split(',').map((speed, index)=> {
-                                        return <ListItemText key={index} primary={speed}/>;
-                                    })
-                                    : <div/>
-                            }
-                        </List>
-                    </Paper>
-                </Grid>
-                <Grid item xs={8}>
-                    <Paper>
-                        <DialogTitle id="form-dialog-title">{ monster.name }</DialogTitle>
-                        <span id="form-dialog-description">
-                    {
-                        monster.size.charAt(0).toUpperCase() + monster.size.slice(1).toLowerCase() + " "}
-                            {monster.type + " "}
-                            {(monster.subType != null && monster.subType != "") ? "(" + monster.subType + ")" : ""
-                            }
-                  </span>
-                        <List dense={true}>
-                            {this.getActions(monster.actions, "Actions")}
-                            {this.getActions(monster.specialAbilities, "Special Abilities")}
-                            {this.getActions(monster.legendaryActions, "Legendary Actions")}
-                            {this.getActions(monster.reactions, "Reactions")}
-                        </List>
-                    </Paper>
-                </Grid>
-            </Grid>
+        <Table className={this.props.classes.table}>
+            <TableHead>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                    <span className={this.props.classes.name}>{monster.name}</span>
+                    <img src={this.props.imageSrc} alt={monster.name} className={this.props.classes.popupImageThumbnail}/>
+                    </TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            <span>
+                                {monster.size.charAt(0).toUpperCase() + monster.size.slice(1).toLowerCase() + " "}
+                                {monster.type + " "}
+                                {(monster.subType != null && monster.subType != "") ? "(" + monster.subType + ")" : ""}
+                            </span>
+                    </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <div className={this.props.classes.divider}></div>
+			        </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Armor Class </strong>
+                        <span>{monster.armourClass}</span>
+                    </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Hit Points </strong>
+                        <span>{monster.hitPoints}</span><span className={this.props.classes.blue}>{" (" + monster.hitDice + "+" + this.getModifier(monster.constitution) * monster.challengeRating + ")"}</span>
+                    </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Speed </strong>
+                        <span>{monster.speed}</span>
+                    </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <div className={this.props.classes.divider}></div>
+			        </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell}>STR</TableCell>
+                    <TableCell className={this.props.classes.tableCell}>DEX</TableCell>
+                    <TableCell className={this.props.classes.tableCell}>CON</TableCell>
+                    <TableCell className={this.props.classes.tableCell}>INT</TableCell>
+                    <TableCell className={this.props.classes.tableCell}>WIS</TableCell>
+                    <TableCell className={this.props.classes.tableCell}>CHA</TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell}>
+                        <span className={this.props.classes.blue}>
+                            {monster.strength + " (+" + this.getModifier(monster.strength) + ")"}
+                        </span>
+                    </TableCell>
+                    <TableCell className={this.props.classes.tableCell}>
+                        <span className={this.props.classes.blue}>
+                            {monster.dexterity + " (+" + this.getModifier(monster.dexterity) + ")"}
+                        </span>
+                    </TableCell>
+                    <TableCell className={this.props.classes.tableCell}>
+                        <span className={this.props.classes.blue}>
+                            {monster.constitution + " (+" + this.getModifier(monster.constitution) + ")"}
+                        </span>
+                    </TableCell>
+                    <TableCell className={this.props.classes.tableCell}>
+                        <span className={this.props.classes.blue}>
+                            {monster.intelligence + " (+" + this.getModifier(monster.intelligence) + ")"}
+                        </span>
+                    </TableCell>
+                    <TableCell className={this.props.classes.tableCell}>
+                        <span className={this.props.classes.blue}>
+                            {monster.wisdom + " (+" + this.getModifier(monster.wisdom) + ")"}
+                        </span>
+                    </TableCell>
+                    <TableCell className={this.props.classes.tableCell}>
+                        <span className={this.props.classes.blue}>
+                            {monster.charisma + " (+" + this.getModifier(monster.charisma) + ")"}
+                        </span>
+                    </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <div className={this.props.classes.divider}></div>
+			        </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Saving Throws </strong>
+                        {((monster.strengthSave != null) ? <span>Str <span className={this.props.classes.blue}>+{monster.strengthSave}</span>, </span> : "")}
+                        {((monster.dexteritySave != null) ? <span>Dex <span className={this.props.classes.blue}>+{monster.dexteritySave}</span>, </span> : "")}
+                        {((monster.constitutionSave != null) ? <span>Con <span className={this.props.classes.blue}>+{monster.constitutionSave}</span>, </span> : "")}
+                        {((monster.intelligenceSave != null) ? <span>Int <span className={this.props.classes.blue}>+{monster.intelligenceSave}</span>, </span> : "")}
+                        {((monster.wisdomSave != null) ? <span>Wis <span className={this.props.classes.blue}>+{monster.wisdomSave}</span>, </span> : "")}
+                        {((monster.charismaSave != null) ? <span>Cha <span className={this.props.classes.blue}>+{monster.charismaSave}</span></span> : "")}
+                    </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Skills</strong><span>Perception +0</span>
+                    </TableCell>
+                </TableRow>
+                {((monster.damageVulnerabilities != "") ?
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Damage Vulnerabilities </strong><span>{monster.damageVulnerabilities}</span>
+                    </TableCell>
+                </TableRow>
+                : "" )}
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Damage Resistances</strong><span>cold</span>
+                    </TableCell>
+                </TableRow>
+                {((monster.damageImmunities != "") ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            <strong>Damage Immunities </strong><span>{monster.damageImmunities}</span>
+                        </TableCell>
+                    </TableRow>
+                : "" )}
+                {((monster.condititonImmunities != "") ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            <strong>Condition Immunities </strong><span>{monster.condititonImmunities}</span>
+                        </TableCell>
+                    </TableRow>
+                : "" )}
+                {((monster.senses != "") ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            <strong>Senses </strong><span>{monster.senses}</span>
+                        </TableCell>
+                    </TableRow>
+                : "" )}
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Languages </strong><span>Common</span>
+                    </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Challenge </strong><span>{monster.challengeRating}</span>
+                    </TableCell>
+                </TableRow>
+                {((Array.isArray(monster.specialAbilities) && monster.specialAbilities.length) ?
+                    this.getActions(monster.specialAbilities, "Special Abilities")
+                : "" )}
+                {((Array.isArray(monster.actions) && monster.actions.length) ?
+                    this.getActions(monster.actions, "Actions")
+                : "" )}
+                {((Array.isArray(monster.legendaryActions) && monster.legendaryActions.length) ?
+                    this.getActions(monster.legendaryActions, "Legendary Actions")
+                : "" )}
+            </TableBody>
+        </Table>
         )
     }
 }
