@@ -61,5 +61,3 @@ Finally open your web browser and navigate to: `localhost:8080`
 Upcoming features:
 - Filter by movement type (move, burrow, fly, swim)
 - Filter by alignment (need to add this if we do this)
-- Fix HP modifications by + or -
-- Details option modal for monsters & players on main page

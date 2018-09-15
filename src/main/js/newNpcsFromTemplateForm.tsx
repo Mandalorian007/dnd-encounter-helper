@@ -18,6 +18,7 @@ import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Slider from 'rc-slider';
+import {API_ROOT} from "./api-config";
 
 const styles = ({ palette, spacing }: Theme) => createStyles({
   root: {
@@ -103,7 +104,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
     };
 
     refreshMonsterSearchState = (monsterSearch) => {
-        fetch(`http://localhost:8080/monsters/search`, {
+        fetch(`${API_ROOT}/monsters/search`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -126,7 +127,6 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         let monsterSearch = this.state.monsterSearch;
         let sizes = monsterSearch.sizes;
 
-        console.log(searchSize);
         if (sizes.includes(searchSize)) {
             sizes = sizes.filter(size => size != searchSize);
         } else {

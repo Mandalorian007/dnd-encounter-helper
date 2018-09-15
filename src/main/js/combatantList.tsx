@@ -13,6 +13,11 @@ import DeleteIcon from '@material-ui/icons/Clear';
 import InfoIcon from '@material-ui/icons/Info';
 import NewRoundForm from "./newRoundForm";
 import * as math from 'mathjs';
+import DialogContent from "@material-ui/core/DialogContent/DialogContent";
+import MonsterDetailsGrid from "./monsterDetailsGrid";
+import DialogActions from "@material-ui/core/DialogActions/DialogActions";
+import Dialog from "@material-ui/core/Dialog/Dialog";
+import {API_ROOT} from "./api-config";
 
 const combatantStyles = ({ palette, spacing }: Theme) => createStyles({
     root: {
@@ -73,15 +78,29 @@ const CustomTableCell = withStyles(tableStyle)(({ classes, children }: TableCell
 
 interface State {
     open: boolean;
+    monster?: Monster;
+    combatants?: any;
 }
 
 class CombatantList extends React.Component<any, State> {
     constructor(props: any) {
         super(props);
-        this.state={
-            open: false,
-        };
+        this.state = this.initialState();
     };
+
+    initialState = () => {
+        return {
+            open: false,
+            monster: null,
+            combatants: [],
+        }
+    };
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.combatants !== this.props.combatants){
+             this.setState({ combatants: nextProps.combatants })
+        }
+    }
 
     handleOpen = () => {
         this.setState({open: true})
@@ -91,22 +110,17 @@ class CombatantList extends React.Component<any, State> {
         this.setState({open: false})
     };
 
-    handleKeyPress = (combatantId, dataType, e) =>{
+    getMonsterDetails = (monsterId: string) => {
+        fetch(`${API_ROOT}/monsters/` + monsterId)
+            .then(results => results.json())
+            .then(data => this.setState({monster: data}));
+    };
 
-        let newItem = 1;
-        if (!isNaN(e.target.value)){
-            this.props.combatants.map(item => {
-                if (combatantId == item.id) {
-                    newItem = item.maxHp;
-                }
-            });
+    handleMonsterDetailsClose = () => {
+      this.setState({monster: null});
+    };
 
-            let val = math.eval(e.target.value / newItem);
-            let textClass = this.computeClass(val);
-            let newStyle = "0px 0px 40px 12px " + textClass;
-            document.getElementById('row' + combatantId).style.boxShadow = newStyle;
-        }
-
+    handleKeyPress = (combatantId, dataType, e) => {
         if (e.keyCode === 13) {
             let value = math.eval(e.target.value);
             this.handleChange(combatantId, dataType, value)
@@ -115,17 +129,47 @@ class CombatantList extends React.Component<any, State> {
 
     handleChange = (combatantId, dataType, value) => {
         let data = {[dataType]: value};
-        if (!isNaN(value) || dataType == "comment")
+
+        //If a number or comment field updateCombatant
+        if (!isNaN(value) || dataType == "comment") {
             this.props.updateCombatant(combatantId, data);
+        }
+        else {
+        //if string adding - + , update state manually
+            const newState = this.state.combatants.map(item => {
+                if (item.id == combatantId) {
+                    return {...item, [dataType]: value};
+                }
+                return item;
+            });
+
+            this.setState({combatants: newState});
+        }
     };
 
-    computeClass= (val) => {
+    getHighlight = (currentHp, maxHp) => {
+        let val = math.eval(currentHp / maxHp);
+        let color = this.computeClass(val);
+        let newStyle = "0px 0px 40px 12px " + color;
+        return newStyle;
+    };
+
+    computeClass = (val) => {
         if (val < 0.33)
             return 'red';
         else if (val < 0.66)
             return 'orange';
         else
             return 'green';
+    };
+
+    getDetailContent = () => {
+        if(this.state.monster != null) {
+            return <MonsterDetailsGrid
+                monster={this.state.monster}
+                imageSrc={`https://5etools.com/img/MM/${this.state.monster.name}.png`}
+            />;
+        }
     };
 
     render() {
@@ -146,7 +190,7 @@ class CombatantList extends React.Component<any, State> {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.props.combatants.map(combatant => {
+                            {this.state.combatants.map(combatant => {
                                 return (
                                     <TableRow className={this.props.classes.row} key={combatant.id}>
                                         <CustomTableCell>
@@ -156,12 +200,11 @@ class CombatantList extends React.Component<any, State> {
                                         <CustomTableCell component="th" scope="row">
                                             {combatant.name}
                                         </CustomTableCell>
-                                        <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "currentInitiative", e.target.value)}
-                                                                value={combatant.currentInitiative} /></CustomTableCell>
+                                        <CustomTableCell>{combatant.currentInitiative}</CustomTableCell>
                                         <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "armourClass", e.target.value)}
                                                                 value={combatant.armourClass} /></CustomTableCell>
                                         <CustomTableCell>
-                                            <input type='text' id={"row" + combatant.id} onChange={(e) => this.handleChange(combatant.id, "currentHp", e.target.value)}
+                                            <input type='text' id={"row" + combatant.id} style={{boxShadow: this.getHighlight(combatant.currentHp, combatant.maxHp)}} onChange={(e) => this.handleChange(combatant.id, "currentHp", e.target.value)}
                                                    value={combatant.currentHp} onKeyDown={(e) => this.handleKeyPress(combatant.id, "currentHp", e)} />
                                             <span style={{paddingLeft: "10px"}}>/{combatant.maxHp}</span>
                                         </CustomTableCell>
@@ -170,10 +213,10 @@ class CombatantList extends React.Component<any, State> {
                                         <CustomTableCell><textarea rows={3} onChange={(e) => this.handleChange(combatant.id, "comment", e.target.value)}
                                                                    value={combatant.comment} /></CustomTableCell>
                                         <CustomTableCell>
-                                            <Button variant="fab" color="secondary" className={this.props.classes.button} onClick={(e) => this.props.deleteCombatant(combatant.id)}>
+                                            <Button variant="fab" color="secondary" className={this.props.classes.button} onClick={() => this.props.deleteCombatant(combatant.id)}>
                                                 <DeleteIcon />
                                             </Button>
-                                            <Button variant="fab" className={this.props.classes.button}>
+                                            <Button variant="fab" className={this.props.classes.button} onClick={() => this.getMonsterDetails(combatant.monsterId)} disabled={!Boolean(combatant.monsterId)}>
                                                 <InfoIcon />
                                             </Button>
                                         </CustomTableCell>
@@ -189,6 +232,21 @@ class CombatantList extends React.Component<any, State> {
                     newRound={this.props.newRound}
                     open={this.state.open}
                     handleClose={this.handleClose}/>
+
+                <Dialog
+                    open={ Boolean(this.state.monster) }
+                    onClose={ this.handleMonsterDetailsClose }
+                    aria-labelledby="form-dialog-title"
+                    aria-describedby="form-dialog-description">
+                    <DialogContent>
+                        {this.getDetailContent()}
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={ this.handleMonsterDetailsClose } color="primary">
+                            Ok
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         )
     }
