@@ -61,4 +61,8 @@ Finally open your web browser and navigate to: `localhost:8080`
 Upcoming features:
 - Filter by movement type (move, burrow, fly, swim)
 - Filter by alignment (need to add this if we do this)
-- Fix HP modifications by + or -
+- CR scale
+
+Bugs:
+- cant filter CR under 1
+- combatantList shows blank if you go to new page
