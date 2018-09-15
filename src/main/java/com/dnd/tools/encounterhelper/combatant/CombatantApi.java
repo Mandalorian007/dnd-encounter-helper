@@ -103,7 +103,7 @@ public class CombatantApi {
                 IntStream.range(1, count + 1)
                     .mapToObj(enemyNumber -> {
                         Combatant npc = new Combatant();
-                        npc.setName(combatant.getName() + (count != 1 ? "#" + enemyNumber : ""));
+                        npc.setName(combatant.getName() + (count != 1 ? " #" + enemyNumber : ""));
                         npc.setArmourClass(combatant.getArmourClass());
                         //Roll hit points for each enemy
                         int maxHp = getMaxHp(hitDie);

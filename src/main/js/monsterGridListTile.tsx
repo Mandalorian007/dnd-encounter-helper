@@ -133,19 +133,19 @@ class MonsterGridListTile extends React.Component<any, State> {
                     aria-describedby="form-dialog-description">
                     <DialogContent>
                         <MonsterDetailsGrid monster={monster} imageSrc={imageSrc}/>
+                    </DialogContent>
+                    <DialogActions>
                         <FormControl component="fieldset">
                             <InputLabel htmlFor="number-of-monsters">Number of Monsters</InputLabel>
-                            <Input id="number-of-monsters" type="number"
-                                   onChange={event => this.changeNumberOfEnemies(event)}/>
+                            <Input id="number-of-monsters" type="number" style={{width: 150}}
+                                onChange={event => this.changeNumberOfEnemies(event)}/>
                         </FormControl>
                         <FormControlLabel
                             control={
                                 <Checkbox onChange={this.toggleRollHp}/>
                             }
-                            label="Roll Monster Hp"
+                            label="Roll Monster HP"
                         />
-                    </DialogContent>
-                    <DialogActions>
                         <Button onClick={this.handleSubmit} color="primary">
                             Create Monsters
                         </Button>

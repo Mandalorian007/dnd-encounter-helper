@@ -79,16 +79,28 @@ const CustomTableCell = withStyles(tableStyle)(({ classes, children }: TableCell
 interface State {
     open: boolean;
     monster?: Monster;
+    combatants?: any;
 }
 
 class CombatantList extends React.Component<any, State> {
     constructor(props: any) {
         super(props);
-        this.state={
+        this.state = this.initialState();
+    };
+
+    initialState = () => {
+        return {
             open: false,
             monster: null,
-        };
+            combatants: [],
+        }
     };
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.combatants !== this.props.combatants){
+             this.setState({ combatants: nextProps.combatants })
+        }
+    }
 
     handleOpen = () => {
         this.setState({open: true})
@@ -109,21 +121,6 @@ class CombatantList extends React.Component<any, State> {
     };
 
     handleKeyPress = (combatantId, dataType, e) =>{
-
-        let newItem = 1;
-        if (!isNaN(e.target.value)){
-            this.props.combatants.map(item => {
-                if (combatantId == item.id) {
-                    newItem = item.maxHp;
-                }
-            });
-
-            let val = math.eval(e.target.value / newItem);
-            let textClass = this.computeClass(val);
-            let newStyle = "0px 0px 40px 12px " + textClass;
-            document.getElementById('row' + combatantId).style.boxShadow = newStyle;
-        }
-
         if (e.keyCode === 13) {
             let value = math.eval(e.target.value);
             this.handleChange(combatantId, dataType, value)
@@ -132,8 +129,29 @@ class CombatantList extends React.Component<any, State> {
 
     handleChange = (combatantId, dataType, value) => {
         let data = {[dataType]: value};
-        if (!isNaN(value) || dataType == "comment")
+
+        //If a number or comment field updateCombatant
+        if (!isNaN(value) || dataType == "comment") {
             this.props.updateCombatant(combatantId, data);
+        }
+        else {
+        //if string adding - + , update state manually
+            const newState = this.state.combatants.map(item => {
+                if (item.id == combatantId) {
+                    return {...item, [dataType]: value};
+                }
+                return item;
+            });
+
+            this.setState({combatants: newState});
+        }
+    };
+
+    getHighlight = (currentHp, maxHp) => {
+        let val = math.eval(currentHp / maxHp);
+        let color = this.computeClass(val);
+        let newStyle = "0px 0px 40px 12px " + color;
+        return newStyle;
     };
 
     computeClass= (val) => {
@@ -172,7 +190,7 @@ class CombatantList extends React.Component<any, State> {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.props.combatants.map(combatant => {
+                            {this.state.combatants.map(combatant => {
                                 return (
                                     <TableRow className={this.props.classes.row} key={combatant.id}>
                                         <CustomTableCell>
@@ -186,7 +204,7 @@ class CombatantList extends React.Component<any, State> {
                                         <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "armourClass", e.target.value)}
                                                                 value={combatant.armourClass} /></CustomTableCell>
                                         <CustomTableCell>
-                                            <input type='text' id={"row" + combatant.id} onChange={(e) => this.handleChange(combatant.id, "currentHp", e.target.value)}
+                                            <input type='text' id={"row" + combatant.id} style={{boxShadow: this.getHighlight(combatant.currentHp, combatant.maxHp)}} onChange={(e) => this.handleChange(combatant.id, "currentHp", e.target.value)}
                                                    value={combatant.currentHp} onKeyDown={(e) => this.handleKeyPress(combatant.id, "currentHp", e)} />
                                             <span style={{paddingLeft: "10px"}}>/{combatant.maxHp}</span>
                                         </CustomTableCell>
