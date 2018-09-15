@@ -79,16 +79,28 @@ const CustomTableCell = withStyles(tableStyle)(({ classes, children }: TableCell
 interface State {
     open: boolean;
     monster?: Monster;
+    combatants?: any;
 }
 
 class CombatantList extends React.Component<any, State> {
     constructor(props: any) {
         super(props);
-        this.state={
+        this.state = this.initialState();
+    };
+
+    initialState = () => {
+        return {
             open: false,
             monster: null,
-        };
+            combatants: [],
+        }
     };
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.combatants !== this.props.combatants){
+             this.setState({ combatants: nextProps.combatants })
+        }
+    }
 
     handleOpen = () => {
         this.setState({open: true})
@@ -124,14 +136,14 @@ class CombatantList extends React.Component<any, State> {
         }
         else {
         //if string adding - + , update state manually
-            const newState = this.props.combatants.map(item => {
+            const newState = this.state.combatants.map(item => {
                 if (item.id == combatantId) {
                     return {...item, [dataType]: value};
                 }
                 return item;
             });
 
-            this.props.updateState(newState);
+            this.setState({combatants: newState});
         }
     };
 
@@ -178,7 +190,7 @@ class CombatantList extends React.Component<any, State> {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.props.combatants.map(combatant => {
+                            {this.state.combatants.map(combatant => {
                                 return (
                                     <TableRow className={this.props.classes.row} key={combatant.id}>
                                         <CustomTableCell>
