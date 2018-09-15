@@ -62,6 +62,8 @@ class NewRoundForm extends React.Component<any, State> {
                 key={player.id}
                 margin="dense"
                 id={stringId}
+                InputProps={{ inputProps: { min: 1 } }}
+                defaultValue={1}
                 label={player.name}
                 type="number"
                 fullWidth
