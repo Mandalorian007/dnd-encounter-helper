@@ -109,7 +109,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                                         <span className={this.props.classes.EntryTitle}>{action.name}. </span><span>{action.description}</span>
                                     </div>
                                 )
-                            });
+                            })
                         }
                         </TableCell>
                     </TableRow>

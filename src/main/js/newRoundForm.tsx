@@ -68,7 +68,7 @@ class NewRoundForm extends React.Component<any, State> {
                                 fullWidth
                                 onChange={this.handleChange}
                             />
-                        });
+                        })
                     }
                 </DialogContent>
                 <DialogActions>
