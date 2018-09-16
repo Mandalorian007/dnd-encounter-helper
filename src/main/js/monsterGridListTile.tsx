@@ -39,14 +39,14 @@ class MonsterGridListTile extends React.Component<any, State> {
     constructor(props: any) {
         super(props);
         this.state = this.initialState();
-    }
+    };
 
     initialState = () => {
         return {
             monsterDetails: null,
             rollHp: false,
             numberOfEnemies: null,
-        }
+        };
     };
 
     getModifier = (abilityScore) => {
@@ -54,21 +54,15 @@ class MonsterGridListTile extends React.Component<any, State> {
     };
 
     handleClick = (event) => {
-        this.setState({
-            monsterDetails: event.currentTarget,
-        });
+        this.setState({monsterDetails: event.currentTarget});
     };
 
     changeNumberOfEnemies = (event) => {
-        this.setState({
-            numberOfEnemies: event.target.value,
-        });
+        this.setState({numberOfEnemies: event.target.value});
     };
 
-    toggleRollHp = () =>{
-        this.setState({
-            rollHp: !this.state.rollHp,
-        });
+    toggleRollHp = () => {
+        this.setState({rollHp: !this.state.rollHp});
     };
 
     handleClose = () => {
@@ -88,6 +82,7 @@ class MonsterGridListTile extends React.Component<any, State> {
             npc: true,
             monsterId: monster.id,
         };
+
         if (componentState.rollHp) {
             //Roll Hp
             this.props.createNpcs(hitDice[0], hitDice[1], null, this.getModifier(monster.constitution), componentState.numberOfEnemies, combatantInfo);
@@ -95,6 +90,7 @@ class MonsterGridListTile extends React.Component<any, State> {
             //Fixed Hp
             this.props.createNpcs(null, null, monster.hitPoints, null, componentState.numberOfEnemies, combatantInfo);
         }
+
         this.handleClose();
         this.props.navigateBack();
     };
@@ -158,5 +154,4 @@ class MonsterGridListTile extends React.Component<any, State> {
         )
     }
 }
-
 export default withStyles(styles)(MonsterGridListTile);

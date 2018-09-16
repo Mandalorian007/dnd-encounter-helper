@@ -67,7 +67,7 @@ const styles = createStyles({
 });
 
 interface State {
-    expandedRows?: any;
+    expandedRows?: any; //TODO figure out type
 }
 
 class MonsterDetailsGrid extends React.Component<any, State> {
@@ -78,8 +78,8 @@ class MonsterDetailsGrid extends React.Component<any, State> {
 
     initialState = () => {
         return {
-            expandedRows : [],
-        }
+            expandedRows: [],
+        };
     };
 
     getModifier = (abilityScore) => {
@@ -120,7 +120,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
         }
     };
 
-    handleRowClick(rowId) {
+    handleRowClick = (rowId) => {
         const currentExpandedRows = this.state.expandedRows;
         const isRowCurrentlyExpanded = currentExpandedRows.includes(rowId);
 
@@ -128,8 +128,8 @@ class MonsterDetailsGrid extends React.Component<any, State> {
 			currentExpandedRows.filter(id => id !== rowId) :
 			currentExpandedRows.concat(rowId);
 
-        this.setState({expandedRows : newExpandedRows});
-    }
+        this.setState({expandedRows: newExpandedRows});
+    };
 
     render() {
         const monster = this.props.monster;

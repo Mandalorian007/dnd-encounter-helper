@@ -60,20 +60,15 @@ interface Range {
 }
 
 interface ToggleOptions {
-    hitPointsDisabled: string,
-    armourClassDisabled: string,
-    challengeDisabled: string,
+    hitPointsDisabled: string;
+    armourClassDisabled: string;
+    challengeDisabled: string;
 }
 
 class NewNpcsFromTemplateForm extends React.Component<any, State> {
     constructor(props: any) {
         super(props);
-
         this.state = this.initialState();
-    };
-
-    componentDidMount() {
-        this.refreshMonsterSearchState(this.state.monsterSearch);
     };
 
     initialState = () => {
@@ -83,24 +78,28 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                 sizes: [],
                 hitPoints: {
                     lowerBound: 1,
-                    upperBound: 700
+                    upperBound: 700,
                 },
                 armourClass: {
                     lowerBound: 5,
-                    upperBound: 25
+                    upperBound: 25,
                 },
                 challengeRating: {
                     lowerBound: 1,
-                    upperBound: 33
+                    upperBound: 33,
                 },
             },
             toggleOptions: {
-                hitPointsDisabled : '',
+                hitPointsDisabled: '',
                 armourClassDisabled: '',
                 challengeDisabled: '',
             },
             monsters: [],
         };
+    };
+
+    componentDidMount = () => {
+        this.refreshMonsterSearchState(this.state.monsterSearch);
     };
 
     refreshMonsterSearchState = (monsterSearch) => {
@@ -111,7 +110,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(monsterSearch)
-        })
+        }).catch(err => err)
             .then(results => results.json())
             .then(data => this.setState({ monsters: data }));
     };
@@ -119,7 +118,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
     searchNameAdjustment = (event) => {
         let monsterSearch = this.state.monsterSearch;
         monsterSearch.partialName = event.target.value;
-        this.setState({ monsterSearch: monsterSearch });
+        this.setState({monsterSearch: monsterSearch});
         this.refreshMonsterSearchState(monsterSearch);
     };
 
@@ -127,59 +126,50 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         let monsterSearch = this.state.monsterSearch;
         let sizes = monsterSearch.sizes;
 
-        console.log(searchSize);
         if (sizes.includes(searchSize)) {
             sizes = sizes.filter(size => size != searchSize);
         } else {
             sizes.push(searchSize);
         }
+
         monsterSearch.sizes = sizes;
-        this.setState({ monsterSearch: monsterSearch });
+        this.setState({monsterSearch: monsterSearch});
         this.refreshMonsterSearchState(monsterSearch);
     };
 
-    searchSliderAdjustment = (event, checked) =>{
+    searchSliderAdjustment = (event, checked) => {
         let monsterSearch = this.state.monsterSearch;
         let toggleOptions = this.state.toggleOptions;
 
         if (event.target.id == "armour-class")
         {
-            if (!checked)
-            {
-                monsterSearch.armourClass =  { lowerBound: 5, upperBound: 25};
+            if (!checked) {
+                monsterSearch.armourClass = {lowerBound: 5, upperBound: 25};
                 toggleOptions.armourClassDisabled = '';
-            }
-            else
-            {
+            } else {
                 toggleOptions.armourClassDisabled = 'enabled';
             }
         }
         else if (event.target.id == "hit-points")
         {
-            if (!checked)
-            {
-                monsterSearch.hitPoints = { lowerBound: 1, upperBound: 700};
+            if (!checked) {
+                monsterSearch.hitPoints = {lowerBound: 1, upperBound: 700};
                 toggleOptions.hitPointsDisabled = '';
-            }
-            else
-            {
+            } else {
                 toggleOptions.hitPointsDisabled = 'enabled';
             }
         }
         else if (event.target.id == "challenge-rating")
         {
-            if (!checked)
-            {
-                monsterSearch.challengeRating =  { lowerBound: 0, upperBound: 33};
+            if (!checked) {
+                monsterSearch.challengeRating = {lowerBound: 0, upperBound: 33};
                 toggleOptions.challengeDisabled = '';
-            }
-            else
-            {
+            } else {
                 toggleOptions.challengeDisabled = 'enabled';
             }
         }
 
-        this.setState({ monsterSearch: monsterSearch });
+        this.setState({monsterSearch: monsterSearch});
         this.refreshMonsterSearchState(this.state.monsterSearch);
     };
 
@@ -187,13 +177,13 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         let monsterSearch = this.state.monsterSearch;
 
         if (name == "armour-class")
-            monsterSearch.armourClass = { lowerBound: value[0], upperBound: value[1]};
+            monsterSearch.armourClass = {lowerBound: value[0], upperBound: value[1]};
         else if (name == "hit-points")
-            monsterSearch.hitPoints = { lowerBound: value[0], upperBound: value[1]};
+            monsterSearch.hitPoints = {lowerBound: value[0], upperBound: value[1]};
         else if (name == "challenge-rating")
-            monsterSearch.challengeRating = { lowerBound: value[0], upperBound: value[1]};
+            monsterSearch.challengeRating = {lowerBound: value[0], upperBound: value[1]};
 
-        this.setState({ monsterSearch: monsterSearch });
+        this.setState({monsterSearch: monsterSearch});
         this.refreshMonsterSearchState(this.state.monsterSearch);
     };
 
@@ -215,10 +205,10 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         return (
             <div>
                 <Grid container>
-                    <Grid item xs={ 9 }>
+                    <Grid item xs={9}>
                         <div className={this.props.classes.root}>
                             <GridList >
-                                <GridListTile key="Subheader" cols={ 2 } style={ { height: 'auto' } }>
+                                <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
                                     <ListSubheader component="div">Monsters</ListSubheader>
                                 </GridListTile>
                                 {
@@ -229,10 +219,10 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                             </GridList>
                         </div>
                     </Grid>
-                    <Grid item xs={ 3 }>
+                    <Grid item xs={3}>
                         <FormControl fullWidth component="fieldset" className={this.props.classes.formControl}>
                             <InputLabel htmlFor="name">Monster Name</InputLabel>
-                            <Input id="name" onChange={ this.searchNameAdjustment } style={{marginRight: "24px" }}/>
+                            <Input id="name" onChange={this.searchNameAdjustment} style={{marginRight: "24px" }}/>
                         </FormControl>
                         <FormControl component="fieldset" className={this.props.classes.formControl}>
                             <FormLabel component="legend">Size</FormLabel>
@@ -241,11 +231,11 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                                     sizes.map((size: Size) => {
                                         return (
                                             <FormControlLabel
-                                                key={ size }
+                                                key={size}
                                                 control={
-                                                    <Checkbox id={ size } onChange={ () => this.searchSizeAdjustment(size) }/>
+                                                    <Checkbox id={size} onChange={ () => this.searchSizeAdjustment(size) }/>
                                                 }
-                                                label={ size }
+                                                label={size}
                                             />
                                         )
                                     })
@@ -265,8 +255,8 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                                     label=""
                                 />
                                 <RangeWithTooltip
-                                    min={ 1 }
-                                    max={ 700 }
+                                    min={1}
+                                    max={700}
                                     defaultValue={[
                                         this.state.monsterSearch.hitPoints.lowerBound,
                                         this.state.monsterSearch.hitPoints.upperBound
@@ -287,8 +277,8 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                                     label=""
                                 />
                                 <RangeWithTooltip
-                                    min={ 5 }
-                                    max={ 25 }
+                                    min={5}
+                                    max={25}
                                     defaultValue={[
                                         this.state.monsterSearch.armourClass.lowerBound,
                                         this.state.monsterSearch.armourClass.upperBound
@@ -309,8 +299,8 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                                     label=""
                                 />
                                 <RangeWithTooltip
-                                    min={ 1 }
-                                    max={ 33 }
+                                    min={1}
+                                    max={33}
                                     defaultValue={[
                                         this.state.monsterSearch.challengeRating.lowerBound,
                                         this.state.monsterSearch.challengeRating.upperBound
