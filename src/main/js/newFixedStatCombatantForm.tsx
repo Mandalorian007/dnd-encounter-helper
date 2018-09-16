@@ -10,120 +10,121 @@ interface State {
 }
 
 class NewCombatantForm extends React.Component<any, State> {
-  constructor(props: any) {
-    super(props);
-
-    this.state = this.initialState();
-  }
-
-  initialState = () => {
-    let combatant = new Map();
-    combatant.set('isNpc', false);
-    return {
-      combatant: combatant,
+    constructor(props: any) {
+        super(props);
+        this.state = this.initialState();
     };
-  };
 
-  handleChange = (event) => {
-    let combatant = this.state.combatant;
-    combatant.set(event.target.id, event.target.value);
-    this.setState({combatant: combatant});
-  };
+    initialState = () => {
+        let combatant = new Map();
+        combatant.set('isNpc', false);
 
-  handleNpcToggle = () => {
-    let combatant = this.state.combatant;
-    combatant.set('isNpc', !combatant.get('isNpc'));
-    this.setState({
-      combatant: combatant,
-    });
-  };
+        return {
+            combatant: combatant,
+        };
+    };
 
-  handleSubmit = (event) => {
-    event.preventDefault();
+    handleChange = (event) => {
+        let combatant = this.state.combatant;
+        combatant.set(event.target.id, event.target.value);
+        this.setState({combatant: combatant});
+    };
 
-    let combatant = this.state.combatant;
-    combatant.set('currentHp', combatant.get('maxHp'));
-    this.props.createCombatant(combatant);
+    handleNpcToggle = () => {
+        let combatant = this.state.combatant;
+        combatant.set('isNpc', !combatant.get('isNpc'));
+        this.setState({combatant: combatant});
+    };
 
-    // reset the state
-    this.setState(this.initialState);
-    this.props.navigateBack();
-  };
+    handleSubmit = (event) => {
+        event.preventDefault();
 
-  render() {
-    return (
-      <div>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="name"
-          label="name"
-          type="text"
-          fullWidth
-          onChange={this.handleChange}
-        />
-        <TextField
-          margin="dense"
-          id="armourClass"
-          label="armourClass"
-          type="number"
-          fullWidth
-          onChange={this.handleChange}
-        />
-        <TextField
-          margin="dense"
-          id="maxHp"
-          label="maxHp"
-          type="number"
-          fullWidth
-          onChange={this.handleChange}
-        />
-        <TextField
-          margin="dense"
-          id="initiativeBonus"
-          label="initativeBonus"
-          type="number"
-          fullWidth
-          onChange={this.handleChange}
-        />
-        <TextField
-          margin="dense"
-          id="passivePerception"
-          label="passivePerception"
-          type="number"
-          fullWidth
-          onChange={this.handleChange}
-        />
-        <FormControlLabel
-          control={
-            <Switch
-              checked={!this.state.combatant.get('isNpc')}
-              onChange={this.handleNpcToggle}
-              color="primary" />
-          }
-          label="Player" />
-        <FormControlLabel
-          control={
-            <Switch
-              checked={this.state.combatant.get('isNpc')}
-              onChange={this.handleNpcToggle} />
-          }
-          label="Npc" />
-       {/* current initative*/}
-        <TextField
-          margin="dense"
-          id="comment"
-          label="comment"
-          type="text"
-          fullWidth
-          onChange={this.handleChange}
-        />
-        <Button onClick={this.handleSubmit} color="primary">
-          Submit
-        </Button>
-      </div>
-    )
-  }
+        let combatant = this.state.combatant;
+        combatant.set('currentHp', combatant.get('maxHp'));
+        this.props.createCombatant(combatant);
+
+        // reset the state
+        this.setState(this.initialState);
+        this.props.navigateBack();
+    };
+
+    render() {
+        return (
+            <div>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="name"
+                    type="text"
+                    fullWidth
+                    onChange={this.handleChange}
+                />
+                <TextField
+                    margin="dense"
+                    id="armourClass"
+                    label="armourClass"
+                    type="number"
+                    fullWidth
+                    onChange={this.handleChange}
+                />
+                <TextField
+                    margin="dense"
+                    id="maxHp"
+                    label="maxHp"
+                    type="number"
+                    fullWidth
+                    onChange={this.handleChange}
+                />
+                <TextField
+                    margin="dense"
+                    id="initiativeBonus"
+                    label="initativeBonus"
+                    type="number"
+                    fullWidth
+                    onChange={this.handleChange}
+                />
+                <TextField
+                    margin="dense"
+                    id="passivePerception"
+                    label="passivePerception"
+                    type="number"
+                    fullWidth
+                    onChange={this.handleChange}
+                />
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={!this.state.combatant.get('isNpc')}
+                            onChange={this.handleNpcToggle}
+                            color="primary"
+                        />
+                    }
+                    label="Player"
+                />
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={this.state.combatant.get('isNpc')}
+                            onChange={this.handleNpcToggle}
+                        />
+                    }
+                    label="Npc"
+                />
+                {/* current initative*/}
+                <TextField
+                    margin="dense"
+                    id="comment"
+                    label="comment"
+                    type="text"
+                    fullWidth
+                    onChange={this.handleChange}
+                />
+                <Button onClick={this.handleSubmit} color="primary">
+                    Submit
+                </Button>
+            </div>
+        )
+    }
 }
-
 export default NewCombatantForm;

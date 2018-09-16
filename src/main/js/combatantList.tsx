@@ -79,7 +79,7 @@ const CustomTableCell = withStyles(tableStyle)(({ classes, children }: TableCell
 interface State {
     open: boolean;
     monster?: Monster;
-    combatants?: any;
+    combatants?: any; //TODO figure out type
 }
 
 class CombatantList extends React.Component<any, State> {
@@ -93,17 +93,17 @@ class CombatantList extends React.Component<any, State> {
             open: false,
             monster: null,
             combatants: [],
-        }
+        };
     };
 
     componentWillReceiveProps = (nextProps) => {
         if(nextProps.combatants !== this.props.combatants){
-             this.setState({ combatants: nextProps.combatants });
+             this.setState({combatants: nextProps.combatants});
         }
     };
 
     componentWillMount = () => {
-        this.setState({ combatants: this.props.combatants });
+        this.setState({combatants: this.props.combatants});
     };
 
     handleOpen = () => {
@@ -121,7 +121,7 @@ class CombatantList extends React.Component<any, State> {
     };
 
     handleMonsterDetailsClose = () => {
-      this.setState({monster: null});
+        this.setState({monster: null});
     };
 
     handleKeyPress = (combatantId, dataType, e) =>{
@@ -139,7 +139,7 @@ class CombatantList extends React.Component<any, State> {
             this.props.updateCombatant(combatantId, data);
         }
         else {
-        //if string adding - + , update state manually
+            //if string adding - + , update state manually
             const newState = this.state.combatants.map(item => {
                 if (item.id == combatantId) {
                     return {...item, [dataType]: value};

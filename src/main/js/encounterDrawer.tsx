@@ -46,13 +46,17 @@ interface State {
 class EncounterDrawer extends React.Component<any, State> {
     constructor(props: any) {
         super(props);
-        this.state = {
+        this.state = this.initialState();
+    };
+
+    initialState = () => {
+        return {
             contentTarget: "combatant",
-            combatants: []
+            combatants: [],
         };
     };
 
-    componentDidMount() {
+    componentDidMount = () => {
         this.refreshCombatantsState();
     };
 
@@ -72,10 +76,10 @@ class EncounterDrawer extends React.Component<any, State> {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(obj),
-        })
+            body: JSON.stringify(obj)
+        }).catch(err => err)
             .then(() => this.refreshCombatantsState());
     };
 
@@ -93,11 +97,11 @@ class EncounterDrawer extends React.Component<any, State> {
     updateCombatant = (combatantId, data) => {
         fetch(`${API_ROOT}/combatants/` + combatantId, {
             method: 'PATCH',
-            body: JSON.stringify(data),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(data)
         }).catch(err => err)
             .then(() => this.refreshCombatantsState());
     };
@@ -116,7 +120,7 @@ class EncounterDrawer extends React.Component<any, State> {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(combatant),
+            body: JSON.stringify(combatant)
         }).catch(err => err)
             .then(() => this.refreshCombatantsState());
     };
@@ -133,8 +137,8 @@ class EncounterDrawer extends React.Component<any, State> {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(obj),
-        })
+            body: JSON.stringify(obj)
+        }).catch(err => err)
             .then(results => results.json())
             .then(data => this.setState({combatants: data}));
     };
