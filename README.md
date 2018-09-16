@@ -65,4 +65,4 @@ Upcoming features:
 
 Bugs:
 - cant filter CR under 1
-- combatantList shows blank if you go to new page
+- system crash if you dont fill in all new round initiatives

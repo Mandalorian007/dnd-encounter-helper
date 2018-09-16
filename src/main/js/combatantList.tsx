@@ -96,18 +96,22 @@ class CombatantList extends React.Component<any, State> {
         }
     };
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps = (nextProps) => {
         if(nextProps.combatants !== this.props.combatants){
-             this.setState({ combatants: nextProps.combatants })
+             this.setState({ combatants: nextProps.combatants });
         }
-    }
+    };
+
+    componentWillMount = () => {
+        this.setState({ combatants: this.props.combatants });
+    };
 
     handleOpen = () => {
-        this.setState({open: true})
+        this.setState({open: true});
     };
 
     handleClose = () => {
-        this.setState({open: false})
+        this.setState({open: false});
     };
 
     getMonsterDetails = (monsterId: string) => {
@@ -123,7 +127,7 @@ class CombatantList extends React.Component<any, State> {
     handleKeyPress = (combatantId, dataType, e) =>{
         if (e.keyCode === 13) {
             let value = math.eval(e.target.value);
-            this.handleChange(combatantId, dataType, value)
+            this.handleChange(combatantId, dataType, value);
         }
     };
 
@@ -154,7 +158,7 @@ class CombatantList extends React.Component<any, State> {
         return newStyle;
     };
 
-    computeClass= (val) => {
+    computeClass = (val) => {
         if (val < 0.33)
             return 'red';
         else if (val < 0.66)
