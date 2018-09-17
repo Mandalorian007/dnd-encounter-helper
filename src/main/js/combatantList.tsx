@@ -79,7 +79,7 @@ const CustomTableCell = withStyles(tableStyle)(({ classes, children }: TableCell
 interface State {
     open: boolean;
     monster?: Monster;
-    combatants?: any;
+    combatants?: any; //TODO figure out type
 }
 
 class CombatantList extends React.Component<any, State> {
@@ -93,21 +93,25 @@ class CombatantList extends React.Component<any, State> {
             open: false,
             monster: null,
             combatants: [],
+        };
+    };
+
+    componentWillReceiveProps = (nextProps) => {
+        if(nextProps.combatants !== this.props.combatants){
+             this.setState({combatants: nextProps.combatants});
         }
     };
 
-    componentWillReceiveProps(nextProps){
-        if(nextProps.combatants !== this.props.combatants){
-             this.setState({ combatants: nextProps.combatants })
-        }
-    }
+    componentWillMount = () => {
+        this.setState({combatants: this.props.combatants});
+    };
 
     handleOpen = () => {
-        this.setState({open: true})
+        this.setState({open: true});
     };
 
     handleClose = () => {
-        this.setState({open: false})
+        this.setState({open: false});
     };
 
     getMonsterDetails = (monsterId: string) => {
@@ -117,13 +121,13 @@ class CombatantList extends React.Component<any, State> {
     };
 
     handleMonsterDetailsClose = () => {
-      this.setState({monster: null});
+        this.setState({monster: null});
     };
 
     handleKeyPress = (combatantId, dataType, e) => {
         if (e.keyCode === 13) {
             let value = math.eval(e.target.value);
-            this.handleChange(combatantId, dataType, value)
+            this.handleChange(combatantId, dataType, value);
         }
     };
 
@@ -135,7 +139,7 @@ class CombatantList extends React.Component<any, State> {
             this.props.updateCombatant(combatantId, data);
         }
         else {
-        //if string adding - + , update state manually
+            //if string adding - + , update state manually
             const newState = this.state.combatants.map(item => {
                 if (item.id == combatantId) {
                     return {...item, [dataType]: value};
