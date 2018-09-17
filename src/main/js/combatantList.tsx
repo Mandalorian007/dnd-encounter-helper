@@ -124,7 +124,7 @@ class CombatantList extends React.Component<any, State> {
         this.setState({monster: null});
     };
 
-    handleKeyPress = (combatantId, dataType, e) =>{
+    handleKeyPress = (combatantId, dataType, e) => {
         if (e.keyCode === 13) {
             let value = math.eval(e.target.value);
             this.handleChange(combatantId, dataType, value);

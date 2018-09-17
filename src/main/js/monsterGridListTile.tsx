@@ -8,8 +8,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
 import MonsterDetailsGrid from "./monsterDetailsGrid"
-import createStyles from "@material-ui/core/styles/createStyles";
 import {Checkbox, FormControl, FormControlLabel, Input, InputLabel} from "@material-ui/core";
+import createStyles from "@material-ui/core/styles/createStyles";
 
 const styles = createStyles({
     titleBar: {
