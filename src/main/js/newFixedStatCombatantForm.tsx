@@ -1,9 +1,9 @@
 import * as React from "react";
 
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 
 interface State {
     combatant: Map<string, any>;
@@ -16,8 +16,15 @@ class NewCombatantForm extends React.Component<any, State> {
     };
 
     initialState = () => {
-        let combatant = new Map();
-        combatant.set('isNpc', false);
+        let combatant = new Map()
+            .set('isNpc', false)
+            .set('name', '')
+            .set('armourClass', null)
+            .set('currentHp', null)
+            .set('maxHp', null)
+            .set('initiativeBonus', null)
+            .set('passivePerception', null)
+            .set('comment', '');
 
         return {
             combatant: combatant,
@@ -26,7 +33,7 @@ class NewCombatantForm extends React.Component<any, State> {
 
     handleChange = (event) => {
         let combatant = this.state.combatant;
-        combatant.set(event.target.id, event.target.value);
+        combatant.set(event.target.name, event.target.value);
         this.setState({combatant: combatant});
     };
 
@@ -49,53 +56,73 @@ class NewCombatantForm extends React.Component<any, State> {
     };
 
     render() {
+        const { combatant } = this.state;
         return (
-            <div>
-                <TextField
+            <ValidatorForm
+                ref="form"
+                onSubmit={this.handleSubmit}
+            >
+                <TextValidator
                     autoFocus
-                    margin="dense"
-                    id="name"
                     label="name"
+                    name="name"
                     type="text"
+                    margin="normal"
                     fullWidth
                     onChange={this.handleChange}
+                    value={combatant.get('name')}
+                    validators={['required']}
+                    errorMessages={['this field is required']}
                 />
-                <TextField
-                    margin="dense"
-                    id="armourClass"
+                <TextValidator
                     label="armourClass"
-                    type="number"
+                    name="armourClass"
+                    type="text"
+                    margin="normal"
                     fullWidth
                     onChange={this.handleChange}
+                    value={combatant.get('armourClass')}
+                    validators={['required', 'isNumber', 'isPositive']}
+                    errorMessages={['this field is required', 'Invalid Number', 'Number must be positive']}
                 />
-                <TextField
-                    margin="dense"
-                    id="maxHp"
+                <TextValidator
                     label="maxHp"
-                    type="number"
+                    name="maxHp"
+                    type="text"
+                    margin="normal"
                     fullWidth
                     onChange={this.handleChange}
+                    value={combatant.get('maxHp')}
+                    validators={['required', 'isNumber', 'isPositive']}
+                    errorMessages={['this field is required', 'Invalid Number', 'Number must be positive']}
                 />
-                <TextField
-                    margin="dense"
-                    id="initiativeBonus"
-                    label="initativeBonus"
-                    type="number"
+                <TextValidator
+                    label="initiativeBonus"
+                    name="initiativeBonus"
+                    type="text"
+                    margin="normal"
                     fullWidth
                     onChange={this.handleChange}
+                    value={combatant.get('initiativeBonus')}
+                    validators={['required', 'isNumber', 'isPositive']}
+                    errorMessages={['this field is required', 'Invalid Number', 'Number must be positive']}
                 />
-                <TextField
-                    margin="dense"
-                    id="passivePerception"
+                <TextValidator
                     label="passivePerception"
-                    type="number"
+                    name="passivePerception"
+                    type="text"
+                    margin="normal"
                     fullWidth
                     onChange={this.handleChange}
+                    value={combatant.get('passivePerception')}
+                    validators={['required', 'isNumber', 'isPositive']}
+                    errorMessages={['this field is required', 'Invalid Number', 'Number must be positive']}
                 />
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={!this.state.combatant.get('isNpc')}
+                            name="isNpc"
+                            checked={!combatant.get('isNpc')}
                             onChange={this.handleNpcToggle}
                             color="primary"
                         />
@@ -105,25 +132,26 @@ class NewCombatantForm extends React.Component<any, State> {
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={this.state.combatant.get('isNpc')}
+                            name="isNpc"
+                            checked={combatant.get('isNpc')}
                             onChange={this.handleNpcToggle}
                         />
                     }
                     label="Npc"
                 />
-                {/* current initative*/}
-                <TextField
-                    margin="dense"
-                    id="comment"
+                <TextValidator
                     label="comment"
+                    name="comment"
                     type="text"
+                    margin="normal"
                     fullWidth
                     onChange={this.handleChange}
+                    value={combatant.get('comment')}
                 />
-                <Button onClick={this.handleSubmit} color="primary">
+                <Button type="submit" color="primary">
                     Submit
                 </Button>
-            </div>
+            </ValidatorForm>
         )
     }
 }
