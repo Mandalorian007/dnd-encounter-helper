@@ -8,7 +8,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
 import MonsterDetailsGrid from "./monsterDetailsGrid"
-import {Checkbox, FormControl, FormControlLabel, Input, InputLabel} from "@material-ui/core";
+import {Checkbox, FormControlLabel} from "@material-ui/core";
+import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import createStyles from "@material-ui/core/styles/createStyles";
 
 const styles = createStyles({
@@ -131,23 +132,33 @@ class MonsterGridListTile extends React.Component<any, State> {
                         <MonsterDetailsGrid monster={monster} imageSrc={imageSrc}/>
                     </DialogContent>
                     <DialogActions>
-                        <FormControl component="fieldset">
-                            <InputLabel htmlFor="number-of-monsters">Number of Monsters</InputLabel>
-                            <Input id="number-of-monsters" type="number" style={{width: 150}}
-                                onChange={event => this.changeNumberOfEnemies(event)}/>
-                        </FormControl>
-                        <FormControlLabel
-                            control={
-                                <Checkbox onChange={this.toggleRollHp}/>
-                            }
-                            label="Roll Monster HP"
-                        />
-                        <Button onClick={this.handleSubmit} color="primary">
-                            Create Monsters
-                        </Button>
-                        <Button onClick={this.handleClose} color="secondary">
-                            Cancel
-                        </Button>
+                        <ValidatorForm
+                            ref="form"
+                            onSubmit={this.handleSubmit}
+                        >
+                            <TextValidator
+                                label="Number of Monsters"
+                                name="number-of-monsters"
+                                type="text"
+                                style={{width: 150}}
+                                onChange={event => this.changeNumberOfEnemies(event)}
+                                value={this.state.numberOfEnemies}
+                                validators={['required', 'isNumber', 'isPositive']}
+                                errorMessages={['this field is required', 'Invalid Number', 'Number must be positive']}
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox onChange={this.toggleRollHp}/>
+                                }
+                                label="Roll Monster HP"
+                            />
+                            <Button type="submit" color="primary">
+                                Create Monsters
+                            </Button>
+                            <Button onClick={this.handleClose} color="secondary">
+                                Cancel
+                            </Button>
+                        </ValidatorForm>
                     </DialogActions>
                 </Dialog>
             </GridListTile>
