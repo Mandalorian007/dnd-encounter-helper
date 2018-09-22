@@ -25,6 +25,7 @@
     "rc-slider": "^8.6.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
+    "react-material-ui-form-validator": "^2.0.2",
     "style-loader": "^0.21.0",
     "ts-loader": "^4.5.0",
     "typescript": "^3.0.1",
