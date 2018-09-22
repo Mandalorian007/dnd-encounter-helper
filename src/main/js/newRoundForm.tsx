@@ -1,12 +1,12 @@
 import * as React from "react";
 
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 
 interface State {
     inititatives: Map<string, number>;
@@ -24,9 +24,22 @@ class NewRoundForm extends React.Component<any, State> {
         };
     };
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.combatants !== this.props.combatants){
+            const players = this.props.combatants.filter(function(combatant){
+                return combatant.npc != true;
+            });
+
+            players.map( player => {
+                const stringId = player.id.toString();
+                this.state.inititatives.set(stringId, null);
+            });
+        }
+    }
+
     handleChange = (event) => {
         let inititatives = this.state.inititatives;
-        inititatives.set(event.target.id, event.target.value);
+        inititatives.set(event.target.name, event.target.value);
         this.setState({inititatives: inititatives});
     };
 
@@ -50,35 +63,41 @@ class NewRoundForm extends React.Component<any, State> {
                 onClose={this.props.handleClose}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">Enter new player initiative rolls</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Please have the players roll new initiatives and enter them below. On Submitting npcs will automatically re-roll initiative.
-                    </DialogContentText>
-                    {
-                        players.map( player => {
-                            const stringId = player.id.toString();
-                            return <TextField
-                                key={player.id}
-                                margin="dense"
-                                id={stringId}
-                                InputProps={{ inputProps: { min: 1 } }}
-                                label={player.name}
-                                type="number"
-                                fullWidth
-                                onChange={this.handleChange}
-                            />
-                        })
-                    }
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.props.handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={this.handleSubmit} color="primary">
-                        Submit
-                    </Button>
-                </DialogActions>
+                <ValidatorForm
+                    ref="form"
+                    onSubmit={this.handleSubmit}
+                >
+                    <DialogTitle id="form-dialog-title">Enter new player initiative rolls</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Please have the players roll new initiatives and enter them below. On Submitting npcs will automatically re-roll initiative.
+                        </DialogContentText>
+                        {
+                            players.map( player => {
+                                const stringId = player.id.toString();
+                                return <TextValidator
+                                    label={player.name}
+                                    name={stringId}
+                                    type="text"
+                                    margin="dense"
+                                    fullWidth
+                                    onChange={this.handleChange}
+                                    value={this.state.inititatives.get(stringId)}
+                                    validators={['required', 'isNumber', 'isPositive']}
+                                    errorMessages={['this field is required', 'Invalid Number', 'Number must be positive']}
+                                />
+                            })
+                        }
+                    </DialogContent>
+                    <DialogActions>
+                        <Button type="submit" color="primary">
+                            Submit
+                        </Button>
+                        <Button onClick={this.props.handleClose} color="secondary">
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </ValidatorForm>
             </Dialog>
         );
     }

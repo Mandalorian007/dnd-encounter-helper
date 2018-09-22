@@ -65,4 +65,3 @@ Upcoming features:
 
 Bugs:
 - cant filter CR under 1
-- system crash if you dont fill in all new round initiatives
