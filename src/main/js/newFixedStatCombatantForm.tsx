@@ -64,7 +64,7 @@ class NewCombatantForm extends React.Component<any, State> {
             >
                 <TextValidator
                     autoFocus
-                    label="name"
+                    label="Combatant Name"
                     name="name"
                     type="text"
                     margin="normal"
@@ -75,7 +75,7 @@ class NewCombatantForm extends React.Component<any, State> {
                     errorMessages={['this field is required']}
                 />
                 <TextValidator
-                    label="armourClass"
+                    label="Armour Class"
                     name="armourClass"
                     type="text"
                     margin="normal"
@@ -86,7 +86,7 @@ class NewCombatantForm extends React.Component<any, State> {
                     errorMessages={['this field is required', 'Invalid Number', 'Number must be positive']}
                 />
                 <TextValidator
-                    label="maxHp"
+                    label="Max HP"
                     name="maxHp"
                     type="text"
                     margin="normal"
@@ -97,7 +97,7 @@ class NewCombatantForm extends React.Component<any, State> {
                     errorMessages={['this field is required', 'Invalid Number', 'Number must be positive']}
                 />
                 <TextValidator
-                    label="initiativeBonus"
+                    label="Initiative Bonus"
                     name="initiativeBonus"
                     type="text"
                     margin="normal"
@@ -108,7 +108,7 @@ class NewCombatantForm extends React.Component<any, State> {
                     errorMessages={['this field is required', 'Invalid Number', 'Number must be positive']}
                 />
                 <TextValidator
-                    label="passivePerception"
+                    label="Passive Perception"
                     name="passivePerception"
                     type="text"
                     margin="normal"
@@ -140,7 +140,7 @@ class NewCombatantForm extends React.Component<any, State> {
                     label="Npc"
                 />
                 <TextValidator
-                    label="comment"
+                    label="Comments"
                     name="comment"
                     type="text"
                     margin="normal"
