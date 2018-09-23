@@ -145,6 +145,11 @@ class MonsterDetailsGrid extends React.Component<any, State> {
         this.setState({anchorEl: null});
     };
 
+    onSliderChange = (monster, value) => {
+        console.log(value);
+        console.log(monster);
+    };
+
     render() {
         const monster = this.props.monster;
         const { anchorEl } = this.state;
@@ -323,6 +328,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                                     min={1}
                                     max={33}
                                     defaultValue={[monster.challengeRating]}
+                                    onAfterChange={(v) => this.onSliderChange(monster, v)}
                                 />
                             </div>
                         </Popover>
