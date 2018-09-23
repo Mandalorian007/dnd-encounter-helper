@@ -230,7 +230,7 @@ class CombatantList extends React.Component<any, State> {
                         </TableBody>
                     </Table>
                 </Paper>
-                <Button size="small" onClick={this.handleOpen} color="primary">New Round</Button>
+                <Button onClick={this.handleOpen} color="primary" style={{marginTop: 10}}>New Round</Button>
                 <NewRoundForm
                     combatants={this.props.combatants}
                     newRound={this.props.newRound}
