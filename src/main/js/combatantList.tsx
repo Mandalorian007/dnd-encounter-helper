@@ -170,6 +170,7 @@ class CombatantList extends React.Component<any, State> {
     getDetailContent = () => {
         if(this.state.monster != null) {
             return <MonsterDetailsGrid
+                disabled={true}
                 monster={this.state.monster}
                 imageSrc={`https://5etools.com/img/MM/${this.state.monster.name}.png`}
             />;
@@ -230,7 +231,7 @@ class CombatantList extends React.Component<any, State> {
                         </TableBody>
                     </Table>
                 </Paper>
-                <Button size="small" onClick={this.handleOpen} color="primary">New Round</Button>
+                <Button onClick={this.handleOpen} color="primary" style={{marginTop: 10}}>New Round</Button>
                 <NewRoundForm
                     combatants={this.props.combatants}
                     newRound={this.props.newRound}

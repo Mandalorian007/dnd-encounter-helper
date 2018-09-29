@@ -8,6 +8,10 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TuneIcon from '@material-ui/icons/Tune';
+import Button from '@material-ui/core/Button';
+import Popover from '@material-ui/core/Popover';
+import Slider from 'rc-slider';
 
 const styles = createStyles({
   imageThumbnail: {
@@ -68,6 +72,7 @@ const styles = createStyles({
 
 interface State {
     expandedRows?: any; //TODO figure out type
+    anchorEl?: any;
 }
 
 class MonsterDetailsGrid extends React.Component<any, State> {
@@ -79,6 +84,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
     initialState = () => {
         return {
             expandedRows: [],
+            anchorEl: null,
         };
     };
 
@@ -131,8 +137,26 @@ class MonsterDetailsGrid extends React.Component<any, State> {
         this.setState({expandedRows: newExpandedRows});
     };
 
+    handleOpen = (event) => {
+        this.setState({anchorEl: event.currentTarget});
+    };
+
+    handleClose = () => {
+        this.setState({anchorEl: null});
+    };
+
+    onSliderChange = (monster, value) => {
+        console.log(value);
+        console.log(monster);
+    };
+
     render() {
         const monster = this.props.monster;
+        const { anchorEl } = this.state;
+        const open = Boolean(anchorEl);
+        const createSliderWithTooltip = Slider.createSliderWithTooltip;
+        const RangeWithTooltip = createSliderWithTooltip(Slider.Range);
+
         return (
         <Table className={this.props.classes.table}>
             <TableHead>
@@ -283,6 +307,31 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                 <TableRow className={this.props.classes.row}>
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
                         <strong>Challenge </strong><span>{monster.challengeRating}</span>
+                        <Button size="small" onClick={this.handleOpen} disabled={this.props.disabled}>
+                            <TuneIcon />
+                        </Button>
+                        <Popover
+                            open={open}
+                            anchorEl={anchorEl}
+                            onClose={this.handleClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                        >
+                            <div style={{width: 500, margin: 10}}>
+                                <RangeWithTooltip
+                                    min={1}
+                                    max={33}
+                                    defaultValue={[monster.challengeRating]}
+                                    onAfterChange={(v) => this.onSliderChange(monster, v)}
+                                />
+                            </div>
+                        </Popover>
                     </TableCell>
                 </TableRow>
                 {((Array.isArray(monster.specialAbilities) && monster.specialAbilities.length) ?
