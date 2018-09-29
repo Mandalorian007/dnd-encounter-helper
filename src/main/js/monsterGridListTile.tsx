@@ -129,7 +129,7 @@ class MonsterGridListTile extends React.Component<any, State> {
                     aria-labelledby="form-dialog-title"
                     aria-describedby="form-dialog-description">
                     <DialogContent>
-                        <MonsterDetailsGrid monster={monster} imageSrc={imageSrc}/>
+                        <MonsterDetailsGrid disabled={false} monster={monster} imageSrc={imageSrc}/>
                     </DialogContent>
                     <DialogActions>
                         <ValidatorForm

@@ -307,7 +307,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                 <TableRow className={this.props.classes.row}>
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
                         <strong>Challenge </strong><span>{monster.challengeRating}</span>
-                        <Button size="small" onClick={this.handleOpen}>
+                        <Button size="small" onClick={this.handleOpen} disabled={this.props.disabled}>
                             <TuneIcon />
                         </Button>
                         <Popover

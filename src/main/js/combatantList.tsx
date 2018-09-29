@@ -170,6 +170,7 @@ class CombatantList extends React.Component<any, State> {
     getDetailContent = () => {
         if(this.state.monster != null) {
             return <MonsterDetailsGrid
+                disabled={true}
                 monster={this.state.monster}
                 imageSrc={`https://5etools.com/img/MM/${this.state.monster.name}.png`}
             />;
