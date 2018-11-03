@@ -1,20 +1,19 @@
-package com.dnd.tools.encounterhelper.monster2;
+package com.dnd.tools.encounterhelper.monster.model;
 
-import java.util.Optional;
 import lombok.Data;
 
 @Data
 public class ConditionImmunity {
   private Condition damageType;
-  private Optional<String> condition;
+  private String condition;
 
   public ConditionImmunity(Condition damageType) {
     this.damageType = damageType;
-    this.condition = Optional.empty();
+    this.condition = null;
   }
 
   public ConditionImmunity(Condition damageType, String condition) {
     this.damageType = damageType;
-    this.condition = Optional.of(condition);
+    this.condition = condition;
   }
 }

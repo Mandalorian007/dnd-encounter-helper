@@ -1,4 +1,4 @@
-package com.dnd.tools.encounterhelper.monster2;
+package com.dnd.tools.encounterhelper.monster.model;
 
 public enum AttackTag {
   MELEE,

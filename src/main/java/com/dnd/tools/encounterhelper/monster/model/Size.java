@@ -1,4 +1,4 @@
-package com.dnd.tools.encounterhelper.monster;
+package com.dnd.tools.encounterhelper.monster.model;
 
 public enum Size {
   TINY,
