@@ -1,4 +1,4 @@
-package com.dnd.tools.encounterhelper.loader.jsonSerializers;
+package com.dnd.tools.encounterhelper.loader.jsonDeserializers;
 
 import com.dnd.tools.encounterhelper.loader.jsonmodel.ActionEntry;
 import com.fasterxml.jackson.core.JsonParser;
@@ -35,11 +35,16 @@ public class ActionEntryDeserializer extends JsonDeserializer<ActionEntry[]> {
         if(itemObjList != null) {
           itemObjList.stream().forEach((itemObj) -> {
             ActionEntry.EntryList.Item item = new ActionEntry.EntryList.Item();
-            Map<?,?> itemData = (LinkedHashMap) itemObj;
-            item.setType((String) itemData.get("type"));
-            item.setName((String) itemData.get("name"));
-            item.setEntry((String) itemData.get("entry"));
-            finalItemsList.add(item);
+            if(itemObj instanceof String) {
+              item.setName((String) itemObj);
+              finalItemsList.add(item);
+            } else {
+              Map<?, ?> itemData = (LinkedHashMap) itemObj;
+              item.setType((String) itemData.get("type"));
+              item.setName((String) itemData.get("name"));
+              item.setEntry((String) itemData.get("entry"));
+              finalItemsList.add(item);
+            }
           });
           entryList.setItems(finalItemsList.toArray(new ActionEntry.EntryList.Item[finalItemsList.size()]));
         }

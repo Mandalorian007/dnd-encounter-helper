@@ -25,4 +25,7 @@ public class Skill {
   private String intimidation;
   private String performance;
   private String persuasion;
+
+  //TODO WTF
+  private Object other;
 }

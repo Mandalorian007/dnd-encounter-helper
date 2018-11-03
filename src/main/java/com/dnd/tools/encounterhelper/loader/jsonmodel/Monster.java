@@ -1,13 +1,13 @@
 package com.dnd.tools.encounterhelper.loader.jsonmodel;
 
-import com.dnd.tools.encounterhelper.loader.jsonSerializers.AcDeserializer;
-import com.dnd.tools.encounterhelper.loader.jsonSerializers.AlignmentDeserializer;
-import com.dnd.tools.encounterhelper.loader.jsonSerializers.ConditionImmuneDeserializer;
-import com.dnd.tools.encounterhelper.loader.jsonSerializers.CrDeserializer;
-import com.dnd.tools.encounterhelper.loader.jsonSerializers.ImmuneDeserializer;
-import com.dnd.tools.encounterhelper.loader.jsonSerializers.MonsterTypeDeserializer;
-import com.dnd.tools.encounterhelper.loader.jsonSerializers.ResistDeserializer;
-import com.dnd.tools.encounterhelper.loader.jsonSerializers.VulnerableDeserializer;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.AcDeserializer;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.AlignmentDeserializer;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.ConditionImmuneDeserializer;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.CrDeserializer;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.ImmuneDeserializer;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.MonsterTypeDeserializer;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.ResistDeserializer;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.VulnerableDeserializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
@@ -59,6 +59,7 @@ public class Monster {
   private Action[] action;
   private Reaction[] reaction;
   private String legendaryGroup;
+  private Integer legendaryActions;
   private Legendary[] legendary;
   private String description;
   private Variant[] variant;

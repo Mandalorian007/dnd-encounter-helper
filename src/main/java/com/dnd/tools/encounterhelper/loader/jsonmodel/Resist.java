@@ -4,6 +4,13 @@ import lombok.Data;
 
 @Data
 public class Resist {
-  private String[] resist;
+  private ResistNested[] resist;
   private String note;
+
+  @Data
+  public static class ResistNested {
+    public String resist;
+    public String[] resistGroup;
+    public String preNote;
+  }
 }

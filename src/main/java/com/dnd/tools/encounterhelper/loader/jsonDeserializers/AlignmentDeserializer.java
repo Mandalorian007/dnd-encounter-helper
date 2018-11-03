@@ -1,4 +1,4 @@
-package com.dnd.tools.encounterhelper.loader.jsonSerializers;
+package com.dnd.tools.encounterhelper.loader.jsonDeserializers;
 
 import com.dnd.tools.encounterhelper.loader.jsonmodel.Alignment;
 import com.fasterxml.jackson.core.JsonParser;
@@ -40,8 +40,11 @@ public class AlignmentDeserializer extends JsonDeserializer<Alignment[]> {
         HashMap<?, ?> hashMap = (LinkedHashMap)alignmentField;
         Alignment alignment = new Alignment();
         ArrayList<String> alignmentList = (ArrayList<String>) hashMap.get("alignment");
-        alignment.setAlignments(alignmentList.toArray(new String[alignmentList.size()]));
-        alignment.setChance((Integer)hashMap.get("chance"));
+        if(alignmentList != null) {
+          alignment.setAlignments(alignmentList.toArray(new String[alignmentList.size()]));
+        }
+        Integer chance = (Integer) hashMap.get("chance");
+        alignment.setChance(chance != null ? chance : 100);
         finalAlignmentList.add(alignment);
       }
       return finalAlignmentList.toArray(new Alignment[finalAlignmentList.size()]);

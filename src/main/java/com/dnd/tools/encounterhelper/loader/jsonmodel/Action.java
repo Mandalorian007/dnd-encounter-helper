@@ -1,6 +1,6 @@
 package com.dnd.tools.encounterhelper.loader.jsonmodel;
 
-import com.dnd.tools.encounterhelper.loader.jsonSerializers.ActionEntryDeserializer;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.ActionEntryDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 

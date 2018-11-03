@@ -1,4 +1,4 @@
-package com.dnd.tools.encounterhelper.loader.jsonSerializers;
+package com.dnd.tools.encounterhelper.loader.jsonDeserializers;
 
 import com.dnd.tools.encounterhelper.loader.jsonmodel.Cr;
 import com.fasterxml.jackson.core.JsonParser;
