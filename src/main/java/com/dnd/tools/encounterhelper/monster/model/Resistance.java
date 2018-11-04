@@ -10,5 +10,7 @@ import lombok.Data;
 public class Resistance {
   @Enumerated(EnumType.STRING)
   private DamageType damageType;
-  private String condition;
+  private String note;
+  private String preNote;
+  private String special;
 }

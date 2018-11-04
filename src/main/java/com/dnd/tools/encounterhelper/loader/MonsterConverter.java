@@ -1,31 +1,10 @@
 package com.dnd.tools.encounterhelper.loader;
 
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.RPGDice;
-import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAc;
-import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAlignment;
-import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonHp;
-import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonMonster;
-import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonMonsterType;
-import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSaves;
-import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSkill;
-import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSpeed;
-import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSpeedData;
-import com.dnd.tools.encounterhelper.monster.model.Alignment;
-import com.dnd.tools.encounterhelper.monster.model.AlignmentOption;
-import com.dnd.tools.encounterhelper.monster.model.ArmourClass;
-import com.dnd.tools.encounterhelper.monster.model.BookSource;
-import com.dnd.tools.encounterhelper.monster.model.Environment;
-import com.dnd.tools.encounterhelper.monster.model.Hp;
-import com.dnd.tools.encounterhelper.monster.model.Monster;
-import com.dnd.tools.encounterhelper.monster.model.Size;
-import com.dnd.tools.encounterhelper.monster.model.Speed;
-import com.dnd.tools.encounterhelper.monster.model.Type;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.*;
+import com.dnd.tools.encounterhelper.monster.model.*;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
@@ -94,8 +73,9 @@ public class MonsterConverter {
 
     //Book Source
     BookSource bookSource = new BookSource();
-    bookSource.setPage(jsonMonster.getPage());
+    bookSource.setBookCode(jsonMonster.getSource());
     bookSource.setBook(getFullBookName(jsonMonster.getSource()));
+    bookSource.setPage(jsonMonster.getPage());
     monster.setBookSource(bookSource);
 
     //Armour Class
@@ -277,6 +257,34 @@ public class MonsterConverter {
     }
 
     //Resistances
+    JsonResist[] jsonResists = jsonMonster.getResist();
+    if(jsonResists != null) {
+      List<Resistance> resistanceList = new ArrayList<>();
+      Arrays.asList(jsonResists).forEach(jsonResist -> {
+        // Currently resist has a String[] of resistances we will normalize this to 1 resist per
+        if(jsonResist.getResist() != null) {
+          Arrays.asList(jsonResist.getResist()).stream().forEach(damageType -> {
+            Resistance resistance = new Resistance();
+            resistance.setDamageType(getDamageTypeFromString(damageType));
+            resistance.setNote(jsonResist.getNote());
+            resistance.setPreNote(jsonResist.getPreNote());
+            resistance.setSpecial(jsonResist.getSpecial());
+            resistanceList.add(resistance);
+          });
+
+        } else {
+          //Handle odd cases where there is content but no damage type
+          Resistance resistance = new Resistance();
+          resistance.setNote(jsonResist.getNote());
+          resistance.setPreNote(jsonResist.getPreNote());
+          resistance.setSpecial(jsonResist.getSpecial());
+          resistanceList.add(resistance);
+        }
+      });
+      monster.setResistances(resistanceList);
+    }
+
+    //Immunities
 
     return monster;
   }
@@ -345,8 +353,101 @@ public class MonsterConverter {
   }
 
   //TODO convert to full book name
+  private static Map<String, String> bookCodeMap = new HashMap<>();
+  static {
+    // code -> book
+    bookCodeMap.put("CoS", "Curse of Strahd");
+    bookCodeMap.put("DMG",	"Dungeon Master's Guide");
+    bookCodeMap.put("EEPC",	"Elemental Evil Player's Companion");
+    bookCodeMap.put("EET", "Elemental Evil: Trinkets");
+    bookCodeMap.put("HotDQ", "Hoard of the Dragon Queen");
+    bookCodeMap.put("LMoP",	"Lost Mine of Phandelver");
+    bookCodeMap.put("Mag",	"Dragon Magazine");
+    bookCodeMap.put("MM",	 "Monster Manual");
+    bookCodeMap.put("OotA", "Out of the Abyss");
+    bookCodeMap.put("PHB", 	"Player's Handbook");
+    bookCodeMap.put("PotA",	"Princes of the Apocalypse");
+    bookCodeMap.put("RoT", 	"The Rise of Tiamat");
+    bookCodeMap.put("RoTOS", "The Rise of Tiamat Online Supplement");
+    bookCodeMap.put("SCAG", "Sword Coast Adventurer's Guide");
+    bookCodeMap.put("SKT", 	"Storm King's Thunder");
+    bookCodeMap.put("ToA", 	"Tomb of Annihilation");
+    bookCodeMap.put("ToD", 	"Tyranny of Dragons");
+    bookCodeMap.put("TTP", 	"The Tortle Package");
+    bookCodeMap.put("TftYP", "Tales from the Yawning Portal");
+    bookCodeMap.put("TYP", 	"Tales from the Yawning Portal");
+    bookCodeMap.put("TYP_AtG", "Tales from the Yawning Portal");
+    bookCodeMap.put("TYP_DiT", "Tales from the Yawning Portal");
+    bookCodeMap.put("TYP_TFoF", "Tales from the Yawning Portal");
+    bookCodeMap.put("TYP_THSoT", "Tales from the Yawning Portal");
+    bookCodeMap.put("TYP_TSC", "Tales from the Yawning Portal");
+    bookCodeMap.put("TYP_ToH", "Tales from the Yawning Portal");
+    bookCodeMap.put("TYP_WPM", "Tales from the Yawning Portal");
+    bookCodeMap.put("VGM", "Volo's Guide to Monsters");
+    bookCodeMap.put("XGE", "Xanathar's Guide to Everything");
+    bookCodeMap.put("OGA", "One Grung Above");
+    bookCodeMap.put("MTF", "Mordenkainen's Tome of Foes");
+    bookCodeMap.put("ALCoS", "Adventurers League:Curse of Strahd");
+    bookCodeMap.put("ALEE", "Adventurers League:Elemental Evil");
+    bookCodeMap.put("ALRoD", "Adventurers League:Rage of Demons");
+    bookCodeMap.put("PSA", "Plane Shift: Amonkhet");
+    bookCodeMap.put("PSI", "Plane Shift: Innistrad");
+    bookCodeMap.put("PSK", "Plane Shift: Kaladesh");
+    bookCodeMap.put("PSZ", "Plane Shift: Zendikar");
+    bookCodeMap.put("PSX", "Plane Shift: Ixalan");
+    bookCodeMap.put("PSD", "Plane Shift: Dominaria");
+    bookCodeMap.put("UAA", "Unearthed Arcana: Artificer");
+    bookCodeMap.put("UAEAG", "Unearthed Arcana: Eladrin and Gith");
+    bookCodeMap.put("UAEBB", "Unearthed Arcana: Eberron");
+    bookCodeMap.put("UAFFR", "Unearthed Arcana: Feats for Races");
+    bookCodeMap.put("UAFFS", "Unearthed Arcana: Feats for Skills");
+    bookCodeMap.put("UAFO", "Unearthed Arcana: Fiendish Options");
+    bookCodeMap.put("UAFT",	"Unearthed Arcana: Feats");
+    bookCodeMap.put("UAGH",	"Unearthed Arcana: Gothic Heroes");
+    bookCodeMap.put("UAMDM", "Unearthed Arcana: Modern Magic");
+    bookCodeMap.put("UASSP", "Unearthed Arcana: Starter Spells");
+    bookCodeMap.put("UATMC", "Unearthed Arcana: The Mystic Class");
+    bookCodeMap.put("UATOBM", "Unearthed Arcana: That Old Black Magic");
+    bookCodeMap.put("UATRR", "Unearthed Arcana: The Ranger, Revised");
+    bookCodeMap.put("UAWA", "Unearthed Arcana: Waterborne Adventures");
+    bookCodeMap.put("UAVR", "Unearthed Arcana: Variant Rules");
+    bookCodeMap.put("UALDR", "Unearthed Arcana: Light, Dark, Underdark!");
+    bookCodeMap.put("UARAR", "Unearthed Arcana: Ranger and Rogue");
+    bookCodeMap.put("UAATOSC",	"Unearthed Arcana: A Trio of Subclasses");
+    bookCodeMap.put("UABPP", "Unearthed Arcana: Barbarian Primal Paths");
+    bookCodeMap.put("UARSC", "Unearthed Arcana: Revised Subclasses");
+    bookCodeMap.put("UAKOO", "Unearthed Arcana: Kits of Old");
+    bookCodeMap.put("UABBC", "Unearthed Arcana: Bard: Bard Colleges");
+    bookCodeMap.put("UACDD", "Unearthed Arcana: Cleric: Divine Domains");
+    bookCodeMap.put("UAD", "Unearthed Arcana: Druid");
+    bookCodeMap.put("UARCO", "Unearthed Arcana: Revised Class Options");
+    bookCodeMap.put("UAF", "Unearthed Arcana: Fighter");
+    bookCodeMap.put("UAM", "Unearthed Arcana: Monk");
+    bookCodeMap.put("UAP",	"Unearthed Arcana: Paladin");
+    bookCodeMap.put("UAMC",	"Unearthed Arcana: Modifying Classes");
+    bookCodeMap.put("UAS", "Unearthed Arcana: Sorcerer");
+    bookCodeMap.put("UAWAW", "Unearthed Arcana: Warlock and Wizard");
+    bookCodeMap.put("UATF", "Unearthed Arcana: The Faithful");
+    bookCodeMap.put("UAWR",	 "Unearthed Arcana: Wizard Revisited");
+    bookCodeMap.put("UAESR", "Unearthed Arcana: Elf Subraces");
+    bookCodeMap.put("UAMAC", "Unearthed Arcana: Mass Combat");
+    bookCodeMap.put("UA3PE", "Unearthed Arcana: Three-Pillar Experience");
+    bookCodeMap.put("UAGHI", "Unearthed Arcana: Greyhawk Initiative");
+    bookCodeMap.put("UATSC", "Unearthed Arcana: Three Subclasses");
+    bookCodeMap.put("UAOD", "Unearthed Arcana: Order Domain");
+    bookCodeMap.put("UACAM", "Unearthed Arcana: Centaurs and Minotaurs");
+    bookCodeMap.put("UAGSS", "Unearthed Arcana: Giant Soul Sorcerer");
+    bookCodeMap.put("UARoE", "Unearthed Arcana: Races of Eberron");
+    bookCodeMap.put("UARoR", "Unearthed Arcana: Races of Ravnica");
+    bookCodeMap.put("UAWGE", "Wayfinder's Guide to Eberron");
+    bookCodeMap.put("STREAM", "Livestream");
+    bookCodeMap.put("TWITTER", "Twitter");
+  }
   private String getFullBookName(String bookCode) {
-    return bookCode;
+    if (!bookCodeMap.containsKey(bookCode)) {
+      throw new RuntimeException("Unable to parse bookCode from string: " + bookCode);
+    }
+    return bookCodeMap.get(bookCode);
   }
 
   private Hp parseHp(JsonHp jsonHp) {
@@ -364,5 +465,29 @@ public class MonsterConverter {
     }
     hp.setSpecial(jsonHp.getSpecial());
     return hp;
+  }
+
+  private static Map<String, DamageType> damageTypeMap = new HashMap<>();
+  static {
+    damageTypeMap.put("ACID", DamageType.ACID);
+    damageTypeMap.put("BLUDGEONING", DamageType.BLUDGEONING);
+    damageTypeMap.put("COLD", DamageType.COLD);
+    damageTypeMap.put("FIRE", DamageType.FIRE);
+    damageTypeMap.put("FORCE", DamageType.FORCE);
+    damageTypeMap.put("LIGHTNING", DamageType.LIGHTNING);
+    damageTypeMap.put("NECROTIC", DamageType.NECROTIC);
+    damageTypeMap.put("PIERCING", DamageType.PIERCING);
+    damageTypeMap.put("POISON", DamageType.POISON);
+    damageTypeMap.put("PSYCHIC", DamageType.PSYCHIC);
+    damageTypeMap.put("RADIANT", DamageType.RADIANT);
+    damageTypeMap.put("SLASHING", DamageType.SLASHING);
+    damageTypeMap.put("THUNDER", DamageType.THUNDER);
+  }
+  private DamageType getDamageTypeFromString(String damageType) {
+    damageType = damageType.toUpperCase();
+    if (!damageTypeMap.containsKey(damageType)) {
+      throw new RuntimeException("Unable to parse damageType from string: " + damageType);
+    }
+    return damageTypeMap.get(damageType);
   }
 }
