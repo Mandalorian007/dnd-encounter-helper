@@ -326,6 +326,12 @@ public class MonsterConverter {
       });
     }
 
+    //Senses
+    String jsonMonsterSenses = jsonMonster.getSenses();
+    if(jsonMonsterSenses != null) {
+      monster.setSenses(Set.of(jsonMonsterSenses.split(",")));
+    }
+
     return monster;
   }
 
