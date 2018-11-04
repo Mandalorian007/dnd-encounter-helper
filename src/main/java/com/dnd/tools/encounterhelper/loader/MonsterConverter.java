@@ -1,6 +1,6 @@
 package com.dnd.tools.encounterhelper.loader;
 
-import com.dnd.tools.encounterhelper.RPGDice;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.RPGDice;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAc;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAlignment;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonHp;

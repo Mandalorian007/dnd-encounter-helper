@@ -1,4 +1,4 @@
-package com.dnd.tools.encounterhelper;
+package com.dnd.tools.encounterhelper.loader.jsonDeserializers;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -19,42 +20,48 @@ public class ResistDeserializer extends JsonDeserializer<JsonResist[]> {
     Object[] resistObjects = p.readValueAs(Object[].class);
 
     List<JsonResist> finalResistList = new ArrayList<>();
-    for(Object resistObject: resistObjects) {
-      if(resistObject instanceof String) {
+    for(Object resistObj: resistObjects) {
+      if(resistObj instanceof String) {
         JsonResist resist = new JsonResist();
-        resist.setResist(new JsonResist.ResistNested[]{getFromString(resistObject)});
+        resist.setResist(new String[]{(String) resistObj});
         finalResistList.add(resist);
       } else {
-        Map<?, ?> map = (LinkedHashMap) resistObject;
+        Map<?, ?> map = (LinkedHashMap) resistObj;
         JsonResist resist = new JsonResist();
-        List<?> resistList = (ArrayList) map.get("resist");
-        List<JsonResist.ResistNested> finalResistNestedList = new ArrayList<>();
-        if (resistList != null) {
-          for(Object curResist : resistList) {
-            if(curResist instanceof String) {
-              finalResistNestedList.add(getFromString(curResist));
+        String note = (String) map.get("note");
+        resist.setNote(note);
+        String preNote = (String) map.get("preNote");
+        resist.setPreNote(preNote);
+        String special = (String) map.get("special");
+        resist.setSpecial(special);
+        if(map.get("resist") != null) {
+          List<?> resistList = (ArrayList) map.get("resist");
+          List<String> tempResistList = new ArrayList<>();
+          resistList.forEach(resistItem -> {
+            if(resistItem instanceof String) {
+              tempResistList.add((String) resistItem);
             } else {
-              Map<?,?> ooph = (LinkedHashMap) curResist;
-              JsonResist.ResistNested resistNested = new JsonResist.ResistNested();
-              List<String> resistyList = (ArrayList<String>) ooph.get("resist");
-              resistNested.setResistGroup(resistyList.toArray(new String[resistyList.size()]));
-              resistNested.setPreNote((String) ooph.get("preNote"));
-              finalResistNestedList.add(resistNested);
+              //Deep nested resist.  Break into an additional result
+              Map<?, ?> nestedMap = (LinkedHashMap) resistItem;
+              JsonResist nestedResist = new JsonResist();
+              String nestedNote = (String) nestedMap.get("note");
+              nestedResist.setNote(nestedNote);
+              String nestedPreNote = (String) nestedMap.get("preNote");
+              nestedResist.setPreNote(nestedPreNote);
+              String nestedSpecial = (String) nestedMap.get("special");
+              nestedResist.setSpecial(nestedSpecial);
+              List<String> nestedResistList = (ArrayList<String>) nestedMap.get("resist");
+              nestedResist.setResist(nestedResistList.toArray(new String[nestedResistList.size()]));
+              // Add to top level result (this reduces the level of nesting
+              finalResistList.add(nestedResist);
             }
-          }
-          resist.setResist(finalResistNestedList.toArray(new JsonResist.ResistNested[finalResistNestedList.size()]));
+          });
+          resist.setResist(tempResistList.toArray(new String[tempResistList.size()]));
         }
-        resist.setNote((String) map.get("note"));
+
         finalResistList.add(resist);
+        }
       }
-    }
-
     return finalResistList.toArray(new JsonResist[finalResistList.size()]);
-  }
-
-  private JsonResist.ResistNested getFromString(Object resistString) {
-    JsonResist.ResistNested resistNested = new JsonResist.ResistNested();
-    resistNested.setResist((String) resistString);
-    return resistNested;
   }
 }
