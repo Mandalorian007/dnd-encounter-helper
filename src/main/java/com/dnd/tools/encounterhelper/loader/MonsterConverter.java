@@ -332,6 +332,18 @@ public class MonsterConverter {
       monster.setSenses(Set.of(jsonMonsterSenses.split(",")));
     }
 
+    //Passive Perception
+    monster.setPassivePerception(jsonMonster.getPassive());
+
+    //Languages
+    String jsonMonsterLanguages = jsonMonster.getLanguages();
+    if(jsonMonsterLanguages != null) {
+      monster.setLanguages(Set.of(jsonMonsterLanguages.split(",")));
+    }
+
+    //Challenge Rating
+    //Note: stored as String value 0 -> 30 (and some fractions like: 1/8,1/4,1/2
+
     return monster;
   }
 
