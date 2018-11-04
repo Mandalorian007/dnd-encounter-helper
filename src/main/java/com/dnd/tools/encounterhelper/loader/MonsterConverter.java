@@ -285,6 +285,46 @@ public class MonsterConverter {
     }
 
     //Immunities
+    JsonImmune[] jsonImmunities = jsonMonster.getImmune();
+    if(jsonImmunities != null) {
+      List<Immunity> finalImmunities = new ArrayList<>();
+      Arrays.asList(jsonImmunities).stream().forEach(jsonImmunityObj -> {
+        //Normalizing a list of list to a single list by duplicating the conditions
+        String[] damageTypes = jsonImmunityObj.getImmune();
+        if(damageTypes != null  && damageTypes.length > 0) {
+          Arrays.asList(damageTypes).stream().forEach(damageType -> {
+            Immunity immunity = new Immunity();
+            immunity.setDamageType(getDamageTypeFromString(damageType));
+            immunity.setCondition(jsonImmunityObj.getNote());
+            finalImmunities.add(immunity);
+          });
+        } else {
+          throw new RuntimeException("We have condition for Immunity but no damage type for monster: " + jsonMonster.getName());
+        }
+        monster.setImmunities(finalImmunities);
+      });
+    }
+
+    //Condition Immunities
+    JsonConditionImmune[] jsonConditionImmunes = jsonMonster.getConditionImmune();
+    if(jsonConditionImmunes != null) {
+      Set<ConditionImmunity> finalConditionImmunities = new HashSet<>();
+      Arrays.asList(jsonConditionImmunes).stream().forEach(jsonConditionImmuneObj -> {
+        //Normalizing a list of list to a single list by duplicating the conditions
+        String[] condition = jsonConditionImmuneObj.getConditionImmune();
+        if (condition != null && condition.length > 0) {
+          Arrays.asList(condition).stream().forEach(jsonConditionString -> {
+            ConditionImmunity conditionImmunity = new ConditionImmunity();
+            conditionImmunity.setCondition(getConditionFromString(jsonConditionString));
+            conditionImmunity.setNote(jsonConditionImmuneObj.getNote());
+            finalConditionImmunities.add(conditionImmunity);
+          });
+        } else {
+          throw new RuntimeException("We have condition for Immunity but no damage type for monster: " + jsonMonster.getName());
+        }
+        monster.setConditionImmunity(finalConditionImmunities);
+      });
+    }
 
     return monster;
   }
@@ -489,5 +529,32 @@ public class MonsterConverter {
       throw new RuntimeException("Unable to parse damageType from string: " + damageType);
     }
     return damageTypeMap.get(damageType);
+  }
+
+  private static Map<String, Condition> conditionMap = new HashMap<>();
+  static {
+    conditionMap.put("BLINDED", Condition.BLINDED);
+    conditionMap.put("CHARMED", Condition.CHARMED);
+    conditionMap.put("DEAFENED", Condition.DEAFENED);
+    conditionMap.put("FATIGUED", Condition.FATIGUED);
+    conditionMap.put("FRIGHTENED", Condition.FRIGHTENED);
+    conditionMap.put("GRAPPLED", Condition.GRAPPLED);
+    conditionMap.put("INCAPACITATED", Condition.INCAPACITATED);
+    conditionMap.put("INVISIBILE", Condition.INVISIBILE);
+    conditionMap.put("PARALYZED", Condition.PARALYZED);
+    conditionMap.put("PETRIFIED", Condition.PETRIFIED);
+    conditionMap.put("POISONED", Condition.POISONED);
+    conditionMap.put("PRONE", Condition.PRONE);
+    conditionMap.put("RESTRAINED", Condition.RESTRAINED);
+    conditionMap.put("STUNNED", Condition.STUNNED);
+    conditionMap.put("UNCONSCIOUS", Condition.UNCONSCIOUS);
+    conditionMap.put("EXHAUSTION", Condition.EXHAUSTION);
+  }
+  private Condition getConditionFromString(String condition) {
+    condition = condition.toUpperCase();
+    if (!conditionMap.containsKey(condition)) {
+      throw new RuntimeException("Unable to parse condition from string: " + condition);
+    }
+    return conditionMap.get(condition);
   }
 }

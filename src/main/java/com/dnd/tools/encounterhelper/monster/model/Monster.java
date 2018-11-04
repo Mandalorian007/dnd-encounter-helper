@@ -76,7 +76,7 @@ public class Monster {
   @ElementCollection
   private List<Immunity> immunities;
   @ElementCollection
-  private Set<Condition> conditionImmunity;
+  private Set<ConditionImmunity> conditionImmunity;
 
   @ElementCollection
   private Set<String> senses;
