@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class Skill {
+public class JsonSkill {
   private String athletics;
   private String acrobatics;
   @JsonProperty("sleight of hand")

@@ -5,17 +5,17 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 @Data
-public class Speed {
+public class JsonSpeed {
   @JsonDeserialize(using = SpeedDataDeserializer.class)
-  private SpeedData walk;
+  private JsonSpeedData walk;
   @JsonDeserialize(using = SpeedDataDeserializer.class)
-  private SpeedData climb;
+  private JsonSpeedData climb;
   @JsonDeserialize(using = SpeedDataDeserializer.class)
-  private SpeedData fly;
+  private JsonSpeedData fly;
   @JsonDeserialize(using = SpeedDataDeserializer.class)
-  private SpeedData swim;
+  private JsonSpeedData swim;
   @JsonDeserialize(using = SpeedDataDeserializer.class)
-  private Object burrow;
+  private JsonSpeedData burrow;
   private Boolean canHover;
 
 }

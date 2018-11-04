@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 @Data
-public class Variant {
+public class JsonVariant {
   private String type;
   private String name;
   @JsonDeserialize(using = VariantEntryDeSerializer.class)

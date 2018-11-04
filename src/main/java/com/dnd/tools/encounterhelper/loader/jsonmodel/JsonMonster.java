@@ -13,20 +13,20 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 @Data
-public class Monster {
+public class JsonMonster {
   private String name;
   private String group;
   private Boolean isNPC;
   private String size;
   @JsonDeserialize(using = MonsterTypeDeserializer.class)
-  private MonsterType type;
+  private JsonMonsterType type;
   private String source;
   @JsonDeserialize(using = AlignmentDeserializer.class)
-  private Alignment[] alignment;
+  private JsonAlignment[] alignment;
   @JsonDeserialize(using = AcDeserializer.class)
-  private Ac[] ac;
-  private Hp hp;
-  private Speed speed;
+  private JsonAc[] ac;
+  private JsonHp hp;
+  private JsonSpeed speed;
   @JsonProperty("str")
   private int strength;
   @JsonProperty("dex")
@@ -39,30 +39,30 @@ public class Monster {
   private int wisdom;
   @JsonProperty("cha")
   private int charisma;
-  private Saves save;
-  private Skill skill;
+  private JsonSaves save;
+  private JsonSkill skill;
   @JsonDeserialize(using = ResistDeserializer.class)
-  private Resist[] resist;
+  private JsonResist[] resist;
   @JsonDeserialize(using = VulnerableDeserializer.class)
-  private Vulnerable[] vulnerable;
+  private JsonVulnerable[] vulnerable;
   @JsonDeserialize(using = ImmuneDeserializer.class)
-  private Immune[] immune;
+  private JsonImmune[] immune;
   @JsonDeserialize(using = ConditionImmuneDeserializer.class)
-  private ConditionImmune[] conditionImmune;
+  private JsonConditionImmune[] conditionImmune;
   private String senses;
   private int passive;
   private String languages;
   @JsonDeserialize(using = CrDeserializer.class)
-  private Cr cr;
+  private JsonCr cr;
   private Object spellcasting;
-  private Trait[] trait;
-  private Action[] action;
-  private Reaction[] reaction;
+  private JsonTrait[] trait;
+  private JsonAction[] action;
+  private JsonReaction[] reaction;
   private String legendaryGroup;
   private Integer legendaryActions;
-  private Legendary[] legendary;
+  private JsonLegendary[] legendary;
   private String description;
-  private Variant[] variant;
+  private JsonVariant[] variant;
   private int page;
   private Boolean familiar;
   private Boolean isNamedCreature;

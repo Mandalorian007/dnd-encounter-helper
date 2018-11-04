@@ -1,6 +1,6 @@
 package com.dnd.tools.encounterhelper.loader.jsonDeserializers;
 
-import com.dnd.tools.encounterhelper.loader.jsonmodel.Variant;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonVariant;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -11,10 +11,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VariantEntryDeSerializer extends JsonDeserializer<Variant.VariantEntry[]> {
+public class VariantEntryDeSerializer extends JsonDeserializer<JsonVariant.VariantEntry[]> {
 
   @Override
-  public Variant.VariantEntry[] deserialize(JsonParser p, DeserializationContext ctxt)
+  public JsonVariant.VariantEntry[] deserialize(JsonParser p, DeserializationContext ctxt)
       throws IOException, JsonProcessingException {
 
     List<?> variantEntryObjList = (ArrayList) p.readValueAs(Object.class);
@@ -22,9 +22,9 @@ public class VariantEntryDeSerializer extends JsonDeserializer<Variant.VariantEn
     return parse(variantEntryObjList);
   }
 
-  private Variant.VariantEntry[] parse(Object variantEntryObjArray) {
+  private JsonVariant.VariantEntry[] parse(Object variantEntryObjArray) {
     List<?> variantEntryObjList = (ArrayList) variantEntryObjArray;
-    List<Variant.VariantEntry> finalVariantEntries = new ArrayList<>();
+    List<JsonVariant.VariantEntry> finalVariantEntries = new ArrayList<>();
 
     variantEntryObjList.stream().forEach(variantEntryObj -> {
       if(variantEntryObj instanceof String) {
@@ -32,7 +32,7 @@ public class VariantEntryDeSerializer extends JsonDeserializer<Variant.VariantEn
       } else {
         // Nested Variant Entry object
         Map<?,?> nestedVariantEntryData = (LinkedHashMap) variantEntryObj;
-        Variant.VariantEntry variantEntry = new Variant.VariantEntry();
+        JsonVariant.VariantEntry variantEntry = new JsonVariant.VariantEntry();
         variantEntry.setName((String) nestedVariantEntryData.get("name"));
         variantEntry.setType((String) nestedVariantEntryData.get("type"));
         if(nestedVariantEntryData.get("entries") != null) {
@@ -42,11 +42,11 @@ public class VariantEntryDeSerializer extends JsonDeserializer<Variant.VariantEn
       }
     });
 
-    return finalVariantEntries.toArray(new Variant.VariantEntry[finalVariantEntries.size()]);
+    return finalVariantEntries.toArray(new JsonVariant.VariantEntry[finalVariantEntries.size()]);
   }
 
-  private Variant.VariantEntry getVarientEntryFromString(String entry) {
-    Variant.VariantEntry variantEntry = new Variant.VariantEntry();
+  private JsonVariant.VariantEntry getVarientEntryFromString(String entry) {
+    JsonVariant.VariantEntry variantEntry = new JsonVariant.VariantEntry();
     variantEntry.setEntry(entry);
     return variantEntry;
   }

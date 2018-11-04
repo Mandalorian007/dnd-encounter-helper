@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 @Data
-public class Action {
+public class JsonAction {
   private String name;
   @JsonDeserialize(using = ActionEntryDeserializer.class)
-  private ActionEntry[] entries;
+  private JsonActionEntry[] entries;
 }

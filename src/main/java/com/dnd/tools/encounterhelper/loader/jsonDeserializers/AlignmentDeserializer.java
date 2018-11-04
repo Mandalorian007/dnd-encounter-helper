@@ -1,6 +1,6 @@
 package com.dnd.tools.encounterhelper.loader.jsonDeserializers;
 
-import com.dnd.tools.encounterhelper.loader.jsonmodel.Alignment;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAlignment;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -13,10 +13,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AlignmentDeserializer extends JsonDeserializer<Alignment[]> {
+public class AlignmentDeserializer extends JsonDeserializer<JsonAlignment[]> {
 
   @Override
-  public Alignment[] deserialize(JsonParser p, DeserializationContext ctxt)
+  public JsonAlignment[] deserialize(JsonParser p, DeserializationContext ctxt)
       throws IOException, JsonProcessingException {
       Object[] alignmentFields = p.readValueAs(Object[].class);
       boolean onlyStrings = true;
@@ -30,15 +30,15 @@ public class AlignmentDeserializer extends JsonDeserializer<Alignment[]> {
       List<String> alignments = Arrays.asList(alignmentFields).stream()
           .map(field -> (String) field)
           .collect(Collectors.toList());
-      Alignment alignment = new Alignment();
+      JsonAlignment alignment = new JsonAlignment();
       alignment.setAlignments(alignments.toArray(new String[alignments.size()]));
       alignment.setChance(100);
-      return new Alignment[]{alignment};
+      return new JsonAlignment[]{alignment};
     } else {
-      List<Alignment> finalAlignmentList = new ArrayList<>();
+      List<JsonAlignment> finalAlignmentList = new ArrayList<>();
       for (Object alignmentField : alignmentFields) {
         HashMap<?, ?> hashMap = (LinkedHashMap)alignmentField;
-        Alignment alignment = new Alignment();
+        JsonAlignment alignment = new JsonAlignment();
         ArrayList<String> alignmentList = (ArrayList<String>) hashMap.get("alignment");
         if(alignmentList != null) {
           alignment.setAlignments(alignmentList.toArray(new String[alignmentList.size()]));
@@ -47,7 +47,7 @@ public class AlignmentDeserializer extends JsonDeserializer<Alignment[]> {
         alignment.setChance(chance != null ? chance : 100);
         finalAlignmentList.add(alignment);
       }
-      return finalAlignmentList.toArray(new Alignment[finalAlignmentList.size()]);
+      return finalAlignmentList.toArray(new JsonAlignment[finalAlignmentList.size()]);
     }
 
   }

@@ -3,7 +3,7 @@ package com.dnd.tools.encounterhelper.loader.jsonmodel;
 import lombok.Data;
 
 @Data
-public class ActionEntry {
+public class JsonActionEntry {
   public String single;
   public EntryList multiple;
 

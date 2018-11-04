@@ -1,7 +1,8 @@
 package com.dnd.tools.encounterhelper.loader;
 
-import com.dnd.tools.encounterhelper.loader.jsonmodel.Monster;
-import com.dnd.tools.encounterhelper.loader.jsonmodel.MonsterList;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonMonster;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonMonsterList;
+import com.dnd.tools.encounterhelper.monster.model.Monster;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component;
 public class MonsterLoader implements CommandLineRunner {
 
   private final ResourceLoader resourceLoader;
+  private final MonsterConverter monsterConverter;
 
   @Override
   public void run(String... args) throws Exception {
@@ -36,18 +38,24 @@ public class MonsterLoader implements CommandLineRunner {
         .collect(Collectors.toList());
 
     ObjectMapper objectMapper = new ObjectMapper();
-    List<Monster> monsterLists = new ArrayList<>();
+    List<JsonMonster> monsterLists = new ArrayList<>();
 
     for (Resource resource : resources) {
       log.info("Loading monsters from: " + resource.getFilename());
-      MonsterList monsterList =
-          objectMapper.readValue(resource.getInputStream(), MonsterList.class);
+      JsonMonsterList monsterList =
+          objectMapper.readValue(resource.getInputStream(), JsonMonsterList.class);
       if (monsterList != null) {
         monsterLists.addAll(monsterList.getMonster());
       }
     }
 
     log.info("Loaded Monster Count: " + monsterLists.size());
+
+    List<Monster> dbMonsterList = monsterLists.stream()
+        .map(monsterConverter::convert)
+        .collect(Collectors.toList());
+
+    log.info("DB Monster Count: " + dbMonsterList.size());
 
   }
 }

@@ -1,9 +1,9 @@
 package com.dnd.tools.encounterhelper.loader.jsonmodel;
 
+import java.util.List;
 import lombok.Data;
 
 @Data
-public class Vulnerable {
-  private String[] vulnerable;
-  private String note;
+public class JsonMonsterList {
+  List<JsonMonster> monster;
 }

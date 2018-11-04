@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class Saves {
+public class JsonSaves {
   @JsonProperty("str")
   private String strength;
   @JsonProperty("dex")

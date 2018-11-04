@@ -3,7 +3,7 @@ package com.dnd.tools.encounterhelper.loader.jsonmodel;
 import lombok.Data;
 
 @Data
-public class Alignment {
-  private String[] alignments;
-  private int chance;
+public class JsonVulnerable {
+  private String[] vulnerable;
+  private String note;
 }

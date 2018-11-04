@@ -1,6 +1,6 @@
 package com.dnd.tools.encounterhelper.loader.jsonDeserializers;
 
-import com.dnd.tools.encounterhelper.loader.jsonmodel.ActionEntry;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonActionEntry;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -11,30 +11,30 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ActionEntryDeserializer extends JsonDeserializer<ActionEntry[]> {
+public class ActionEntryDeserializer extends JsonDeserializer<JsonActionEntry[]> {
 
   @Override
-  public ActionEntry[] deserialize(JsonParser p, DeserializationContext ctxt)
+  public JsonActionEntry[] deserialize(JsonParser p, DeserializationContext ctxt)
       throws IOException, JsonProcessingException {
     Object[] fields = p.readValueAs(Object[].class);
 
-    List<ActionEntry> entries = new ArrayList<>();
+    List<JsonActionEntry> entries = new ArrayList<>();
     for(Object field: fields) {
       if(field instanceof String) {
-        ActionEntry entry = new ActionEntry();
+        JsonActionEntry entry = new JsonActionEntry();
         entry.setSingle((String) field);
         entries.add(entry);
       } else {
         Map<?, ?> data = (LinkedHashMap) field;
-        ActionEntry entry = new ActionEntry();
-        ActionEntry.EntryList entryList = new ActionEntry.EntryList();
+        JsonActionEntry entry = new JsonActionEntry();
+        JsonActionEntry.EntryList entryList = new JsonActionEntry.EntryList();
         entryList.setType((String) data.get("type"));
         entryList.setStyle((String) data.get("style"));
         List<?> itemObjList = (ArrayList) data.get("items");
-        List<ActionEntry.EntryList.Item> finalItemsList = new ArrayList<>();
+        List<JsonActionEntry.EntryList.Item> finalItemsList = new ArrayList<>();
         if(itemObjList != null) {
           itemObjList.stream().forEach((itemObj) -> {
-            ActionEntry.EntryList.Item item = new ActionEntry.EntryList.Item();
+            JsonActionEntry.EntryList.Item item = new JsonActionEntry.EntryList.Item();
             if(itemObj instanceof String) {
               item.setName((String) itemObj);
               finalItemsList.add(item);
@@ -46,7 +46,7 @@ public class ActionEntryDeserializer extends JsonDeserializer<ActionEntry[]> {
               finalItemsList.add(item);
             }
           });
-          entryList.setItems(finalItemsList.toArray(new ActionEntry.EntryList.Item[finalItemsList.size()]));
+          entryList.setItems(finalItemsList.toArray(new JsonActionEntry.EntryList.Item[finalItemsList.size()]));
         }
 
         entry.setMultiple(entryList);
@@ -54,6 +54,6 @@ public class ActionEntryDeserializer extends JsonDeserializer<ActionEntry[]> {
       }
     }
 
-    return entries.toArray(new ActionEntry[entries.size()]);
+    return entries.toArray(new JsonActionEntry[entries.size()]);
   }
 }

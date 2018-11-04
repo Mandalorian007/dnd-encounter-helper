@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 @Data
-public class MonsterType {
+public class JsonMonsterType {
 
   private String type;
   @JsonDeserialize(using = MonsterTypeTagDeserializer.class)
@@ -15,6 +15,7 @@ public class MonsterType {
   @Data
   public static class MonsterTypeTag {
     private String tag;
+    // Note this data is ignored as it is only present on Grisha from oota
     private String prefix;
   }
 }

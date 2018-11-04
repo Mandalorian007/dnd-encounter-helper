@@ -1,6 +1,6 @@
 package com.dnd.tools.encounterhelper.loader.jsonDeserializers;
 
-import com.dnd.tools.encounterhelper.loader.jsonmodel.Vulnerable;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonVulnerable;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -11,22 +11,22 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VulnerableDeserializer extends JsonDeserializer<Vulnerable[]> {
+public class VulnerableDeserializer extends JsonDeserializer<JsonVulnerable[]> {
 
   @Override
-  public Vulnerable[] deserialize(JsonParser p, DeserializationContext ctxt)
+  public JsonVulnerable[] deserialize(JsonParser p, DeserializationContext ctxt)
       throws IOException, JsonProcessingException {
     Object[] vulnerableObjects = p.readValueAs(Object[].class);
 
-    List<Vulnerable> finalVulnerableList = new ArrayList<>();
+    List<JsonVulnerable> finalVulnerableList = new ArrayList<>();
     for(Object vulnerableObject: vulnerableObjects) {
       if(vulnerableObject instanceof String) {
-        Vulnerable vulnerable = new Vulnerable();
+        JsonVulnerable vulnerable = new JsonVulnerable();
         vulnerable.setVulnerable(new String[]{(String) vulnerableObject});
         finalVulnerableList.add(vulnerable);
       } else {
         Map<?, ?> map = (LinkedHashMap) vulnerableObject;
-        Vulnerable vulnerable = new Vulnerable();
+        JsonVulnerable vulnerable = new JsonVulnerable();
         List<String> stringList = (List<String>) map.get("vulnerable");
         if (stringList != null) {
           vulnerable.setVulnerable(stringList.toArray(new String[stringList.size()]));
@@ -36,6 +36,6 @@ public class VulnerableDeserializer extends JsonDeserializer<Vulnerable[]> {
       }
     }
 
-    return finalVulnerableList.toArray(new Vulnerable[finalVulnerableList.size()]);
+    return finalVulnerableList.toArray(new JsonVulnerable[finalVulnerableList.size()]);
   }
 }

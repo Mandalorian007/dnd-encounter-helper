@@ -1,6 +1,6 @@
 package com.dnd.tools.encounterhelper.loader.jsonDeserializers;
 
-import com.dnd.tools.encounterhelper.loader.jsonmodel.Ac;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAc;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -10,23 +10,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class AcDeserializer extends JsonDeserializer<Ac[]> {
+public class AcDeserializer extends JsonDeserializer<JsonAc[]> {
 
   @Override
-  public Ac[] deserialize(JsonParser p, DeserializationContext ctxt)
+  public JsonAc[] deserialize(JsonParser p, DeserializationContext ctxt)
       throws IOException, JsonProcessingException {
 
     Object[] fields = p.readValueAs(Object[].class);
 
-    List<Ac> finalAcList = new ArrayList<>();
+    List<JsonAc> finalAcList = new ArrayList<>();
     for(Object field : fields) {
       if(field instanceof Integer) {
-        Ac ac = new Ac();
+        JsonAc ac = new JsonAc();
         ac.setAc((Integer) field);
         finalAcList.add(ac);
       } else {
         Map<?, ?> map = (Map) field;
-        Ac ac = new Ac();
+        JsonAc ac = new JsonAc();
         ac.setAc((Integer) map.get("ac"));
         List<String> from = (List<String>) map.get("from");
         if(from != null) {
@@ -38,6 +38,6 @@ public class AcDeserializer extends JsonDeserializer<Ac[]> {
       }
     }
 
-    return finalAcList.toArray(new Ac[finalAcList.size()]);
+    return finalAcList.toArray(new JsonAc[finalAcList.size()]);
   }
 }

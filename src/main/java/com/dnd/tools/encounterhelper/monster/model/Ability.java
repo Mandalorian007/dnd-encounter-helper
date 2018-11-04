@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import lombok.Data;
 
 @Data
-@Entity
 public class Ability {
   @Id
   @GeneratedValue

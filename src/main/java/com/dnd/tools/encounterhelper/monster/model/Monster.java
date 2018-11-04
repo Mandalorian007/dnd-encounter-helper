@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Monster { // Uses empty lists instead of null lists
+public class Monster {
 
   @Id
   @GeneratedValue
@@ -21,25 +21,22 @@ public class Monster { // Uses empty lists instead of null lists
 
   private String name;
   @ElementCollection
-  private Set<Alignment> alignment; // See enum class for conversion details
+  private List<AlignmentOption> alignment;
   @ElementCollection
   private Set<Environment> environments;
   @Enumerated(EnumType.STRING)
-  private Size size; //Convert from T, S, M, L, H, G
-  private String type; //Convert from either fixed string or object with type(string) and tags(array)
+  private Size size;
+  @Embedded
+  private Type type;
+  @Embedded
+  private BookSource bookSource;
   @ElementCollection
-  private List<String> subTypes; // see above if it is string this is no subtype
+  private List<ArmourClass> armourClass;
   @Embedded
-  private BookSource bookSource; // Book monster is from with page (2 fields)  TODO convert to readable names
-  private Integer armourClass; //TODO convert from []Integer with 1 record if not Integer it's an object with field for ac(Integer) and field from with String(array)
-  @ElementCollection
-  private List<String> armourSources;
-  private Integer averageHitPoints; // TODO convert from object with average field of type Integer
+  private Hp hp;
   @Embedded
-  private DiceFormula hpFormula; //TODO convert from String representation 3d6+6 (+X is optional)
-  @Embedded
-  private Speed speed;  //TODO complex parse: see MM bestiary record for: Air Elemental  Going to normalize hover into a new movement option
-  private boolean familiar;
+  private Speed speed;
+  private Boolean familiar;
   
   private Integer strength;
   private Integer dexterity;
@@ -88,14 +85,14 @@ public class Monster { // Uses empty lists instead of null lists
   private Set<String> languages;
   private Double challengeRatings;
 
-  @ElementCollection
+ /* @ElementCollection
   private List<Ability> trait;
   @ElementCollection
   private List<Ability> action;
   @ElementCollection
   private List<Ability> reaction;
   @ElementCollection
-  private List<Ability> legendaryAction;
+  private List<Ability> legendaryAction;*/
 
   //spellcasting, variant
 }

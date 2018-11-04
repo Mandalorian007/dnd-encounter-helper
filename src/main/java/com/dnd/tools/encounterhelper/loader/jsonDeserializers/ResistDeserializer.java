@@ -1,6 +1,6 @@
 package com.dnd.tools.encounterhelper.loader.jsonDeserializers;
 
-import com.dnd.tools.encounterhelper.loader.jsonmodel.Resist;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonResist;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -11,49 +11,49 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ResistDeserializer extends JsonDeserializer<Resist[]> {
+public class ResistDeserializer extends JsonDeserializer<JsonResist[]> {
 
   @Override
-  public Resist[] deserialize(JsonParser p, DeserializationContext ctxt)
+  public JsonResist[] deserialize(JsonParser p, DeserializationContext ctxt)
       throws IOException, JsonProcessingException {
     Object[] resistObjects = p.readValueAs(Object[].class);
 
-    List<Resist> finalResistList = new ArrayList<>();
+    List<JsonResist> finalResistList = new ArrayList<>();
     for(Object resistObject: resistObjects) {
       if(resistObject instanceof String) {
-        Resist resist = new Resist();
-        resist.setResist(new Resist.ResistNested[]{getFromString(resistObject)});
+        JsonResist resist = new JsonResist();
+        resist.setResist(new JsonResist.ResistNested[]{getFromString(resistObject)});
         finalResistList.add(resist);
       } else {
         Map<?, ?> map = (LinkedHashMap) resistObject;
-        Resist resist = new Resist();
+        JsonResist resist = new JsonResist();
         List<?> resistList = (ArrayList) map.get("resist");
-        List<Resist.ResistNested> finalResistNestedList = new ArrayList<>();
+        List<JsonResist.ResistNested> finalResistNestedList = new ArrayList<>();
         if (resistList != null) {
           for(Object curResist : resistList) {
             if(curResist instanceof String) {
               finalResistNestedList.add(getFromString(curResist));
             } else {
               Map<?,?> ooph = (LinkedHashMap) curResist;
-              Resist.ResistNested resistNested = new Resist.ResistNested();
+              JsonResist.ResistNested resistNested = new JsonResist.ResistNested();
               List<String> resistyList = (ArrayList<String>) ooph.get("resist");
               resistNested.setResistGroup(resistyList.toArray(new String[resistyList.size()]));
               resistNested.setPreNote((String) ooph.get("preNote"));
               finalResistNestedList.add(resistNested);
             }
           }
-          resist.setResist(finalResistNestedList.toArray(new Resist.ResistNested[finalResistNestedList.size()]));
+          resist.setResist(finalResistNestedList.toArray(new JsonResist.ResistNested[finalResistNestedList.size()]));
         }
         resist.setNote((String) map.get("note"));
         finalResistList.add(resist);
       }
     }
 
-    return finalResistList.toArray(new Resist[finalResistList.size()]);
+    return finalResistList.toArray(new JsonResist[finalResistList.size()]);
   }
 
-  private Resist.ResistNested getFromString(Object resistString) {
-    Resist.ResistNested resistNested = new Resist.ResistNested();
+  private JsonResist.ResistNested getFromString(Object resistString) {
+    JsonResist.ResistNested resistNested = new JsonResist.ResistNested();
     resistNested.setResist((String) resistString);
     return resistNested;
   }

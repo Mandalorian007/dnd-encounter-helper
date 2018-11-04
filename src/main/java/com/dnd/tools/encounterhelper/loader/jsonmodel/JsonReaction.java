@@ -3,8 +3,7 @@ package com.dnd.tools.encounterhelper.loader.jsonmodel;
 import lombok.Data;
 
 @Data
-public class Legendary {
+public class JsonReaction {
   private String name;
   private String[] entries;
-  private String[] attack;
 }
