@@ -11,14 +11,4 @@ public class Resistance {
   @Enumerated(EnumType.STRING)
   private DamageType damageType;
   private String condition;
-
-  public Resistance(DamageType damageType) {
-    this.damageType = damageType;
-    this.condition = null;
-  }
-
-  public Resistance(DamageType damageType, String condition) {
-    this.damageType = damageType;
-    this.condition = condition;
-  }
 }
