@@ -5,6 +5,7 @@ import com.dnd.tools.encounterhelper.loader.jsonDeserializers.AlignmentDeseriali
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.ConditionImmuneDeserializer;
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.CrDeserializer;
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.ImmuneDeserializer;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.JsonAbilityDeserializer;
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.MonsterTypeDeserializer;
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.ResistDeserializer;
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.VulnerableDeserializer;
@@ -56,8 +57,10 @@ public class JsonMonster {
   private JsonCr cr;
   private Object spellcasting;
   private JsonTrait[] trait;
-  private JsonAction[] action;
-  private JsonReaction[] reaction;
+  @JsonDeserialize(using = JsonAbilityDeserializer.class)
+  private JsonAbility[] action;
+  @JsonDeserialize(using = JsonAbilityDeserializer.class)
+  private JsonAbility[] reaction;
   private String legendaryGroup;
   private Integer legendaryActions;
   private JsonLegendary[] legendary;

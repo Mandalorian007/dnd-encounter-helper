@@ -4,6 +4,10 @@ import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonMonster;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonMonsterList;
 import com.dnd.tools.encounterhelper.monster.model.Monster;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -11,11 +15,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component

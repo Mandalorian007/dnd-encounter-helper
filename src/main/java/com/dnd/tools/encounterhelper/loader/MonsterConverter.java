@@ -350,6 +350,18 @@ public class MonsterConverter {
       monster.setChallengeRating(challengeRating);
     }
 
+    //Trait
+
+    //Action
+
+    //Reaction
+
+    //Legendary Action
+
+
+    //Ancient Brass Dragon has a really good action model to think about
+    //Deepking Horgar Steelshadow V has non list use case
+
     return monster;
   }
 
