@@ -18,6 +18,7 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
     StringBuilder queryBuilder = new StringBuilder();
 
     queryBuilder.append("SELECT * FROM Monster m");
+    //queryBuilder.append("INNER JOIN MONSTER_ARMOUR_CLASS mac ON m.ID=mac.ID");
     queryBuilder.append(" WHERE LOWER(m.NAME) LIKE '%");
     String partialName = monsterSearch.getPartialName() == null ? "" : monsterSearch.getPartialName();
     queryBuilder.append(partialName.toLowerCase());
@@ -43,21 +44,22 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
 
     MonsterSearch.Range hitpoints = monsterSearch.getHitPoints();
     if(hitpoints != null) {
-      queryBuilder.append(" AND (m.HIT_POINTS BETWEEN ");
+      queryBuilder.append(" AND (m.AVERAGE_HP BETWEEN ");
       queryBuilder.append(hitpoints.getLowerBound());
       queryBuilder.append(" AND ");
       queryBuilder.append(hitpoints.getUpperBound());
       queryBuilder.append(")");
     }
 
-    MonsterSearch.Range armourClass = monsterSearch.getArmourClass();
+    //TODO redo this since DB structure isn't the same now
+    /*MonsterSearch.Range armourClass = monsterSearch.getArmourClass();
     if(armourClass != null) {
       queryBuilder.append(" AND (m.ARMOUR_CLASS BETWEEN ");
       queryBuilder.append(armourClass.getLowerBound());
       queryBuilder.append(" AND ");
       queryBuilder.append(armourClass.getUpperBound());
       queryBuilder.append(")");
-    }
+    }*/
 
     MonsterSearch.Range challengeRating = monsterSearch.getChallengeRating();
     if(challengeRating != null) {
