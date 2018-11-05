@@ -1,10 +1,43 @@
 package com.dnd.tools.encounterhelper.loader;
 
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.RPGDice;
-import com.dnd.tools.encounterhelper.loader.jsonmodel.*;
-import com.dnd.tools.encounterhelper.monster.model.*;
-
-import java.util.*;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAbility;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAc;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAlignment;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonConditionImmune;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonHp;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonImmune;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonMonster;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonMonsterType;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonResist;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSaves;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSkill;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSpeed;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSpeedData;
+import com.dnd.tools.encounterhelper.monster.model.Ability;
+import com.dnd.tools.encounterhelper.monster.model.Alignment;
+import com.dnd.tools.encounterhelper.monster.model.AlignmentOption;
+import com.dnd.tools.encounterhelper.monster.model.ArmourClass;
+import com.dnd.tools.encounterhelper.monster.model.BookSource;
+import com.dnd.tools.encounterhelper.monster.model.ChallengeRating;
+import com.dnd.tools.encounterhelper.monster.model.Condition;
+import com.dnd.tools.encounterhelper.monster.model.ConditionImmunity;
+import com.dnd.tools.encounterhelper.monster.model.DamageType;
+import com.dnd.tools.encounterhelper.monster.model.Environment;
+import com.dnd.tools.encounterhelper.monster.model.Hp;
+import com.dnd.tools.encounterhelper.monster.model.Immunity;
+import com.dnd.tools.encounterhelper.monster.model.Monster;
+import com.dnd.tools.encounterhelper.monster.model.Resistance;
+import com.dnd.tools.encounterhelper.monster.model.Size;
+import com.dnd.tools.encounterhelper.monster.model.Speed;
+import com.dnd.tools.encounterhelper.monster.model.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
@@ -353,16 +386,40 @@ public class MonsterConverter {
     }
 
     //Trait
+    if(jsonMonster.getTrait() != null) {
+      List<Ability> traits = Arrays.asList(jsonMonster.getTrait()).stream()
+          .map(this::convertFromJsonAbility)
+          .collect(Collectors.toList());
+      monster.setTrait(traits);
+    }
 
     //Action
+    if(jsonMonster.getAction() != null) {
+      List<Ability> actions = Arrays.asList(jsonMonster.getAction()).stream()
+          .map(this::convertFromJsonAbility)
+          .collect(Collectors.toList());
+      monster.setAction(actions);
+    }
 
     //Reaction
+    if(jsonMonster.getReaction() != null) {
+      List<Ability> reactions = Arrays.asList(jsonMonster.getReaction()).stream()
+          .map(this::convertFromJsonAbility)
+          .collect(Collectors.toList());
+      monster.setReaction(reactions);
+    }
 
     //Legendary Action
+    if(jsonMonster.getLegendary() != null) {
+      List<Ability> legendaryActions = Arrays.asList(jsonMonster.getLegendary()).stream()
+          .map(this::convertFromJsonAbility)
+          .collect(Collectors.toList());
+      monster.setLegendaryAction(legendaryActions);
+    }
 
+    //Variants
 
-    //Ancient Brass Dragon has a really good action model to think about
-    //Deepking Horgar Steelshadow V has non list use case
+    //Spell casting
 
     return monster;
   }
@@ -615,5 +672,24 @@ public class MonsterConverter {
           throw new RuntimeException("Unable to parse challenge rating: " + challengeRating);
         }
     }
+  }
+
+  private Ability convertFromJsonAbility(JsonAbility jsonAbility) {
+
+    Ability ability = new Ability();
+    ability.setName(jsonAbility.getName());
+    if(jsonAbility.getEntries() != null) {
+      ability.setEntries(new ArrayList<>(List.of(jsonAbility.getEntries())));
+    }
+    ability.setAttack(jsonAbility.getAttack());
+
+    if(jsonAbility.getSubEntries() != null) {
+      List<Ability> subAbilities = Arrays.asList(jsonAbility.getSubEntries()).stream()
+          .map(this::convertFromJsonAbility)
+          .collect(Collectors.toList());
+      ability.setSubEntries(subAbilities);
+    }
+
+    return ability;
   }
 }

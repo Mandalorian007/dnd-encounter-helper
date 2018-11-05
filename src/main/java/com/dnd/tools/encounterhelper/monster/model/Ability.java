@@ -2,6 +2,7 @@ package com.dnd.tools.encounterhelper.monster.model;
 
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,6 +23,7 @@ public class Ability {
 
   private String name;
   @ElementCollection
+  @Column(length = 10000)
   private List<String> entries;
   private String attack;
 

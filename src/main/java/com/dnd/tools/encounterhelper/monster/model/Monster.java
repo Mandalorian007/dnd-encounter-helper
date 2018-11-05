@@ -2,6 +2,7 @@ package com.dnd.tools.encounterhelper.monster.model;
 
 import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -87,13 +88,13 @@ public class Monster {
   @Embedded
   private ChallengeRating challengeRating;
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.PERSIST)
   private List<Ability> trait;
-  @OneToMany
+  @OneToMany(cascade = CascadeType.PERSIST)
   private List<Ability> action;
-  @OneToMany
+  @OneToMany(cascade = CascadeType.PERSIST)
   private List<Ability> reaction;
-  @OneToMany
+  @OneToMany(cascade = CascadeType.PERSIST)
   private List<Ability> legendaryAction;
 
   //spellcasting, variant
