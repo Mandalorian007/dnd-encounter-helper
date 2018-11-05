@@ -342,7 +342,13 @@ public class MonsterConverter {
     }
 
     //Challenge Rating
-    //Note: stored as String value 0 -> 30 (and some fractions like: 1/8,1/4,1/2
+    if(jsonMonster.getCr() != null) {
+      ChallengeRating challengeRating = new ChallengeRating();
+      challengeRating.setChallengeRating(parseChallengeRating(jsonMonster.getCr().getCr()));
+      challengeRating.setCoven(parseChallengeRating(jsonMonster.getCr().getCoven()));
+      challengeRating.setChallengeRating(parseChallengeRating(jsonMonster.getCr().getLair()));
+      monster.setChallengeRating(challengeRating);
+    }
 
     return monster;
   }
@@ -410,7 +416,6 @@ public class MonsterConverter {
     return sizeMap.get(size);
   }
 
-  //TODO convert to full book name
   private static Map<String, String> bookCodeMap = new HashMap<>();
   static {
     // code -> book
@@ -574,5 +579,27 @@ public class MonsterConverter {
       throw new RuntimeException("Unable to parse condition from string: " + condition);
     }
     return conditionMap.get(condition);
+  }
+
+  private Double parseChallengeRating(String challengeRating) {
+    if(challengeRating == null) {
+      return null;
+    }
+    switch (challengeRating) {
+      case "Unknown":
+        return null;
+      case "1/8":
+        return .125;
+      case "1/4":
+        return .25;
+      case "1/2":
+        return .5;
+      default:
+        try {
+          return Double.parseDouble(challengeRating);
+        } catch (Exception e) {
+          throw new RuntimeException("Unable to parse challenge rating: " + challengeRating);
+        }
+    }
   }
 }

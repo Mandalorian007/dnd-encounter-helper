@@ -83,7 +83,8 @@ public class Monster {
   private Integer passivePerception;
   @ElementCollection
   private Set<String> languages;
-  private Double challengeRatings;
+  @Embedded
+  private ChallengeRating challengeRating;
 
  /* @ElementCollection
   private List<Ability> trait;
