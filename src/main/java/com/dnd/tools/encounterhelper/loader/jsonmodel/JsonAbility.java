@@ -6,6 +6,7 @@ import lombok.Data;
 public class JsonAbility {
   private String name;
   private String[] entries;
+  private String attack;
   private JsonAbility[] subEntries;
   //Supports Action and Reaction.
   //Needs additional work for Trait and Legendary Action

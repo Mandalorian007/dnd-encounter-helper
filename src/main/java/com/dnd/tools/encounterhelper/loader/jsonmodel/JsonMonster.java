@@ -63,7 +63,8 @@ public class JsonMonster {
   private JsonAbility[] reaction;
   private String legendaryGroup;
   private Integer legendaryActions;
-  private JsonLegendary[] legendary;
+  @JsonDeserialize(using = JsonAbilityDeserializer.class)
+  private JsonAbility[] legendary;
   private String description;
   private JsonVariant[] variant;
   private int page;

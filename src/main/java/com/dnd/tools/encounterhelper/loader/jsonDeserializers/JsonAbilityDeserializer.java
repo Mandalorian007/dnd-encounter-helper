@@ -25,7 +25,7 @@ public class JsonAbilityDeserializer extends JsonDeserializer<JsonAbility[]> {
       Map<?, ?> actionMap = (LinkedHashMap) action;
       //Validate fields
       Map<?, ?> tempMap = new HashMap<>(actionMap);
-      tempMap.keySet().removeAll(Arrays.asList("name", "entries"));
+      tempMap.keySet().removeAll(Arrays.asList("name", "entries", "attack"));
       if(tempMap.size() > 0) {
         throw new RuntimeException("Found unexpected to level fields in Ability Model: " + tempMap.keySet());
       }
@@ -33,6 +33,17 @@ public class JsonAbilityDeserializer extends JsonDeserializer<JsonAbility[]> {
       //Parse
       JsonAbility jsonAbility = new JsonAbility();
       jsonAbility.setName((String) actionMap.get("name"));
+      if(actionMap.get("attack") != null) {
+        List<?> attacks = (ArrayList) actionMap.get("attack");
+        for(Object attack: attacks) {
+          if(jsonAbility.getAttack() == null) {
+            jsonAbility.setAttack((String) attack);
+          } else {
+            jsonAbility.setAttack(jsonAbility.getAttack() + ", " + attack);
+          }
+        }
+      }
+
       List<String> entries = new ArrayList<>();
       List<JsonAbility> subEntries = new ArrayList<>();
       List entriesObj = (ArrayList) actionMap.get("entries");
