@@ -25,7 +25,8 @@ public class JsonAbilityDeserializer extends JsonDeserializer<JsonAbility[]> {
       Map<?, ?> actionMap = (LinkedHashMap) action;
       //Validate fields
       Map<?, ?> tempMap = new HashMap<>(actionMap);
-      tempMap.keySet().removeAll(Arrays.asList("name", "entries", "attack"));
+      //Note: type exists but is ignored only 1 example in Trait of Asharra from toa source
+      tempMap.keySet().removeAll(Arrays.asList("name", "entries", "attack", "type"));
       if(tempMap.size() > 0) {
         throw new RuntimeException("Found unexpected to level fields in Ability Model: " + tempMap.keySet());
       }
@@ -33,13 +34,15 @@ public class JsonAbilityDeserializer extends JsonDeserializer<JsonAbility[]> {
       //Parse
       JsonAbility jsonAbility = new JsonAbility();
       jsonAbility.setName((String) actionMap.get("name"));
+
+      //Note attack is a legendary action specific field
       if(actionMap.get("attack") != null) {
         List<?> attacks = (ArrayList) actionMap.get("attack");
         for(Object attack: attacks) {
           if(jsonAbility.getAttack() == null) {
             jsonAbility.setAttack((String) attack);
           } else {
-            jsonAbility.setAttack(jsonAbility.getAttack() + ", " + attack);
+            jsonAbility.setAttack(jsonAbility.getAttack() + "," + attack);
           }
         }
       }
@@ -54,9 +57,10 @@ public class JsonAbilityDeserializer extends JsonDeserializer<JsonAbility[]> {
           Map<?,?> entryMap = (LinkedHashMap) entry;
           //Validate fields
           Map<?, ?> tempMap2 = new HashMap<>(entryMap);
-          tempMap2.keySet().removeAll(Arrays.asList("type", "items", "style"));
+          //Note: entries type is specifically for inline types
+          tempMap2.keySet().removeAll(Arrays.asList("type", "items", "style", "entries"));
           if(tempMap2.size() > 0) {
-            throw new RuntimeException("Found unexpected to level fields in Ability Model: " + tempMap2.keySet());
+           throw new RuntimeException("Found unexpected to level fields in Ability Model: " + tempMap2.keySet());
           }
 
           //Parse (Note: style element is always ignored)]
@@ -104,7 +108,21 @@ public class JsonAbilityDeserializer extends JsonDeserializer<JsonAbility[]> {
             }
 
           } else if(type.equals("inline")){
-            //TODO when parsing trait see oota line: 4149
+            //Note: special case see oota trait for creature: Deepking Horgar Steelshadow V
+            List<?> entryList = (ArrayList) entryMap.get("entries");
+            String result = "";
+            for(int i = 0; i < entryList.size(); i++) {
+              if( i == 0 || i == 2) {
+                result = result.concat((String) entryList.get(i));
+              } else {
+                Map<?,?> bogus = (LinkedHashMap) entryList.get(i);
+                result = result.concat((String) bogus.get("text"));
+              }
+            }
+            JsonAbility nestedJsonAbility = new JsonAbility();
+            nestedJsonAbility.setEntries(new String[] {result});
+            subEntries.add(nestedJsonAbility);
+
           } else {
             throw new RuntimeException("Found unexpected type of: " + type);
           }
