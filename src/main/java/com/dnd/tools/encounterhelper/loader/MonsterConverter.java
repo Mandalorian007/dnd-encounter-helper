@@ -88,7 +88,9 @@ public class MonsterConverter {
             armourClass.setCondition(jsonAc.getCondition());
             String[] jsonArmourSources = jsonAc.getFrom();
             if (jsonArmourSources != null) {
-              armourClass.setArmourSources(Arrays.asList(jsonArmourSources));
+              //TODO resolve Json handling of this
+              //armourClass.setArmourSources(Arrays.asList(jsonArmourSources));
+              armourClass.setArmourSources(String.join(",", jsonArmourSources));
             }
             return armourClass;
           })

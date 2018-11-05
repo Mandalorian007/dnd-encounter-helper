@@ -1,7 +1,5 @@
 package com.dnd.tools.encounterhelper.monster.model;
 
-import java.util.Arrays;
-import java.util.List;
 import javax.persistence.Embeddable;
 import lombok.Data;
 
@@ -13,11 +11,12 @@ public class ArmourClass {
   private String armourSources;
   private String condition;
 
-  public List<String> getArmourSources() {
+  //TODO resolve Json handling of this
+  /*public List<String> getArmourSources() {
     return Arrays.asList(armourSources.split(","));
   }
 
   public void setArmourSources(List<String> armourSources) {
     this.armourSources = String.join(",", armourSources);
-  }
+  }*/
 }

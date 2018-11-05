@@ -9,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import lombok.Data;
 
 @Data
@@ -86,14 +87,14 @@ public class Monster {
   @Embedded
   private ChallengeRating challengeRating;
 
- /* @ElementCollection
+  @OneToMany
   private List<Ability> trait;
-  @ElementCollection
+  @OneToMany
   private List<Ability> action;
-  @ElementCollection
+  @OneToMany
   private List<Ability> reaction;
-  @ElementCollection
-  private List<Ability> legendaryAction;*/
+  @OneToMany
+  private List<Ability> legendaryAction;
 
   //spellcasting, variant
 }

@@ -2,6 +2,7 @@ package com.dnd.tools.encounterhelper.loader;
 
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonMonster;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonMonsterList;
+import com.dnd.tools.encounterhelper.monster.MonsterRepository;
 import com.dnd.tools.encounterhelper.monster.model.Monster;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class MonsterLoader implements CommandLineRunner {
 
   private final ResourceLoader resourceLoader;
   private final MonsterConverter monsterConverter;
+  private final MonsterRepository monsterRepository;
 
   @Override
   public void run(String... args) throws Exception {
@@ -54,6 +56,8 @@ public class MonsterLoader implements CommandLineRunner {
     List<Monster> dbMonsterList = monsterLists.stream()
         .map(monsterConverter::convert)
         .collect(Collectors.toList());
+
+    monsterRepository.saveAll(dbMonsterList);
 
     log.info("DB Monster Count: " + dbMonsterList.size());
 
