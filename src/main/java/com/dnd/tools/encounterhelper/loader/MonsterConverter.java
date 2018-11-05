@@ -5,6 +5,7 @@ import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAbility;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAc;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAlignment;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonConditionImmune;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonCr;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonHp;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonImmune;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonMonster;
@@ -377,11 +378,12 @@ public class MonsterConverter {
     }
 
     //Challenge Rating
-    if(jsonMonster.getCr() != null) {
+    JsonCr jsonMonsterCr = jsonMonster.getCr();
+    if(jsonMonsterCr != null) {
       ChallengeRating challengeRating = new ChallengeRating();
-      challengeRating.setChallengeRating(parseChallengeRating(jsonMonster.getCr().getCr()));
-      challengeRating.setCoven(parseChallengeRating(jsonMonster.getCr().getCoven()));
-      challengeRating.setChallengeRating(parseChallengeRating(jsonMonster.getCr().getLair()));
+      challengeRating.setChallengeRating(parseChallengeRating(jsonMonsterCr.getCr()));
+      challengeRating.setCoven(parseChallengeRating(jsonMonsterCr.getCoven()));
+      challengeRating.setLair(parseChallengeRating(jsonMonsterCr.getLair()));
       monster.setChallengeRating(challengeRating);
     }
 
