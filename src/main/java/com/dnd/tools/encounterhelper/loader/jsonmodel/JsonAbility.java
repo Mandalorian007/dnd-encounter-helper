@@ -8,6 +8,6 @@ public class JsonAbility {
   private String[] entries;
   private String attack;
   private JsonAbility[] subEntries;
-  //Supports Action and Reaction.
-  //Needs additional work for Trait and Legendary Action
+  //Supports Action, Reaction, and Legendary Action
+  //Needs additional work for Trait
 }
