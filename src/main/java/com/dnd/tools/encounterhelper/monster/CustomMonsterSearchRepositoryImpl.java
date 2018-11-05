@@ -4,11 +4,11 @@ import com.dnd.tools.encounterhelper.monster.model.Monster;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRepository {
 
   private final EntityManager entityManager;
@@ -17,7 +17,8 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
   public List<Monster> searchForMonsters(MonsterSearch monsterSearch) {
     StringBuilder queryBuilder = new StringBuilder();
 
-    queryBuilder.append("SELECT * FROM Monster m");
+    queryBuilder.append("SELECT * FROM Monster om WHERE om.ID IN (");
+    queryBuilder.append("SELECT DISTINCT(m.ID) FROM Monster m");
     queryBuilder.append(" INNER JOIN MONSTER_ARMOUR_CLASS a ON m.ID=a.MONSTER_ID");
     queryBuilder.append(" WHERE LOWER(m.NAME) LIKE '%");
     String partialName = monsterSearch.getPartialName() == null ? "" : monsterSearch.getPartialName();
@@ -69,6 +70,9 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
       queryBuilder.append(challengeRating.getUpperBound());
       queryBuilder.append(")");
     }
+
+    //Close IN statement
+    queryBuilder.append(")");
 
     queryBuilder.append(" LIMIT 12;");
     String query = queryBuilder.toString();
