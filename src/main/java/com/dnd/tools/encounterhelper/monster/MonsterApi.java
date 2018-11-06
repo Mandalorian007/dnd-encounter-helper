@@ -1,9 +1,8 @@
 package com.dnd.tools.encounterhelper.monster;
 
+import com.dnd.tools.encounterhelper.monster.model.Monster;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
