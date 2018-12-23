@@ -172,8 +172,9 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
                             <span>
                                 {monster.size.charAt(0).toUpperCase() + monster.size.slice(1).toLowerCase() + " "}
-                                {monster.type + " "}
-                                {(monster.subType != null && monster.subType != "") ? "(" + monster.subType + ")" : ""}
+                                {monster.type.type + " "}
+                                {(monster.subTypes != null && monster.subTypes != "") ? "(" + monster.subTypes + ")" : ""}
+                                {", " + monster.alignment.alignment}
                             </span>
                     </TableCell>
                 </TableRow>
@@ -185,13 +186,13 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                 <TableRow className={this.props.classes.row}>
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
                         <strong>Armor Class </strong>
-                        <span>{monster.armourClass}</span>
+                        <span>{monster.armourClass.armourClass}</span>
                     </TableCell>
                 </TableRow>
                 <TableRow className={this.props.classes.row}>
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
                         <strong>Hit Points </strong>
-                        <span>{monster.hitPoints}</span><span className={this.props.classes.blue}>{" (" + monster.hitDice + "+" + this.getModifier(monster.constitution) * monster.challengeRating + ")"}</span>
+                        <span>{monster.hp.averageHp}</span><span className={this.props.classes.blue}>{" (" + monster.hp.numOfDice + "d" + monster.hp.sizeOfDie + " + " + monster.hp.flatBonus + ")"}</span>
                     </TableCell>
                 </TableRow>
                 <TableRow className={this.props.classes.row}>
@@ -250,99 +251,6 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                         <div className={this.props.classes.divider}></div>
 			        </TableCell>
                 </TableRow>
-                <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        <strong>Saving Throws </strong>
-                        {((monster.strengthSave != null) ? <span>Str <span className={this.props.classes.blue}>+{monster.strengthSave}</span>, </span> : "")}
-                        {((monster.dexteritySave != null) ? <span>Dex <span className={this.props.classes.blue}>+{monster.dexteritySave}</span>, </span> : "")}
-                        {((monster.constitutionSave != null) ? <span>Con <span className={this.props.classes.blue}>+{monster.constitutionSave}</span>, </span> : "")}
-                        {((monster.intelligenceSave != null) ? <span>Int <span className={this.props.classes.blue}>+{monster.intelligenceSave}</span>, </span> : "")}
-                        {((monster.wisdomSave != null) ? <span>Wis <span className={this.props.classes.blue}>+{monster.wisdomSave}</span>, </span> : "")}
-                        {((monster.charismaSave != null) ? <span>Cha <span className={this.props.classes.blue}>+{monster.charismaSave}</span></span> : "")}
-                    </TableCell>
-                </TableRow>
-                <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        <strong>Skills</strong><span>Perception +0</span>
-                    </TableCell>
-                </TableRow>
-                {((monster.damageVulnerabilities != "") ?
-                <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        <strong>Damage Vulnerabilities </strong><span>{monster.damageVulnerabilities}</span>
-                    </TableCell>
-                </TableRow>
-                : "" )}
-                <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        <strong>Damage Resistances</strong><span>cold</span>
-                    </TableCell>
-                </TableRow>
-                {((monster.damageImmunities != "") ?
-                    <TableRow className={this.props.classes.row}>
-                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                            <strong>Damage Immunities </strong><span>{monster.damageImmunities}</span>
-                        </TableCell>
-                    </TableRow>
-                : "" )}
-                {((monster.condititonImmunities != "") ?
-                    <TableRow className={this.props.classes.row}>
-                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                            <strong>Condition Immunities </strong><span>{monster.condititonImmunities}</span>
-                        </TableCell>
-                    </TableRow>
-                : "" )}
-                {((monster.senses != "") ?
-                    <TableRow className={this.props.classes.row}>
-                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                            <strong>Senses </strong><span>{monster.senses}</span>
-                        </TableCell>
-                    </TableRow>
-                : "" )}
-                <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        <strong>Languages </strong><span>Common</span>
-                    </TableCell>
-                </TableRow>
-                <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        <strong>Challenge </strong><span>{monster.challengeRating}</span>
-                        <Button size="small" onClick={this.handleOpen} disabled={this.props.disabled}>
-                            <TuneIcon />
-                        </Button>
-                        <Popover
-                            open={open}
-                            anchorEl={anchorEl}
-                            onClose={this.handleClose}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'center',
-                            }}
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'center',
-                            }}
-                        >
-                            <div style={{width: 500, margin: 10}}>
-                                <RangeWithTooltip
-                                    min={1}
-                                    max={33}
-                                    defaultValue={[monster.challengeRating]}
-                                    onAfterChange={(v) => this.onSliderChange(monster, v)}
-                                />
-                            </div>
-                        </Popover>
-                    </TableCell>
-                </TableRow>
-                {((Array.isArray(monster.specialAbilities) && monster.specialAbilities.length) ?
-                    this.getActions(monster.specialAbilities, "Special Abilities")
-                : "" )}
-                {((Array.isArray(monster.actions) && monster.actions.length) ?
-                    this.getActions(monster.actions, "Actions")
-                : "" )}
-                {((Array.isArray(monster.legendaryActions) && monster.legendaryActions.length) ?
-                    this.getActions(monster.legendaryActions, "Legendary Actions")
-                : "" )}
             </TableBody>
         </Table>
         )

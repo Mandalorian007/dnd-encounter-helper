@@ -101,7 +101,7 @@ class MonsterGridListTile extends React.Component<any, State> {
         // This is a "hack and pray" might be nice to actually download all the images from their repo
         //https://github.com/TheGiddyLimit/TheGiddyLimit.github.io/tree/master/img/MM
         //https://5etools.com/5etools.html
-        const imageSrc = `https://5etools.com/img/MM/${monster.name}.png`;
+        const imageSrc = `https://5etools.com/img/${monster.bookSource.bookCode}/${monster.name}.png`;
         return (
             <GridListTile classes={{root: this.props.classes.tile}}>
                 <img src={imageSrc} alt={monster.name} className={this.props.classes.imageThumbnail}
@@ -115,11 +115,11 @@ class MonsterGridListTile extends React.Component<any, State> {
                         <div className={this.props.classes.subTitle}>
                             <span>Size: {monster.size.toLowerCase()}</span>
                             <br/>
-                            <span>Hp: {monster.hitPoints}</span>
+                            <span>Hp: {monster.hp.averageHp}</span>
                             <br/>
-                            <span>AC: {monster.armourClass}</span>
+                            <span>AC: {monster.armourClass.armourClass}</span>
                             <br/>
-                            <span>CR: {monster.challengeRating}</span>
+                            <span>CR: {monster.challengeRating.challengeRating}</span>
                         </div>
                     }
                 />
