@@ -117,7 +117,13 @@ class MonsterGridListTile extends React.Component<any, State> {
                             <br/>
                             <span>Hp: {monster.hp.averageHp}</span>
                             <br/>
-                            <span>AC: {monster.armourClass.armourClass}</span>
+                            <span>AC:
+                                {monster.armourClass.map((item) =>
+                                    {
+                                        return " " + item.armourClass
+                                    }
+                                )}
+                            </span>
                             <br/>
                             <span>CR: {monster.challengeRating.challengeRating}</span>
                         </div>

@@ -415,7 +415,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                               }
                             )}
                         </TableCell>
-                    </TableRow>
+                    </TableRow> 
                 : "" )}
             </TableBody>
         </Table>
