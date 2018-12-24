@@ -154,17 +154,16 @@ class CombatantList extends React.Component<any, State> {
     getHighlight = (currentHp, maxHp) => {
         let val = math.eval(currentHp / maxHp);
         let color = this.computeClass(val);
-        let newStyle = "0px 0px 40px 12px " + color;
-        return newStyle;
+        return color;
     };
 
     computeClass = (val) => {
         if (val < 0.33)
-            return 'red';
+            return '#FF0000';
         else if (val < 0.66)
             return 'orange';
         else
-            return 'green';
+            return '#54ff56';
     };
 
     getDetailContent = () => {
@@ -209,7 +208,7 @@ class CombatantList extends React.Component<any, State> {
                                         <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "armourClass", e.target.value)}
                                                                 value={combatant.armourClass} /></CustomTableCell>
                                         <CustomTableCell>
-                                            <input type='text' id={"row" + combatant.id} style={{boxShadow: this.getHighlight(combatant.currentHp, combatant.maxHp)}} onChange={(e) => this.handleChange(combatant.id, "currentHp", e.target.value)}
+                                            <input type='text' id={"row" + combatant.id} style={{color: this.getHighlight(combatant.currentHp, combatant.maxHp)}} onChange={(e) => this.handleChange(combatant.id, "currentHp", e.target.value)}
                                                    value={combatant.currentHp} onKeyDown={(e) => this.handleKeyPress(combatant.id, "currentHp", e)} />
                                             <span style={{paddingLeft: "10px"}}>/{combatant.maxHp}</span>
                                         </CustomTableCell>

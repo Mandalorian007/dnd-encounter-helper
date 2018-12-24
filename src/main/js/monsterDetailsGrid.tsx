@@ -157,6 +157,126 @@ class MonsterDetailsGrid extends React.Component<any, State> {
         const createSliderWithTooltip = Slider.createSliderWithTooltip;
         const RangeWithTooltip = createSliderWithTooltip(Slider.Range);
 
+        const saves = [];
+        const skills = [];
+
+        //saving throws
+        if (monster.strengthSave != null) {
+            const obj = {id: 'Str', save: monster.strengthSave};
+            saves.push(obj);
+        }
+        if (monster.dexteritySave != null) {
+            const obj = {id: 'Dex', save: monster.dexteritySave};
+            saves.push(obj);
+        }
+        if (monster.constitutionSave != null) {
+            const obj = {id: 'Con', save: monster.constitutionSave};
+            saves.push(obj);
+        }
+        if (monster.intelligenceSave != null) {
+            const obj = {id: 'Int', save: monster.intelligenceSave};
+            saves.push(obj);
+        }
+        if (monster.wisdomSave != null) {
+            const obj = {id: 'Wis', save: monster.wisdomSave};
+            saves.push(obj);
+        }
+        if (monster.charismaSave != null) {
+            const obj = {id: 'Cha', save: monster.charismaSave};
+            saves.push(obj);
+        }
+
+        //skills
+        if (monster.athletics != null) {
+            const obj = {id: 'Athletics', skill: monster.athletics};
+            skills.push(obj);
+        }
+
+        if (monster.acrobatics != null) {
+            const obj = {id: 'Acrobatics', skill: monster.acrobatics};
+            skills.push(obj);
+        }
+
+        if (monster.slightOfHand != null) {
+            const obj = {id: 'Slight of Hand', skill: monster.slightOfHand};
+            skills.push(obj);
+        }
+
+        if (monster.arcana != null) {
+            const obj = {id: 'Arcana', skill: monster.arcana};
+            skills.push(obj);
+        }
+
+        if (monster.history != null) {
+            const obj = {id: 'History', skill: monster.history};
+            skills.push(obj);
+        }
+
+        if (monster.investigation != null) {
+            const obj = {id: 'Investigation', skill: monster.investigation};
+            skills.push(obj);
+        }
+
+        if (monster.nature != null) {
+            const obj = {id: 'Nature', skill: monster.nature};
+            skills.push(obj);
+        }
+
+        if (monster.religion != null) {
+            const obj = {id: 'Religion', skill: monster.religion};
+            skills.push(obj);
+        }
+
+        if (monster.animalHandling != null) {
+            const obj = {id: 'Animal Handling', skill: monster.animalHandling};
+            skills.push(obj);
+        }
+
+        if (monster.insight != null) {
+            const obj = {id: 'Insight', skill: monster.insight};
+            skills.push(obj);
+        }
+
+        if (monster.medicine != null) {
+            const obj = {id: 'Medicine', skill: monster.medicine};
+            skills.push(obj);
+        }
+
+        if (monster.perception != null) {
+            const obj = {id: 'Perception', skill: monster.perception};
+            skills.push(obj);
+        }
+
+        if (monster.survival != null) {
+            const obj = {id: 'Survival', skill: monster.survival};
+            skills.push(obj);
+        }
+
+        if (monster.deception != null) {
+            const obj = {id: 'Deception', skill: monster.deception};
+            skills.push(obj);
+        }
+
+        if (monster.intimidation != null) {
+            const obj = {id: 'Intimidation', skill: monster.intimidation};
+            skills.push(obj);
+        }
+
+        if (monster.performance != null) {
+            const obj = {id: 'Performance', skill: monster.performance};
+            skills.push(obj);
+        }
+
+        if (monster.persuasion != null) {
+            const obj = {id: 'Persuasion', skill: monster.persuasion};
+            skills.push(obj);
+        }
+
+        if (monster.stealth != null) {
+            const obj = {id: 'Stealth', skill: monster.stealth};
+            skills.push(obj);
+        }
+
         return (
         <Table className={this.props.classes.table}>
             <TableHead>
@@ -172,8 +292,13 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
                             <span>
                                 {monster.size.charAt(0).toUpperCase() + monster.size.slice(1).toLowerCase() + " "}
-                                {monster.type + " "}
-                                {(monster.subType != null && monster.subType != "") ? "(" + monster.subType + ")" : ""}
+                                {monster.type.type}
+                                {(monster.type.subTypes != null && monster.type.subTypes != "") ? " (" + monster.type.subTypes + ")" : ""}
+                                {monster.alignment.map((item) =>
+                                    {
+                                        return ", " + item.alignment
+                                    }
+                                )}
                             </span>
                     </TableCell>
                 </TableRow>
@@ -185,13 +310,23 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                 <TableRow className={this.props.classes.row}>
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
                         <strong>Armor Class </strong>
-                        <span>{monster.armourClass}</span>
+                        <span>
+                            {monster.armourClass.map((item) =>
+                              {
+                                if(item.armourSources != null && item.armourSources != ""){
+                                    return item.armourClass + " (" + item.armourSources + ")"
+                                } else {
+                                    return  item.armourClass
+                                }
+                              }
+                            )}
+                        </span>
                     </TableCell>
                 </TableRow>
                 <TableRow className={this.props.classes.row}>
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
                         <strong>Hit Points </strong>
-                        <span>{monster.hitPoints}</span><span className={this.props.classes.blue}>{" (" + monster.hitDice + "+" + this.getModifier(monster.constitution) * monster.challengeRating + ")"}</span>
+                        <span>{monster.hp.averageHp}</span><span className={this.props.classes.blue}>{" (" + monster.hp.numOfDice + "d" + monster.hp.sizeOfDie + " + " + monster.hp.flatBonus + ")"}</span>
                     </TableCell>
                 </TableRow>
                 <TableRow className={this.props.classes.row}>
@@ -250,98 +385,37 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                         <div className={this.props.classes.divider}></div>
 			        </TableCell>
                 </TableRow>
-                <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        <strong>Saving Throws </strong>
-                        {((monster.strengthSave != null) ? <span>Str <span className={this.props.classes.blue}>+{monster.strengthSave}</span>, </span> : "")}
-                        {((monster.dexteritySave != null) ? <span>Dex <span className={this.props.classes.blue}>+{monster.dexteritySave}</span>, </span> : "")}
-                        {((monster.constitutionSave != null) ? <span>Con <span className={this.props.classes.blue}>+{monster.constitutionSave}</span>, </span> : "")}
-                        {((monster.intelligenceSave != null) ? <span>Int <span className={this.props.classes.blue}>+{monster.intelligenceSave}</span>, </span> : "")}
-                        {((monster.wisdomSave != null) ? <span>Wis <span className={this.props.classes.blue}>+{monster.wisdomSave}</span>, </span> : "")}
-                        {((monster.charismaSave != null) ? <span>Cha <span className={this.props.classes.blue}>+{monster.charismaSave}</span></span> : "")}
-                    </TableCell>
-                </TableRow>
-                <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        <strong>Skills</strong><span>Perception +0</span>
-                    </TableCell>
-                </TableRow>
-                {((monster.damageVulnerabilities != "") ?
-                <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        <strong>Damage Vulnerabilities </strong><span>{monster.damageVulnerabilities}</span>
-                    </TableCell>
-                </TableRow>
-                : "" )}
-                <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        <strong>Damage Resistances</strong><span>cold</span>
-                    </TableCell>
-                </TableRow>
-                {((monster.damageImmunities != "") ?
+                {((saves.length) ?
                     <TableRow className={this.props.classes.row}>
                         <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                            <strong>Damage Immunities </strong><span>{monster.damageImmunities}</span>
+                            <strong>Saving Throws </strong>
+                           {saves.map((item, index) =>
+                              {
+                                if(index + 1 === saves.length){
+                                    return <span>{item.id} <span className={this.props.classes.blue}>+{item.save}</span></span>
+                                } else {
+                                    return <span>{item.id} <span className={this.props.classes.blue}>+{item.save}</span>, </span>
+                                }
+                              }
+                            )}
                         </TableCell>
                     </TableRow>
                 : "" )}
-                {((monster.condititonImmunities != "") ?
+                {((skills.length) ?
                     <TableRow className={this.props.classes.row}>
                         <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                            <strong>Condition Immunities </strong><span>{monster.condititonImmunities}</span>
+                            <strong>Skills </strong>
+                           {skills.map((item, index) =>
+                              {
+                                if(index + 1 === skills.length){
+                                    return <span>{item.id} <span className={this.props.classes.blue}>+{item.skill}</span></span>
+                                } else {
+                                    return <span>{item.id} <span className={this.props.classes.blue}>+{item.skill}</span>, </span>
+                                }
+                              }
+                            )}
                         </TableCell>
-                    </TableRow>
-                : "" )}
-                {((monster.senses != "") ?
-                    <TableRow className={this.props.classes.row}>
-                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                            <strong>Senses </strong><span>{monster.senses}</span>
-                        </TableCell>
-                    </TableRow>
-                : "" )}
-                <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        <strong>Languages </strong><span>Common</span>
-                    </TableCell>
-                </TableRow>
-                <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        <strong>Challenge </strong><span>{monster.challengeRating}</span>
-                        <Button size="small" onClick={this.handleOpen} disabled={this.props.disabled}>
-                            <TuneIcon />
-                        </Button>
-                        <Popover
-                            open={open}
-                            anchorEl={anchorEl}
-                            onClose={this.handleClose}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'center',
-                            }}
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'center',
-                            }}
-                        >
-                            <div style={{width: 500, margin: 10}}>
-                                <RangeWithTooltip
-                                    min={1}
-                                    max={33}
-                                    defaultValue={[monster.challengeRating]}
-                                    onAfterChange={(v) => this.onSliderChange(monster, v)}
-                                />
-                            </div>
-                        </Popover>
-                    </TableCell>
-                </TableRow>
-                {((Array.isArray(monster.specialAbilities) && monster.specialAbilities.length) ?
-                    this.getActions(monster.specialAbilities, "Special Abilities")
-                : "" )}
-                {((Array.isArray(monster.actions) && monster.actions.length) ?
-                    this.getActions(monster.actions, "Actions")
-                : "" )}
-                {((Array.isArray(monster.legendaryActions) && monster.legendaryActions.length) ?
-                    this.getActions(monster.legendaryActions, "Legendary Actions")
+                    </TableRow> 
                 : "" )}
             </TableBody>
         </Table>
