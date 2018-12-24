@@ -417,6 +417,78 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                         </TableCell>
                     </TableRow> 
                 : "" )}
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Languages </strong>
+                            {monster.languages.map((item, index) =>
+                              {
+                                if(index + 1 === monster.languages.length){
+                                    return <span>{item}</span>
+                                } else {
+                                    return <span>{item},</span>
+                                }
+                              }
+                            )}
+                    </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Challenge </strong>
+                        <span>
+                            {monster.challengeRating.challengeRating}
+                            {(monster.challengeRating.coven != null) ? " or " + monster.challengeRating.coven + " when part of a coven" : ""}
+                            {(monster.challengeRating.lair != null) ? " or " + monster.challengeRating.lair + " when encountered in lair" : ""}
+                        </span>
+
+                        <Button size="small" onClick={this.handleOpen} disabled={this.props.disabled}>
+                            <TuneIcon />
+                        </Button>
+                        <Popover
+                            open={open}
+                            anchorEl={anchorEl}
+                            onClose={this.handleClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                        >
+                            <div style={{width: 500, margin: 10}}>
+                                <RangeWithTooltip
+                                    min={1}
+                                    max={33}
+                                    defaultValue={[monster.challengeRating.challengeRating]}
+                                    onAfterChange={(v) => this.onSliderChange(monster, v)}
+                                />
+                            </div>
+                        </Popover>
+                    </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <div className={this.props.classes.divider}></div>
+			        </TableCell>
+                </TableRow>
+                {((monster.trait.length) ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            {monster.trait.map((item, index) =>
+                                {
+                                    return <div className={this.props.classes.InlineStats}><strong><i>{item.name}. </i></strong>
+                                    {item.entries.map((item, index) =>
+                                        {
+                                            return  <span>{item}<br/></span>
+                                        }
+                                    )}
+                                    </div>
+                                }
+                            )}
+                        </TableCell>
+                    </TableRow>
+                : "" )}
             </TableBody>
         </Table>
         )
