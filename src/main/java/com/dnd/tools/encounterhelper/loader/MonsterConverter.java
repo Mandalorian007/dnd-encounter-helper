@@ -173,6 +173,7 @@ public class MonsterConverter {
       }
       //Hover
       speed.setHover(jsonSpeed.getCanHover());
+      monster.setSpeed(speed);
     }
 
     //Familiar
