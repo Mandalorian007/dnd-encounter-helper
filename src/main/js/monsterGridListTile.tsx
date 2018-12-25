@@ -120,9 +120,10 @@ class MonsterGridListTile extends React.Component<any, State> {
                             <span>Id: {monster.id}</span>
                             <br/>
                             <span>AC:
-                                {monster.armourClass.map((item) =>
+                                {monster.armourClass.map((item, index) =>
                                     {
-                                        return " " + item.armourClass
+                                        if (index === 0)
+                                            return " " + item.armourClass
                                     }
                                 )}
                             </span>
