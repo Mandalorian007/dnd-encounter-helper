@@ -50,6 +50,11 @@ const styles = createStyles({
     border: 'none',
     padding: '3px',
   },
+  tableCell2: {
+    border: 'none',
+    padding: '3px',
+    width: 'calc(100%/6)',
+  },
   blue: {
     color:'#337ab7',
   },
@@ -89,8 +94,34 @@ class MonsterDetailsGrid extends React.Component<any, State> {
     };
 
     getModifier = (abilityScore) => {
-        return Math.floor((abilityScore-10)/2);
+        let value = Math.floor((abilityScore-10)/2);
+
+        if (value < 0)
+            return value;
+        else
+            return "+" + value;
     };
+
+    compareValues = (key) => {
+        return function(a, b) {
+            if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+                // property doesn't exist on either object
+                return 0;
+            }
+
+            const varA = (typeof a[key] === 'string') ? a[key].toUpperCase() : a[key];
+            const varB = (typeof b[key] === 'string') ? b[key].toUpperCase() : b[key];
+            let comparison = 0;
+
+            if (varA > varB) {
+                comparison = 1;
+            } else if (varA < varB) {
+                comparison = -1;
+            }
+
+            return (comparison);
+        };
+    }
 
     getActions = (actionList, subHeaderName) => {
         const rowId = "row-data-" + subHeaderName;
@@ -112,7 +143,13 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                             actionList.map(action => {
                                 return (
                                     <div className={this.props.classes.InlineStats}>
-                                        <span className={this.props.classes.EntryTitle}>{action.name}. </span><span>{action.description}</span>
+                                        <span className={this.props.classes.EntryTitle}>{action.name}. </span><span>
+                                        {action.entries.map((item, index) =>
+                                            {
+                                                return  <span>{item}<br/></span>
+                                            }
+                                        )}
+                                        </span>
                                     </div>
                                 )
                             })
@@ -156,9 +193,17 @@ class MonsterDetailsGrid extends React.Component<any, State> {
         const open = Boolean(anchorEl);
         const createSliderWithTooltip = Slider.createSliderWithTooltip;
         const RangeWithTooltip = createSliderWithTooltip(Slider.Range);
-
+        let flatBonus = "";
         const saves = [];
         const skills = [];
+        const speeds = [];
+
+        if(monster.hp.flatBonus < 0) {
+            flatBonus = " " + monster.hp.flatBonus;
+        }
+        else if (monster.hp.flatBonus > 0) {
+            flatBonus = " +" + monster.hp.flatBonus;
+        }
 
         //saving throws
         if (monster.strengthSave != null) {
@@ -277,6 +322,28 @@ class MonsterDetailsGrid extends React.Component<any, State> {
             skills.push(obj);
         }
 
+        //speed
+        if (monster.speed.walk != null) {
+            const obj = {id: 'walk', speed: monster.speed.walk, condition: monster.speed.walkCondition};
+            speeds.push(obj);
+        }
+        if (monster.speed.burrow != null) {
+            const obj = {id: 'burrow', speed: monster.speed.burrow, condition: monster.speed.burrowCondition};
+            speeds.push(obj);
+        }
+        if (monster.speed.climb != null) {
+            const obj = {id: 'climb', speed: monster.speed.climb, condition: monster.speed.climbCondition};
+            speeds.push(obj);
+        }
+        if (monster.speed.fly != null) {
+            const obj = {id: 'fly', speed: monster.speed.fly, condition: monster.speed.flyCondition};
+            speeds.push(obj);
+        }
+        if (monster.speed.swim != null) {
+            const obj = {id: 'swim', speed: monster.speed.swim, condition: monster.speed.swimCondition};
+            speeds.push(obj);
+        }
+
         return (
         <Table className={this.props.classes.table}>
             <TableHead>
@@ -311,14 +378,39 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
                         <strong>Armor Class </strong>
                         <span>
-                            {monster.armourClass.map((item) =>
-                              {
-                                if(item.armourSources != null && item.armourSources != ""){
-                                    return item.armourClass + " (" + item.armourSources + ")"
-                                } else {
-                                    return  item.armourClass
+                            {monster.armourClass.map((item, index) =>
+                                {
+                                    if (index + 1 === monster.armourClass.length) {
+                                        if(item.armourSources != null && item.condition != null){
+                                            return item.armourClass + " (" + item.armourSources + ") " + item.condition
+                                        }
+                                        else if(item.armourSources === null && item.condition != null){
+                                            return item.armourClass + " " + item.condition
+                                        }
+                                        else if(item.armourSources != null && item.condition === null){
+                                            return item.armourClass + " (" + item.armourSources + ")"
+                                        }
+                                        else
+                                        {
+                                            return item.armourClass
+                                        }
+                                    }
+                                    else {
+                                        if(item.armourSources != null && item.condition != null){
+                                            return item.armourClass + " (" + item.armourSources + ") " + item.condition + ", "
+                                        }
+                                        else if(item.armourSources === null && item.condition != null){
+                                            return item.armourClass + " " + item.condition + ", "
+                                        }
+                                        else if(item.armourSources != null && item.condition === null){
+                                            return item.armourClass + " (" + item.armourSources + "), "
+                                        }
+                                        else
+                                        {
+                                            return item.armourClass + ", "
+                                        }
+                                    }
                                 }
-                              }
                             )}
                         </span>
                     </TableCell>
@@ -326,13 +418,27 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                 <TableRow className={this.props.classes.row}>
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
                         <strong>Hit Points </strong>
-                        <span>{monster.hp.averageHp}</span><span className={this.props.classes.blue}>{" (" + monster.hp.numOfDice + "d" + monster.hp.sizeOfDie + " + " + monster.hp.flatBonus + ")"}</span>
+                        <span>{monster.hp.averageHp}</span><span className={this.props.classes.blue}>{" (" + monster.hp.numOfDice + "d" + monster.hp.sizeOfDie + flatBonus + ")"}</span>
                     </TableCell>
                 </TableRow>
                 <TableRow className={this.props.classes.row}>
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
                         <strong>Speed </strong>
-                        <span>{monster.speed}</span>
+                        {speeds.map((item, index) =>
+                            {
+                                if(index + 1 === speeds.length){
+                                    if (item.condition != null)
+                                        return <span>{item.id} {item.speed}ft. {item.condition}</span>
+                                    else
+                                        return <span>{item.id} {item.speed}ft.</span>
+                                } else {
+                                    if (item.condition != null)
+                                        return <span>{item.id} {item.speed}ft. {item.condition}, </span>
+                                    else
+                                        return <span>{item.id} {item.speed}ft., </span>
+                                }
+                            }
+                        )}
                     </TableCell>
                 </TableRow>
                 <TableRow className={this.props.classes.row}>
@@ -341,42 +447,42 @@ class MonsterDetailsGrid extends React.Component<any, State> {
 			        </TableCell>
                 </TableRow>
                 <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell}>STR</TableCell>
-                    <TableCell className={this.props.classes.tableCell}>DEX</TableCell>
-                    <TableCell className={this.props.classes.tableCell}>CON</TableCell>
-                    <TableCell className={this.props.classes.tableCell}>INT</TableCell>
-                    <TableCell className={this.props.classes.tableCell}>WIS</TableCell>
-                    <TableCell className={this.props.classes.tableCell}>CHA</TableCell>
+                    <TableCell className={this.props.classes.tableCell2}>STR</TableCell>
+                    <TableCell className={this.props.classes.tableCell2}>DEX</TableCell>
+                    <TableCell className={this.props.classes.tableCell2}>CON</TableCell>
+                    <TableCell className={this.props.classes.tableCell2}>INT</TableCell>
+                    <TableCell className={this.props.classes.tableCell2}>WIS</TableCell>
+                    <TableCell className={this.props.classes.tableCell2}>CHA</TableCell>
                 </TableRow>
                 <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell}>
+                    <TableCell className={this.props.classes.tableCell2}>
                         <span className={this.props.classes.blue}>
-                            {monster.strength + " (+" + this.getModifier(monster.strength) + ")"}
+                            {monster.strength + " (" + this.getModifier(monster.strength) + ")"}
                         </span>
                     </TableCell>
-                    <TableCell className={this.props.classes.tableCell}>
+                    <TableCell className={this.props.classes.tableCell2}>
                         <span className={this.props.classes.blue}>
-                            {monster.dexterity + " (+" + this.getModifier(monster.dexterity) + ")"}
+                            {monster.dexterity + " (" + this.getModifier(monster.dexterity) + ")"}
                         </span>
                     </TableCell>
-                    <TableCell className={this.props.classes.tableCell}>
+                    <TableCell className={this.props.classes.tableCell2}>
                         <span className={this.props.classes.blue}>
-                            {monster.constitution + " (+" + this.getModifier(monster.constitution) + ")"}
+                            {monster.constitution + " (" + this.getModifier(monster.constitution) + ")"}
                         </span>
                     </TableCell>
-                    <TableCell className={this.props.classes.tableCell}>
+                    <TableCell className={this.props.classes.tableCell2}>
                         <span className={this.props.classes.blue}>
-                            {monster.intelligence + " (+" + this.getModifier(monster.intelligence) + ")"}
+                            {monster.intelligence + " (" + this.getModifier(monster.intelligence) + ")"}
                         </span>
                     </TableCell>
-                    <TableCell className={this.props.classes.tableCell}>
+                    <TableCell className={this.props.classes.tableCell2}>
                         <span className={this.props.classes.blue}>
-                            {monster.wisdom + " (+" + this.getModifier(monster.wisdom) + ")"}
+                            {monster.wisdom + " (" + this.getModifier(monster.wisdom) + ")"}
                         </span>
                     </TableCell>
-                    <TableCell className={this.props.classes.tableCell}>
+                    <TableCell className={this.props.classes.tableCell2}>
                         <span className={this.props.classes.blue}>
-                            {monster.charisma + " (+" + this.getModifier(monster.charisma) + ")"}
+                            {monster.charisma + " (" + this.getModifier(monster.charisma) + ")"}
                         </span>
                     </TableCell>
                 </TableRow>
@@ -417,6 +523,171 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                         </TableCell>
                     </TableRow> 
                 : "" )}
+                {((monster.vulnerabilities.length) ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            <strong>Damage Vulnerabilities </strong>
+                            {monster.vulnerabilities.map((item, index) =>
+                              {
+                                if(index + 1 === monster.vulnerabilities.length){
+                                    return <span>{item.damageType.toLowerCase()}</span>
+                                } else {
+                                    return <span>{item.damageType.toLowerCase()}, </span>
+                                }
+                              }
+                            )}
+                        </TableCell>
+                    </TableRow>
+                : "" )}
+                {((monster.resistances.length) ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            <strong>Damage Resistances </strong>
+                            {monster.resistances.map((item, index) =>
+                              {
+                                if(index + 1 === monster.resistances.length){
+                                    return <span>{item.damageType.toLowerCase()}</span>
+                                } else {
+                                    return <span>{item.damageType.toLowerCase()}, </span>
+                                }
+                              }
+                            )}
+                        </TableCell>
+                    </TableRow>
+                : "" )}
+                {((monster.immunities.length) ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            <strong>Damage Immunities </strong>
+                            {monster.immunities.map((item, index) =>
+                              {
+                                if(index + 1 === monster.immunities.length){
+                                    return <span>{item.damageType.toLowerCase()}</span>
+                                } else {
+                                    return <span>{item.damageType.toLowerCase()}, </span>
+                                }
+                              }
+                            )}
+                        </TableCell>
+                    </TableRow>
+                : "" )}
+                {((monster.conditionImmunity.length) ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            <strong>Condition Immunities </strong>
+                            {monster.conditionImmunity.map((item, index) =>
+                              {
+                                if(index + 1 === monster.conditionImmunity.length){
+                                    return <span>{item.condition.toLowerCase()}</span>
+                                } else {
+                                    return <span>{item.condition.toLowerCase()}, </span>
+                                }
+                              }
+                            )}
+                        </TableCell>
+                    </TableRow>
+                : "" )}
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Senses </strong>
+                            {monster.senses.map((item, index) =>
+                                {
+                                    return <span>{item}, </span>
+                                }
+                            )}
+                            <span>passive Perception {monster.passivePerception}</span>
+                    </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Languages </strong>
+                        {((monster.languages.length) ?
+                            <span>
+                            {monster.languages.map((item, index) =>
+                              {
+                                if(index + 1 === monster.languages.length){
+                                    return <span>{item}</span>
+                                } else {
+                                    return <span>{item},</span>
+                                }
+                              }
+                            )}
+                            </span>
+                        : <span>—</span> )}
+                    </TableCell>
+                </TableRow>
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <strong>Challenge </strong>
+                        <span>
+                            {monster.challengeRating.challengeRating}
+                            {(monster.challengeRating.coven != null) ? " or " + monster.challengeRating.coven + " when part of a coven" : ""}
+                            {(monster.challengeRating.lair != null) ? " or " + monster.challengeRating.lair + " when encountered in lair" : ""}
+                        </span>
+
+                        <Button size="small" onClick={this.handleOpen} disabled={this.props.disabled}>
+                            <TuneIcon />
+                        </Button>
+                        <Popover
+                            open={open}
+                            anchorEl={anchorEl}
+                            onClose={this.handleClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                        >
+                            <div style={{width: 500, margin: 10}}>
+                                <RangeWithTooltip
+                                    min={1}
+                                    max={33}
+                                    defaultValue={[monster.challengeRating.challengeRating]}
+                                    onAfterChange={(v) => this.onSliderChange(monster, v)}
+                                />
+                            </div>
+                        </Popover>
+                    </TableCell>
+                </TableRow>
+                {((monster.trait.length) ?
+                     this.getActions(monster.trait, "Traits")
+                : "" )}
+                {((Array.isArray(monster.action) && monster.action.length) ?
+                    this.getActions(monster.action, "Actions")
+                : "" )}
+                {((Array.isArray(monster.reaction) && monster.reaction.length) ?
+                    this.getActions(monster.reaction, "Reactions")
+                : "" )}
+                {((Array.isArray(monster.legendaryAction) && monster.legendaryAction.length) ?
+                    this.getActions(monster.legendaryAction, "Legendary Actions")
+                : "" )}
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={4}>
+                        <strong>Source: </strong>
+                        <span>
+                            {monster.bookSource.bookCode}, page {monster.bookSource.page}
+                        </span>
+                    </TableCell>
+                    {((monster.environments.length) ?
+                        <TableCell className={this.props.classes.tableCell} colSpan={2}>
+                            <strong>Environment: </strong>
+                            <span>
+                                {monster.environments.map((item, index) =>
+                                  {
+                                    if(index + 1 === monster.environments.length){
+                                        return <span>{item}</span>
+                                    } else {
+                                        return <span>{item}, </span>
+                                    }
+                                  }
+                                )}
+                            </span>
+                         </TableCell>
+                    : "" )}
+                </TableRow>
             </TableBody>
         </Table>
         )
