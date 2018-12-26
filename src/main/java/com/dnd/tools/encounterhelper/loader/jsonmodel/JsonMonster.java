@@ -55,7 +55,7 @@ public class JsonMonster {
   private String languages;
   @JsonDeserialize(using = CrDeserializer.class)
   private JsonCr cr;
-  private Object spellcasting;
+  private JsonSpellcasting[] spellcasting;
   @JsonDeserialize(using = JsonAbilityDeserializer.class)
   private JsonAbility[] trait;
   @JsonDeserialize(using = JsonAbilityDeserializer.class)
