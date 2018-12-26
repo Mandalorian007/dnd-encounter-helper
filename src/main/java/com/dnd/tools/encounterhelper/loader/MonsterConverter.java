@@ -398,7 +398,7 @@ public class MonsterConverter {
     //Languages
     String jsonMonsterLanguages = jsonMonster.getLanguages();
     if(jsonMonsterLanguages != null) {
-      monster.setLanguages(Set.of(jsonMonsterLanguages.split(",")));
+      monster.setLanguages(Set.of(jsonMonsterLanguages));
     }
 
     //Challenge Rating

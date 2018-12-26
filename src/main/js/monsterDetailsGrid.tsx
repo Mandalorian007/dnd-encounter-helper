@@ -523,16 +523,16 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                         </TableCell>
                     </TableRow> 
                 : "" )}
-                {((monster.vulnerability.length) ?
+                {((monster.vulnerabilities.length) ?
                     <TableRow className={this.props.classes.row}>
                         <TableCell className={this.props.classes.tableCell} colSpan={6}>
                             <strong>Damage Vulnerabilities </strong>
-                            {monster.vulnerability.map((item, index) =>
+                            {monster.vulnerabilities.map((item, index) =>
                               {
-                                if(index + 1 === monster.vulnerability.length){
-                                    return <span>{item.vulnerable.toLowerCase()}</span>
+                                if(index + 1 === monster.vulnerabilities.length){
+                                    return <span>{item.damageType.toLowerCase()}</span>
                                 } else {
-                                    return <span>{item.vulnerable.toLowerCase()}, </span>
+                                    return <span>{item.damageType.toLowerCase()}, </span>
                                 }
                               }
                             )}
@@ -665,13 +665,13 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                     this.getActions(monster.legendaryAction, "Legendary Actions")
                 : "" )}
                 <TableRow className={this.props.classes.row}>
-                    <TableCell className={this.props.classes.tableCell} colSpan={3}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={4}>
                         <strong>Source: </strong>
                         <span>
                             {monster.bookSource.bookCode}, page {monster.bookSource.page}
                         </span>
                     </TableCell>
-                    <TableCell className={this.props.classes.tableCell} colSpan={3}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={2}>
                         <strong>Environment: </strong>
                         <span>
                             {monster.environments.map((item, index) =>
@@ -679,7 +679,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                                 if(index + 1 === monster.environments.length){
                                     return <span>{item}</span>
                                 } else {
-                                    return <span>{item},</span>
+                                    return <span>{item}, </span>
                                 }
                               }
                             )}
