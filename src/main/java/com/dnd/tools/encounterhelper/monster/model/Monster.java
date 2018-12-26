@@ -78,6 +78,8 @@ public class Monster {
   @ElementCollection
   private List<Immunity> immunities;
   @ElementCollection
+  private List<Vulnerability> vulnerabilities;
+  @ElementCollection
   private Set<ConditionImmunity> conditionImmunity;
 
   @ElementCollection
