@@ -671,20 +671,22 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                             {monster.bookSource.bookCode}, page {monster.bookSource.page}
                         </span>
                     </TableCell>
-                    <TableCell className={this.props.classes.tableCell} colSpan={2}>
-                        <strong>Environment: </strong>
-                        <span>
-                            {monster.environments.map((item, index) =>
-                              {
-                                if(index + 1 === monster.environments.length){
-                                    return <span>{item}</span>
-                                } else {
-                                    return <span>{item}, </span>
-                                }
-                              }
-                            )}
-                        </span>
-                     </TableCell>
+                    {((monster.environments.length) ?
+                        <TableCell className={this.props.classes.tableCell} colSpan={2}>
+                            <strong>Environment: </strong>
+                            <span>
+                                {monster.environments.map((item, index) =>
+                                  {
+                                    if(index + 1 === monster.environments.length){
+                                        return <span>{item}</span>
+                                    } else {
+                                        return <span>{item}, </span>
+                                    }
+                                  }
+                                )}
+                            </span>
+                         </TableCell>
+                    : "" )}
                 </TableRow>
             </TableBody>
         </Table>
