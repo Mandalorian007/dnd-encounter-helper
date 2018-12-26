@@ -523,6 +523,54 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                         </TableCell>
                     </TableRow> 
                 : "" )}
+                {((monster.vulnerability.length) ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            <strong>Damage Vulnerabilities </strong>
+                            {monster.vulnerability.map((item, index) =>
+                              {
+                                if(index + 1 === monster.vulnerability.length){
+                                    return <span>{item.vulnerable.toLowerCase()}</span>
+                                } else {
+                                    return <span>{item.vulnerable.toLowerCase()}, </span>
+                                }
+                              }
+                            )}
+                        </TableCell>
+                    </TableRow>
+                : "" )}
+                {((monster.resistances.length) ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            <strong>Damage Resistances </strong>
+                            {monster.resistances.map((item, index) =>
+                              {
+                                if(index + 1 === monster.resistances.length){
+                                    return <span>{item.damageType.toLowerCase()}</span>
+                                } else {
+                                    return <span>{item.damageType.toLowerCase()}, </span>
+                                }
+                              }
+                            )}
+                        </TableCell>
+                    </TableRow>
+                : "" )}
+                {((monster.immunities.length) ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            <strong>Damage Immunities </strong>
+                            {monster.immunities.map((item, index) =>
+                              {
+                                if(index + 1 === monster.immunities.length){
+                                    return <span>{item.damageType.toLowerCase()}</span>
+                                } else {
+                                    return <span>{item.damageType.toLowerCase()}, </span>
+                                }
+                              }
+                            )}
+                        </TableCell>
+                    </TableRow>
+                : "" )}
                 {((monster.conditionImmunity.length) ?
                     <TableRow className={this.props.classes.row}>
                         <TableCell className={this.props.classes.tableCell} colSpan={6}>
@@ -530,9 +578,9 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                             {monster.conditionImmunity.map((item, index) =>
                               {
                                 if(index + 1 === monster.conditionImmunity.length){
-                                    return <span>{item.condition}</span>
+                                    return <span>{item.condition.toLowerCase()}</span>
                                 } else {
-                                    return <span>{item.condition}, </span>
+                                    return <span>{item.condition.toLowerCase()}, </span>
                                 }
                               }
                             )}
@@ -616,6 +664,28 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                 {((Array.isArray(monster.legendaryAction) && monster.legendaryAction.length) ?
                     this.getActions(monster.legendaryAction, "Legendary Actions")
                 : "" )}
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={3}>
+                        <strong>Source: </strong>
+                        <span>
+                            {monster.bookSource.bookCode}, page {monster.bookSource.page}
+                        </span>
+                    </TableCell>
+                    <TableCell className={this.props.classes.tableCell} colSpan={3}>
+                        <strong>Environment: </strong>
+                        <span>
+                            {monster.environments.map((item, index) =>
+                              {
+                                if(index + 1 === monster.environments.length){
+                                    return <span>{item}</span>
+                                } else {
+                                    return <span>{item},</span>
+                                }
+                              }
+                            )}
+                        </span>
+                     </TableCell>
+                </TableRow>
             </TableBody>
         </Table>
         )
