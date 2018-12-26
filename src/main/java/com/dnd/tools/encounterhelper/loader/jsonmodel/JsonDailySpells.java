@@ -1,17 +1,26 @@
 package com.dnd.tools.encounterhelper.loader.jsonmodel;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class JsonDailySpells {
 
-  @JsonAlias({"1e", "1"})
-  private String[] firstLevel;
+  @JsonProperty("1")
+  private String[] one;
 
-  @JsonAlias({"2e", "2"})
-  private String[] secondLevel;
+  @JsonProperty("1e")
+  private String[] oneEach;
 
-  @JsonAlias({"3e", "3"})
-  private String[] thirdLevel;
+  @JsonProperty("2")
+  private String[] two;
+
+  @JsonProperty("2e")
+  private String[] twoEach;
+
+  @JsonProperty("3")
+  private String[] three;
+
+  @JsonProperty("3e")
+  private String[] threeEach;
 }

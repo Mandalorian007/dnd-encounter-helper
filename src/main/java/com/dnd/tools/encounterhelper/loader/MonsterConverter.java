@@ -6,6 +6,7 @@ import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAc;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonAlignment;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonConditionImmune;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonCr;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonDailySpells;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonHp;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonImmune;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonMonster;
@@ -15,6 +16,7 @@ import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSaves;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSkill;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSpeed;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSpeedData;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSpells;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonVulnerable;
 import com.dnd.tools.encounterhelper.monster.model.Ability;
 import com.dnd.tools.encounterhelper.monster.model.Alignment;
@@ -28,10 +30,12 @@ import com.dnd.tools.encounterhelper.monster.model.DamageType;
 import com.dnd.tools.encounterhelper.monster.model.Environment;
 import com.dnd.tools.encounterhelper.monster.model.Hp;
 import com.dnd.tools.encounterhelper.monster.model.Immunity;
+import com.dnd.tools.encounterhelper.monster.model.InnateSpellCasting;
 import com.dnd.tools.encounterhelper.monster.model.Monster;
 import com.dnd.tools.encounterhelper.monster.model.Resistance;
 import com.dnd.tools.encounterhelper.monster.model.Size;
 import com.dnd.tools.encounterhelper.monster.model.Speed;
+import com.dnd.tools.encounterhelper.monster.model.Spellcasting;
 import com.dnd.tools.encounterhelper.monster.model.Type;
 import com.dnd.tools.encounterhelper.monster.model.Vulnerability;
 import java.util.ArrayList;
@@ -40,6 +44,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -56,7 +61,7 @@ public class MonsterConverter {
     //Alignment
     JsonAlignment[] jsonAlignments = jsonMonster.getAlignment();
     if (jsonAlignments != null) {
-      List<AlignmentOption> alignmentOptions = Arrays.asList(jsonAlignments).stream()
+      List<AlignmentOption> alignmentOptions = Arrays.stream(jsonAlignments)
           .map(jsonAlignment -> {
             AlignmentOption alignmentOption = new AlignmentOption();
             String[] alignments = jsonAlignment.getAlignments();
@@ -80,7 +85,7 @@ public class MonsterConverter {
     //Environment
     String[] jsonMonsterEnvironment = jsonMonster.getEnvironment();
     if (jsonMonsterEnvironment != null && jsonMonsterEnvironment.length != 0) {
-      Set<Environment> environments = Arrays.asList(jsonMonsterEnvironment).stream()
+      Set<Environment> environments = Arrays.stream(jsonMonsterEnvironment)
           .map(this::getEnvironmentFromString)
           .collect(Collectors.toSet());
       monster.setEnvironments(environments);
@@ -95,9 +100,9 @@ public class MonsterConverter {
       Type type = new Type();
       type.setType(jsonMonsterType.getType());
       if(jsonMonsterType.getTags() != null) {
-        List<String> subTypes = Arrays.asList(jsonMonsterType.getTags()).stream()
-            .map(tag -> tag.getTag())
-            .filter(tag -> tag != null)
+        List<String> subTypes = Arrays.stream(jsonMonsterType.getTags())
+            .map(JsonMonsterType.MonsterTypeTag::getTag)
+            .filter(Objects::nonNull)
             .collect(Collectors.toList());
         type.setSubTypes(subTypes);
       }
@@ -117,7 +122,7 @@ public class MonsterConverter {
     //Armour Class
     JsonAc[] jsonMonsterAc = jsonMonster.getAc();
     if(jsonMonsterAc != null) {
-      List<ArmourClass> armourClasses = Arrays.asList(jsonMonsterAc).stream()
+      List<ArmourClass> armourClasses = Arrays.stream(jsonMonsterAc)
           .map(jsonAc -> {
             ArmourClass armourClass = new ArmourClass();
             armourClass.setArmourClass(jsonAc.getAc());
@@ -302,7 +307,7 @@ public class MonsterConverter {
       Arrays.asList(jsonResists).forEach(jsonResist -> {
         // Currently resist has a String[] of resistances we will normalize this to 1 resist per
         if(jsonResist.getResist() != null) {
-          Arrays.asList(jsonResist.getResist()).stream().forEach(damageType -> {
+          Arrays.stream(jsonResist.getResist()).forEach(damageType -> {
             Resistance resistance = new Resistance();
             resistance.setDamageType(getDamageTypeFromString(damageType));
             resistance.setNote(jsonResist.getNote());
@@ -327,11 +332,11 @@ public class MonsterConverter {
     JsonImmune[] jsonImmunities = jsonMonster.getImmune();
     if(jsonImmunities != null) {
       List<Immunity> finalImmunities = new ArrayList<>();
-      Arrays.asList(jsonImmunities).stream().forEach(jsonImmunityObj -> {
+      Arrays.stream(jsonImmunities).forEach(jsonImmunityObj -> {
         //Normalizing a list of list to a single list by duplicating the conditions
         String[] damageTypes = jsonImmunityObj.getImmune();
         if(damageTypes != null  && damageTypes.length > 0) {
-          Arrays.asList(damageTypes).stream().forEach(damageType -> {
+          Arrays.stream(damageTypes).forEach(damageType -> {
             Immunity immunity = new Immunity();
             immunity.setDamageType(getDamageTypeFromString(damageType));
             immunity.setCondition(jsonImmunityObj.getNote());
@@ -348,11 +353,11 @@ public class MonsterConverter {
     JsonVulnerable[] jsonVulnerables = jsonMonster.getVulnerable();
     if(jsonVulnerables != null) {
       List<Vulnerability> finalVulnerabilities = new ArrayList<>();
-      Arrays.asList(jsonVulnerables).stream().forEach(jsonVulnerabilityObj -> {
+      Arrays.stream(jsonVulnerables).forEach(jsonVulnerabilityObj -> {
         //Normalizing a list of list to a single list by duplicating the conditions
         String[] damageTypes = jsonVulnerabilityObj.getVulnerable();
         if(damageTypes != null  && damageTypes.length > 0) {
-          Arrays.asList(damageTypes).stream().forEach(damageType -> {
+          Arrays.stream(damageTypes).forEach(damageType -> {
             Vulnerability vulnerability = new Vulnerability();
             vulnerability.setDamageType(getDamageTypeFromString(damageType));
             vulnerability.setCondition(jsonVulnerabilityObj.getNote());
@@ -369,11 +374,11 @@ public class MonsterConverter {
     JsonConditionImmune[] jsonConditionImmunes = jsonMonster.getConditionImmune();
     if(jsonConditionImmunes != null) {
       Set<ConditionImmunity> finalConditionImmunities = new HashSet<>();
-      Arrays.asList(jsonConditionImmunes).stream().forEach(jsonConditionImmuneObj -> {
+      Arrays.stream(jsonConditionImmunes).forEach(jsonConditionImmuneObj -> {
         //Normalizing a list of list to a single list by duplicating the conditions
         String[] condition = jsonConditionImmuneObj.getConditionImmune();
         if (condition != null && condition.length > 0) {
-          Arrays.asList(condition).stream().forEach(jsonConditionString -> {
+          Arrays.stream(condition).forEach(jsonConditionString -> {
             ConditionImmunity conditionImmunity = new ConditionImmunity();
             conditionImmunity.setCondition(getConditionFromString(jsonConditionString));
             conditionImmunity.setNote(jsonConditionImmuneObj.getNote());
@@ -413,7 +418,7 @@ public class MonsterConverter {
 
     //Trait
     if(jsonMonster.getTrait() != null) {
-      List<Ability> traits = Arrays.asList(jsonMonster.getTrait()).stream()
+      List<Ability> traits = Arrays.stream(jsonMonster.getTrait())
           .map(this::convertFromJsonAbility)
           .collect(Collectors.toList());
       monster.setTrait(traits);
@@ -421,7 +426,7 @@ public class MonsterConverter {
 
     //Action
     if(jsonMonster.getAction() != null) {
-      List<Ability> actions = Arrays.asList(jsonMonster.getAction()).stream()
+      List<Ability> actions = Arrays.stream(jsonMonster.getAction())
           .map(this::convertFromJsonAbility)
           .collect(Collectors.toList());
       monster.setAction(actions);
@@ -429,7 +434,7 @@ public class MonsterConverter {
 
     //Reaction
     if(jsonMonster.getReaction() != null) {
-      List<Ability> reactions = Arrays.asList(jsonMonster.getReaction()).stream()
+      List<Ability> reactions = Arrays.stream(jsonMonster.getReaction())
           .map(this::convertFromJsonAbility)
           .collect(Collectors.toList());
       monster.setReaction(reactions);
@@ -437,7 +442,7 @@ public class MonsterConverter {
 
     //Legendary Action
     if(jsonMonster.getLegendary() != null) {
-      List<Ability> legendaryActions = Arrays.asList(jsonMonster.getLegendary()).stream()
+      List<Ability> legendaryActions = Arrays.stream(jsonMonster.getLegendary())
           .map(this::convertFromJsonAbility)
           .collect(Collectors.toList());
       monster.setLegendaryAction(legendaryActions);
@@ -445,7 +450,132 @@ public class MonsterConverter {
 
     //Variants
 
-    //Spell casting
+    //Spellcasting
+    if(jsonMonster.getSpellcasting() != null) {
+      Arrays.stream(jsonMonster.getSpellcasting())
+          .forEach(jsonSpellcasting -> {
+            //Innate Spellcasting
+            if(jsonSpellcasting.getName().startsWith("Innate Spellcasting")) {
+              InnateSpellCasting innateSpellCasting = new InnateSpellCasting();
+              String[] headerEntries = jsonSpellcasting.getHeaderEntries();
+              if(headerEntries != null) {
+                innateSpellCasting.setHeaderEntries(Arrays.asList(headerEntries));
+              }
+              String[] footerEntries = jsonSpellcasting.getFooterEntries();
+              if(footerEntries != null) {
+                innateSpellCasting.setFooterEntries(Arrays.asList(footerEntries));
+              }
+              innateSpellCasting.setSpellStat(jsonSpellcasting.getAbility());
+
+              String[] atWillSpells = jsonSpellcasting.getWill();
+              if(atWillSpells != null) {
+                innateSpellCasting.setAtWill(Arrays.asList(atWillSpells));
+              }
+
+              JsonDailySpells dailySpells = jsonSpellcasting.getDaily();
+              if(dailySpells != null) {
+                String[] one = dailySpells.getOne();
+                if(one != null) {
+                  innateSpellCasting.setOne(Arrays.asList(one));
+                }
+
+                String[] oneEach = dailySpells.getOneEach();
+                if(oneEach != null) {
+                  innateSpellCasting.setOneEach(Arrays.asList(oneEach));
+                }
+
+                String[] two = dailySpells.getTwo();
+                if(two != null) {
+                  innateSpellCasting.setTwo(Arrays.asList(two));
+                }
+
+                String[] twoEach = dailySpells.getTwoEach();
+                if(twoEach != null) {
+                  innateSpellCasting.setTwoEach(Arrays.asList(twoEach));
+                }
+
+                String[] three = dailySpells.getThree();
+                if(three != null) {
+                  innateSpellCasting.setThree(Arrays.asList(three));
+                }
+
+                String[] threeEach = dailySpells.getThreeEach();
+                if(threeEach != null) {
+                  innateSpellCasting.setThreeEach(Arrays.asList(threeEach));
+                }
+              }
+              monster.setInnateSpellCasting(innateSpellCasting);
+
+            } else {//Regular Spellcasting
+              JsonSpells jsonSpells = jsonSpellcasting.getSpells();
+              if(jsonSpells != null) {
+                Spellcasting spellcasting = new Spellcasting();
+                JsonSpells.Spell cantrips = jsonSpells.getCantrips();
+                if(cantrips != null) {
+                  spellcasting.setCantrips(Arrays.asList(cantrips.getSpells()));
+                }
+
+                JsonSpells.Spell firstLevel = jsonSpells.getFirstLevel();
+                if(firstLevel != null) {
+                  spellcasting.setFirstLevelSlots(firstLevel.getSlots());
+                  spellcasting.setFirstLevel(Arrays.asList(firstLevel.getSpells()));
+                }
+
+                JsonSpells.Spell secondLevel = jsonSpells.getSecondLevel();
+                if(secondLevel != null) {
+                  spellcasting.setSecondLevelSlot(secondLevel.getSlots());
+                  spellcasting.setSecondLevel(Arrays.asList(secondLevel.getSpells()));
+                }
+
+                JsonSpells.Spell thirdLevel = jsonSpells.getThirdLevel();
+                if(thirdLevel != null) {
+                  spellcasting.setThirdLevelSlots(thirdLevel.getSlots());
+                  spellcasting.setThirdLevel(Arrays.asList(thirdLevel.getSpells()));
+                }
+
+                JsonSpells.Spell fourthLevel = jsonSpells.getFourthLevel();
+                if(fourthLevel != null) {
+                  spellcasting.setFourthLevelSlots(fourthLevel.getSlots());
+                  spellcasting.setFourthLevel(Arrays.asList(fourthLevel.getSpells()));
+                }
+
+                JsonSpells.Spell fifthLevel = jsonSpells.getFifthLevel();
+                if(fifthLevel != null) {
+                  spellcasting.setFifthLevelSlots(fifthLevel.getSlots());
+                  spellcasting.setFifthLevel(Arrays.asList(fifthLevel.getSpells()));
+                }
+
+                JsonSpells.Spell sixthLevel = jsonSpells.getSixthLevel();
+                if(sixthLevel != null) {
+                  spellcasting.setSixthLevelSlots(sixthLevel.getSlots());
+                  spellcasting.setSixthLevel(Arrays.asList(sixthLevel.getSpells()));
+                }
+
+                JsonSpells.Spell seventhLevel = jsonSpells.getSeventhLevel();
+                if(seventhLevel != null) {
+                  spellcasting.setSeventhLevelSlots(seventhLevel.getSlots());
+                  spellcasting.setSeventhLevel(Arrays.asList(secondLevel.getSpells()));
+                }
+
+                JsonSpells.Spell eighthLevel = jsonSpells.getEighthLevel();
+                if(eighthLevel != null) {
+                  spellcasting.setEighthLevelSlots(eighthLevel.getSlots());
+                  spellcasting.setEighthLevel(Arrays.asList(eighthLevel.getSpells()));
+                }
+
+                JsonSpells.Spell ninthLevel = jsonSpells.getNinthLevel();
+                if(ninthLevel != null) {
+                  spellcasting.setNinthLevelSlot(ninthLevel.getSlots());
+                  spellcasting.setNinthLevel(Arrays.asList(ninthLevel.getSpells()));
+                }
+              } else {
+                throw new RuntimeException(
+                    "Cannot properly parse spellcasting for: "
+                    + jsonMonster.getName() + " : " + jsonMonster.getSource());
+              }
+            }
+          });
+    }
 
     return monster;
   }
@@ -710,7 +840,7 @@ public class MonsterConverter {
     ability.setAttack(jsonAbility.getAttack());
 
     if(jsonAbility.getSubEntries() != null) {
-      List<Ability> subAbilities = Arrays.asList(jsonAbility.getSubEntries()).stream()
+      List<Ability> subAbilities = Arrays.stream(jsonAbility.getSubEntries())
           .map(this::convertFromJsonAbility)
           .collect(Collectors.toList());
       ability.setSubEntries(subAbilities);
