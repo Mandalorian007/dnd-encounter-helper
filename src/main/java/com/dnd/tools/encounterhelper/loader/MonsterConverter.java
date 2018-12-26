@@ -15,6 +15,7 @@ import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSaves;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSkill;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSpeed;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSpeedData;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonVulnerable;
 import com.dnd.tools.encounterhelper.monster.model.Ability;
 import com.dnd.tools.encounterhelper.monster.model.Alignment;
 import com.dnd.tools.encounterhelper.monster.model.AlignmentOption;
@@ -32,6 +33,7 @@ import com.dnd.tools.encounterhelper.monster.model.Resistance;
 import com.dnd.tools.encounterhelper.monster.model.Size;
 import com.dnd.tools.encounterhelper.monster.model.Speed;
 import com.dnd.tools.encounterhelper.monster.model.Type;
+import com.dnd.tools.encounterhelper.monster.model.Vulnerability;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -339,6 +341,27 @@ public class MonsterConverter {
           throw new RuntimeException("We have condition for Immunity but no damage type for monster: " + jsonMonster.getName());
         }
         monster.setImmunities(finalImmunities);
+      });
+    }
+
+    //Vulnerabilities
+    JsonVulnerable[] jsonVulnerables = jsonMonster.getVulnerable();
+    if(jsonVulnerables != null) {
+      List<Vulnerability> finalVulnerabilities = new ArrayList<>();
+      Arrays.asList(jsonVulnerables).stream().forEach(jsonVulnerabilityObj -> {
+        //Normalizing a list of list to a single list by duplicating the conditions
+        String[] damageTypes = jsonVulnerabilityObj.getVulnerable();
+        if(damageTypes != null  && damageTypes.length > 0) {
+          Arrays.asList(damageTypes).stream().forEach(damageType -> {
+            Vulnerability vulnerability = new Vulnerability();
+            vulnerability.setDamageType(getDamageTypeFromString(damageType));
+            vulnerability.setCondition(jsonVulnerabilityObj.getNote());
+            finalVulnerabilities.add(vulnerability);
+          });
+        } else {
+          throw new RuntimeException("We have condition for Vulnerability but no damage type for monster: " + jsonMonster.getName());
+        }
+        monster.setVulnerabilities(finalVulnerabilities);
       });
     }
 
