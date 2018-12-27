@@ -73,23 +73,28 @@ class MonsterGridListTile extends React.Component<any, State> {
     handleSubmit = () => {
         const componentState = this.state;
         const monster = this.props.monster;
-        const hitDice = monster.hitDice.split("d");
+        let armourClass;
+
+        monster.armourClass.map(function(item, index){
+            if (index === 0)
+                armourClass = item.armourClass;
+        });
 
         let combatantInfo = {
             name: monster.name,
-            armourClass: monster.armourClass,
+            armourClass: armourClass,
             initativeBonus: this.getModifier(monster.dexterity),
-            passivePerception: monster.perceptionMod,
+            passivePerception: monster.passivePerception,
             npc: true,
             monsterId: monster.id,
         };
 
         if (componentState.rollHp) {
             //Roll Hp
-            this.props.createNpcs(hitDice[0], hitDice[1], null, this.getModifier(monster.constitution), componentState.numberOfEnemies, combatantInfo);
+            this.props.createNpcs(monster.hp.numOfDice, monster.hp.sizeOfDie, null, this.getModifier(monster.constitution), componentState.numberOfEnemies, combatantInfo);
         } else {
             //Fixed Hp
-            this.props.createNpcs(null, null, monster.hitPoints, null, componentState.numberOfEnemies, combatantInfo);
+            this.props.createNpcs(null, null, monster.hp.averageHp, null, componentState.numberOfEnemies, combatantInfo);
         }
 
         this.handleClose();
