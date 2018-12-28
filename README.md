@@ -7,7 +7,7 @@ characters to combat, and adding many npcs to combat with a template system all 
 ### Running Locally
 
 You will need to have Java installed the download link can be found here:
-[Java](http://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase9-3934878.html)
+[Java](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html)
 
 You will also need your environment variables configured
 [Java Environment variables](https://confluence.atlassian.com/doc/setting-the-java_home-variable-in-windows-8895.html)
