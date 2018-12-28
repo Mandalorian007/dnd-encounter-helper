@@ -99,7 +99,8 @@ public class Monster {
   @OneToMany(cascade = CascadeType.PERSIST)
   private List<Ability> legendaryAction;
 
-  // variant
+  @OneToMany(cascade = CascadeType.PERSIST)
+  private List<Variant> variants;
 
   @Embedded
   private InnateSpellCasting innateSpellCasting;
