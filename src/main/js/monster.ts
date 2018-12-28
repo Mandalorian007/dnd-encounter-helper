@@ -51,6 +51,17 @@ interface Monster {
 
     languages: string[];
     challengeRating: ChallengeRating;
+
+    senses: string[];
+    trait: Action[];
+    action?: Action[];
+    legendaryAction?: Action[];
+    reaction?: Action[];
+
+    immunities: Immunities[];
+    vulnerabilities: Immunities[];
+    resistances: Resistances[];
+    conditionImmunity: ConditionImmunity[];
 }
 
 enum Size {
@@ -116,10 +127,33 @@ interface ChallengeRating {
     lair: string;
 }
 
+interface Entry {
+    name: string;
+    entries: string[];
+    attack: null;
+    subEntries: string[];
+}
+
 interface Action {
     name: string;
-    description: string;
-    attackBonus?: number;
-    damageDice?: string;
-    damageBonus?: string;
+    entries: string[];
+    attack?: number;
+    subEntries?: Entry[];
+}
+
+interface Immunities {
+    damageType: string;
+    condition: string;
+}
+
+interface Resistances {
+    damageType: string;
+    note: string;
+    preNote: null;
+    special: null;
+}
+
+interface ConditionImmunity {
+    condition: string;
+    note: string;
 }
