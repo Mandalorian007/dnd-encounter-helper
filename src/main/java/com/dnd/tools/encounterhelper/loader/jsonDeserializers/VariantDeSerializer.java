@@ -11,43 +11,36 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VariantEntryDeSerializer extends JsonDeserializer<JsonVariant.VariantEntry[]> {
+public class VariantDeSerializer extends JsonDeserializer<JsonVariant[]> {
 
   @Override
-  public JsonVariant.VariantEntry[] deserialize(JsonParser p, DeserializationContext ctxt)
-      throws IOException, JsonProcessingException {
+  public JsonVariant[] deserialize(JsonParser p, DeserializationContext ctxt)
+      throws IOException {
 
     List<?> variantEntryObjList = (ArrayList) p.readValueAs(Object.class);
 
     return parse(variantEntryObjList);
   }
 
-  private JsonVariant.VariantEntry[] parse(Object variantEntryObjArray) {
+  private JsonVariant[] parse(Object variantEntryObjArray) {
     List<?> variantEntryObjList = (ArrayList) variantEntryObjArray;
-    List<JsonVariant.VariantEntry> finalVariantEntries = new ArrayList<>();
-
+    List<JsonVariant> finalVariantEntries = new ArrayList<>();
     variantEntryObjList.stream().forEach(variantEntryObj -> {
+      JsonVariant variantEntry = new JsonVariant();
       if(variantEntryObj instanceof String) {
-        finalVariantEntries.add(getVarientEntryFromString((String) variantEntryObj));
+        variantEntry.setEntry((String) variantEntryObj);
       } else {
-        // Nested Variant Entry object
+        // Nested Variant object
         Map<?,?> nestedVariantEntryData = (LinkedHashMap) variantEntryObj;
-        JsonVariant.VariantEntry variantEntry = new JsonVariant.VariantEntry();
         variantEntry.setName((String) nestedVariantEntryData.get("name"));
         variantEntry.setType((String) nestedVariantEntryData.get("type"));
         if(nestedVariantEntryData.get("entries") != null) {
           variantEntry.setEntries(parse(nestedVariantEntryData.get("entries")));
         }
-        finalVariantEntries.add(variantEntry);
       }
+      finalVariantEntries.add(variantEntry);
     });
 
-    return finalVariantEntries.toArray(new JsonVariant.VariantEntry[finalVariantEntries.size()]);
-  }
-
-  private JsonVariant.VariantEntry getVarientEntryFromString(String entry) {
-    JsonVariant.VariantEntry variantEntry = new JsonVariant.VariantEntry();
-    variantEntry.setEntry(entry);
-    return variantEntry;
+    return finalVariantEntries.toArray(new JsonVariant[finalVariantEntries.size()]);
   }
 }

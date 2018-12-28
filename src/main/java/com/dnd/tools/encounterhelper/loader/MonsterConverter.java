@@ -17,6 +17,7 @@ import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSkill;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSpeed;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSpeedData;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonSpells;
+import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonVariant;
 import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonVulnerable;
 import com.dnd.tools.encounterhelper.monster.model.Ability;
 import com.dnd.tools.encounterhelper.monster.model.Alignment;
@@ -37,6 +38,7 @@ import com.dnd.tools.encounterhelper.monster.model.Size;
 import com.dnd.tools.encounterhelper.monster.model.Speed;
 import com.dnd.tools.encounterhelper.monster.model.Spellcasting;
 import com.dnd.tools.encounterhelper.monster.model.Type;
+import com.dnd.tools.encounterhelper.monster.model.Variant;
 import com.dnd.tools.encounterhelper.monster.model.Vulnerability;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -449,6 +451,12 @@ public class MonsterConverter {
     }
 
     //Variants
+    if(jsonMonster.getVariant() != null) {
+      List<Variant> variants = Arrays.stream(jsonMonster.getVariant())
+          .map(this::convertFromJsonVariant)
+          .collect(Collectors.toList());
+      monster.setVariants(variants);
+    }
 
     //Spellcasting
     if(jsonMonster.getSpellcasting() != null) {
@@ -831,7 +839,6 @@ public class MonsterConverter {
   }
 
   private Ability convertFromJsonAbility(JsonAbility jsonAbility) {
-
     Ability ability = new Ability();
     ability.setName(jsonAbility.getName());
     if(jsonAbility.getEntries() != null) {
@@ -845,7 +852,30 @@ public class MonsterConverter {
           .collect(Collectors.toList());
       ability.setSubEntries(subAbilities);
     }
-
     return ability;
+  }
+
+  private Variant convertFromJsonVariant(JsonVariant jsonVariant) {
+    Variant variant = new Variant();
+    variant.setType(jsonVariant.getType());
+    variant.setName(jsonVariant.getName());
+    JsonVariant.VariantSource jsonVariantSource = jsonVariant.getVariantSource();
+    if(jsonVariantSource != null) {
+      variant.setSource(jsonVariantSource.getSource());
+      variant.setPage(jsonVariantSource.getPage());
+    }
+
+    if(jsonVariant.getEntry() != null) {
+      variant.setEntry(jsonVariant.getEntry());
+    }
+
+    if(jsonVariant.getEntries() != null) {
+      List<Variant> variants = Arrays.stream(jsonVariant.getEntries())
+          .map(this::convertFromJsonVariant)
+          .collect(Collectors.toList());
+      variant.setEntries(variants);
+    }
+
+    return variant;
   }
 }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,26 +18,29 @@ import org.hibernate.annotations.Cascade;
 
 @Data
 @Entity
-public class Ability {
+public class Variant {
   @Id
   @GeneratedValue
   @JsonIgnore
   private Long id;
 
+  private String type;
   private String name;
-  @ElementCollection
+
+  private String source;
+  private Integer page;
+
   @Column(length = 10000)
-  private List<String> entries;
-  private String attack;
+  private String entry;
 
   @OneToMany(fetch= FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
   @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-  @JoinColumn(name="ABILITY_ID")
+  @JoinColumn(name="VARIANT_ID")
   @JsonManagedReference
-  private List<Ability> subEntries;
+  private List<Variant> entries;
 
   @ManyToOne(fetch=FetchType.EAGER)
-  @JoinColumn(name="ABILITY_ID")
+  @JoinColumn(name="VARIANT_ID")
   @JsonBackReference
-  private Ability self;
+  private Variant self;
 }

@@ -5,9 +5,10 @@ import com.dnd.tools.encounterhelper.loader.jsonDeserializers.AlignmentDeseriali
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.ConditionImmuneDeserializer;
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.CrDeserializer;
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.ImmuneDeserializer;
-import com.dnd.tools.encounterhelper.loader.jsonDeserializers.JsonAbilityDeserializer;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.AbilityDeserializer;
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.MonsterTypeDeserializer;
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.ResistDeserializer;
+import com.dnd.tools.encounterhelper.loader.jsonDeserializers.VariantDeSerializer;
 import com.dnd.tools.encounterhelper.loader.jsonDeserializers.VulnerableDeserializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -56,17 +57,18 @@ public class JsonMonster {
   @JsonDeserialize(using = CrDeserializer.class)
   private JsonCr cr;
   private JsonSpellcasting[] spellcasting;
-  @JsonDeserialize(using = JsonAbilityDeserializer.class)
+  @JsonDeserialize(using = AbilityDeserializer.class)
   private JsonAbility[] trait;
-  @JsonDeserialize(using = JsonAbilityDeserializer.class)
+  @JsonDeserialize(using = AbilityDeserializer.class)
   private JsonAbility[] action;
-  @JsonDeserialize(using = JsonAbilityDeserializer.class)
+  @JsonDeserialize(using = AbilityDeserializer.class)
   private JsonAbility[] reaction;
   private String legendaryGroup;
   private Integer legendaryActions;
-  @JsonDeserialize(using = JsonAbilityDeserializer.class)
+  @JsonDeserialize(using = AbilityDeserializer.class)
   private JsonAbility[] legendary;
   private String description;
+  @JsonDeserialize(using = VariantDeSerializer.class)
   private JsonVariant[] variant;
   private int page;
   private Boolean familiar;

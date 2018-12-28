@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JsonAbilityDeserializer extends JsonDeserializer<JsonAbility[]> {
+public class AbilityDeserializer extends JsonDeserializer<JsonAbility[]> {
 
   @Override
   public JsonAbility[] deserialize(JsonParser p, DeserializationContext ctxt)
