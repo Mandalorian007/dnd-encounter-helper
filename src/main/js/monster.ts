@@ -2,15 +2,17 @@ interface Monster {
 
     id: number;
     name: string;
+    alignment: Alignment[];
+    environments: string[];
     size: Size;
-    type: string;
-    subType?: string;
-    armourClass: number;
-    hitDice: string;
-    hitPoints: number;
-    speed: string;
+    type: Type;
+    bookSource: BookSource;
+    armourClass: ArmourClass[];
+    hp: HP;
+    speed: Speed;
 
     // Attributes
+    familiar: number;
     strength: number;
     dexterity: number;
     constitution: number;
@@ -19,29 +21,36 @@ interface Monster {
     charisma: number;
 
     //saves
-    strengthSave?: number;
-    dexteritySave?: number;
-    constitutionSave?: number;
-    intelligenceSave?: number;
-    wisdomSave?: number;
-    charismaSave?: number;
+    strengthSave: number;
+    dexteritySave: number;
+    constitutionSave: number;
+    intelligenceSave: number;
+    wisdomSave: number;
+    charismaSave: number;
 
-    perceptionMod?: number;
-    stealth?: number;
-    damageVulnerabilities?: string;
-    damageImmunities?: string;
-    condititonImmunities?: string;
-    senses?: string;
+    //skills
+    athletics: number;
+    acrobatics: number;
+    slightOfHand: number;
+    arcana: number;
+    history: number;
+    investigation: number;
+    nature: number;
+    religion: number;
+    animalHandling: number;
+    insight: number;
+    medicine: number;
+    perception: number;
+    survival: number;
+    deception: number;
+    intimidation: number;
+    performance: number;
+    persuasion: number;
+    passivePerception: number;
+    stealth: number;
 
-    /* Valid settings
-     0 1/8 1/4 1/2 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 26 30
-     */
-    challengeRating: number;
-
-    specialAbilities?: Action[];
-    actions?: Action[];
-    reactions?: Action[];
-    legendaryActions?: Action[];
+    languages: string[];
+    challengeRating: ChallengeRating;
 }
 
 enum Size {
@@ -51,6 +60,60 @@ enum Size {
     LARGE = "LARGE",
     HUGE = "HUGE",
     GARGANTUAN = "GARGANTUAN",
+}
+
+interface Alignment {
+    alignemnt: string;
+    chance: number;
+}
+
+interface Type {
+    type: string;
+    subtype: string[];
+    swarmSize: number;
+}
+
+interface BookSource {
+    bookCode: string;
+    book: string;
+    page: number;
+}
+
+interface ArmourClass {
+    armourClass: number;
+    armourSources: string;
+    condition: string;
+}
+
+interface HP {
+    averageHp: number;
+    numOfDice: number;
+    sizeOfDie: number;
+    flatBonus: number;
+    special: number;
+}
+
+interface Speed {
+    walk: number;
+    walkCondition: string;
+    burrow: number;
+    burrowCondition: string;
+    climb: number;
+    climbCondition: string;
+    fly: number;
+    flyCondition: string;
+    swim: number;
+    swimCondition: string;
+    hover: boolean;
+}
+
+/* Valid settings
+0 1/8 1/4 1/2 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 26 30
+*/
+interface ChallengeRating {
+    challengeRating: number;
+    coven: string;
+    lair: string;
 }
 
 interface Action {
