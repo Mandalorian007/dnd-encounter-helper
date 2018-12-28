@@ -80,6 +80,7 @@ public class MonsterConverter {
       AlignmentOption alignmentOption = new AlignmentOption();
       alignmentOption.setAlignment(Alignment.ANY);
       alignmentOption.setChance(100);
+      monster.setAlignment(Arrays.asList(alignmentOption));
     }
 
     //Environment
