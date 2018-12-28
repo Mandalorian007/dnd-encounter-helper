@@ -171,7 +171,7 @@ class CombatantList extends React.Component<any, State> {
             return <MonsterDetailsGrid
                 disabled={true}
                 monster={this.state.monster}
-                imageSrc={`https://5etools.com/img/MM/${this.state.monster.name}.png`}
+                imageSrc={`https://5etools.com/img/${this.state.monster.bookSource.bookCode}/${this.state.monster.name}.png`}
             />;
         }
     };
