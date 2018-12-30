@@ -33,7 +33,6 @@ Bugs:
 - CR filter sends wrong request to backend
 - single creature in search has a smaller box (example 'abo' vs 'abol')
 - "Zombie" doesn't show on "Zombie" search
-- On a new install component="fieldset" and component="legend" break during webpack (newNpcsFromTemplateForm.tsx)
 
 Ian feedback Need:
 - Current hit point color sucks with white background

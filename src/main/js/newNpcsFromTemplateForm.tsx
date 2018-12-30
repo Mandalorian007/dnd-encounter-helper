@@ -217,12 +217,12 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                         </div>
                     </Grid>
                     <Grid item xs={3}>
-                        <FormControl fullWidth component="fieldset" className={this.props.classes.formControl}>
+                        <FormControl fullWidth component={"fieldset" as "div"} className={this.props.classes.formControl}>
                             <InputLabel htmlFor="name">Monster Name</InputLabel>
                             <Input id="name" onChange={this.searchNameAdjustment} style={{marginRight: "24px" }}/>
                         </FormControl>
-                        <FormControl component="fieldset" className={this.props.classes.formControl}>
-                            <FormLabel component="legend">Size</FormLabel>
+                        <FormControl component={"fieldset" as "div"} className={this.props.classes.formControl}>
+                            <FormLabel component={"legend" as "div"}>Size</FormLabel>
                             <FormGroup>
                                 {
                                     sizes.map((size: Size) => {
@@ -242,7 +242,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
 
                         <List className={this.props.classes.ListClass}>
                             <ListItem className={this.props.classes.ListItemClass}>
-                                <FormLabel component="legend">Hit Points</FormLabel>
+                                <FormLabel component={"legend" as "div"}>Hit Points</FormLabel>
                             </ListItem>
                             <ListItem style={{padding: "0px"}}>
                                 <FormControlLabel
@@ -264,7 +264,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                                 />
                             </ListItem>
                             <ListItem className={this.props.classes.ListItemClass}>
-                                <FormLabel component="legend">Armour Class</FormLabel>
+                                <FormLabel component={"legend" as "div"}>Armour Class</FormLabel>
                             </ListItem>
                             <ListItem style={{padding: "0px"}}>
                                 <FormControlLabel
@@ -286,7 +286,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                                 />
                             </ListItem>
                             <ListItem className={this.props.classes.ListItemClass}>
-                                <FormLabel component="legend">Challenge Rating</FormLabel>
+                                <FormLabel component={"legend" as "div"}>Challenge Rating</FormLabel>
                             </ListItem>
                             <ListItem style={{padding: "0px"}}>
                                 <FormControlLabel
