@@ -76,7 +76,6 @@ const styles = createStyles({
 });
 
 interface State {
-    expandedRows?: any; //TODO figure out type
     anchorEl?: any;
 }
 
@@ -88,7 +87,6 @@ class MonsterDetailsGrid extends React.Component<any, State> {
 
     initialState = () => {
         return {
-            expandedRows: [],
             anchorEl: null,
         };
     };
@@ -102,76 +100,42 @@ class MonsterDetailsGrid extends React.Component<any, State> {
             return "+" + value;
     };
 
-    compareValues = (key) => {
-        return function(a, b) {
-            if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-                // property doesn't exist on either object
-                return 0;
-            }
-
-            const varA = (typeof a[key] === 'string') ? a[key].toUpperCase() : a[key];
-            const varB = (typeof b[key] === 'string') ? b[key].toUpperCase() : b[key];
-            let comparison = 0;
-
-            if (varA > varB) {
-                comparison = 1;
-            } else if (varA < varB) {
-                comparison = -1;
-            }
-
-            return (comparison);
-        };
-    }
-
     getActions = (actionList, subHeaderName) => {
         const rowId = "row-data-" + subHeaderName;
         if (Array.isArray(actionList) && actionList.length) {
 
             const itemRows = [
-                <TableRow className={this.props.classes.row} key={rowId} onClick={() => this.handleRowClick(rowId)}>
+                <TableRow className={this.props.classes.row} key={rowId}>
                     <TableCell className={`this.props.classes.tableCell ${this.props.classes.titles}`} colSpan={6}>
                         <span>{subHeaderName}</span>
                     </TableCell>
                 </TableRow>
             ];
 
-            if(this.state.expandedRows.includes(rowId)) {
-                itemRows.push(
-                    <TableRow className={this.props.classes.row} key={rowId}>
-                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                        {
-                            actionList.map(action => {
-                                return (
-                                    <div className={this.props.classes.InlineStats}>
-                                        <span className={this.props.classes.EntryTitle}>{action.name}. </span><span>
-                                        {action.entries.map((item, index) =>
-                                            {
-                                                return  <span>{item}<br/></span>
-                                            }
-                                        )}
-                                        </span>
-                                    </div>
-                                )
-                            })
-                        }
-                        </TableCell>
-                    </TableRow>
-                );
-            }
+            itemRows.push(
+                <TableRow className={this.props.classes.row} key={rowId}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                    {
+                        actionList.map(action => {
+                            return (
+                                <div className={this.props.classes.InlineStats}>
+                                    <span className={this.props.classes.EntryTitle}>{action.name}. </span><span>
+                                    {action.entries.map((item, index) =>
+                                        {
+                                            return  <span>{item}<br/></span>
+                                        }
+                                    )}
+                                    </span>
+                                </div>
+                            )
+                        })
+                    }
+                    </TableCell>
+                </TableRow>
+            );
 
             return itemRows;
         }
-    };
-
-    handleRowClick = (rowId) => {
-        const currentExpandedRows = this.state.expandedRows;
-        const isRowCurrentlyExpanded = currentExpandedRows.includes(rowId);
-
-        const newExpandedRows = isRowCurrentlyExpanded ?
-			currentExpandedRows.filter(id => id !== rowId) :
-			currentExpandedRows.concat(rowId);
-
-        this.setState({expandedRows: newExpandedRows});
     };
 
     handleOpen = (event) => {
