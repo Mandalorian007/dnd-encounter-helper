@@ -35,8 +35,6 @@ Bugs:
 Ian feedback Need:
 - Display all armour classes on tiles
 - Convert to fractions on Monster tiles
-- Current hit point color sucks with white background
-- (Black, yellow, red) (either text or background of text box)
 
 Ian feedback Nice to Have:
 - Mark turn over option
