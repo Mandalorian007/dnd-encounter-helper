@@ -36,12 +36,12 @@ Ian feedback Need:
 - Display all armour classes on tiles
 - Convert to fractions on Monster tiles
 - Current hit point color sucks with white background
--- (Black, yellow, red) (either text or background of text box)
+- (Black, yellow, red) (either text or background of text box)
 
 Ian feedback Nice to Have:
 - Mark turn over option
 - Condition tracking feature
--- Condition expiry feature
+- Condition expiry feature
 - Would like changeable art
 - Refactor combatant to be called Encounter
 - Display "Combatant" for Lair actions

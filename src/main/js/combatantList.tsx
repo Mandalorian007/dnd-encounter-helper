@@ -158,12 +158,12 @@ class CombatantList extends React.Component<any, State> {
     };
 
     computeClass = (val) => {
-        if (val < 0.33)
+        if (val <= 0.25)
             return '#FF0000';
-        else if (val < 0.66)
+        else if (val <= 0.50)
             return 'orange';
         else
-            return '#54ff56';
+            return '#000000';
     };
 
     getDetailContent = () => {

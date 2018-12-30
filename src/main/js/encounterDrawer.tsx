@@ -190,7 +190,7 @@ class EncounterDrawer extends React.Component<any, State> {
                     <div className={classes.toolbar} />
                     <List>
                         <ListItem button onClick={() => this.selectContent("combatant")}>
-                            <ListItemText primary="Combatants" />
+                            <ListItemText primary="Encounter" />
                         </ListItem>
                         <Divider />
                         <ListItem button onClick={() => this.selectContent("new-combatant")}>
