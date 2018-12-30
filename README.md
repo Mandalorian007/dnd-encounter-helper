@@ -30,13 +30,13 @@ Upcoming features:
 Filter examples: https://donjon.bin.sh/5e/monsters/
 
 Bugs:
-- CR filter sends wrong request to backend
 - single creature in search has a smaller box (example 'abo' vs 'abol')
 
 Ian feedback Need:
+- Display all armour classes on tiles
+- Convert to fractions on Monster tiles
 - Current hit point color sucks with white background
 -- (Black, yellow, red) (either text or background of text box)
-- Auto show action information
 
 Ian feedback Nice to Have:
 - Mark turn over option

@@ -4,7 +4,6 @@ import {createStyles, Theme, withStyles} from "@material-ui/core/styles/index";
 import MonsterGridListTile from "./monsterGridListTile";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListSubheader from '@material-ui/core/ListSubheader';
 
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -16,7 +15,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
 import Slider from 'rc-slider';
 import {API_ROOT} from "./api-config";
 
@@ -103,13 +101,21 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
     };
 
     refreshMonsterSearchState = (monsterSearch) => {
+        const apiChallengeRatingRange = this.getChallengeRatingAPI(
+            monsterSearch.challengeRating.lowerBound,
+            monsterSearch.challengeRating.upperBound);
+
+        const monsterSearchClone: MonsterSearch = JSON.parse(JSON.stringify(monsterSearch));
+        monsterSearchClone.challengeRating.lowerBound = apiChallengeRatingRange[0];
+        monsterSearchClone.challengeRating.upperBound = apiChallengeRatingRange[apiChallengeRatingRange.length-1];
+
         fetch(`${API_ROOT}/monsters/search`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(monsterSearch)
+            body: JSON.stringify(monsterSearchClone)
         }).catch(err => err)
             .then(results => results.json())
             .then(data => this.setState({ monsters: data }));
