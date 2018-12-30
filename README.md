@@ -32,7 +32,6 @@ Filter examples: https://donjon.bin.sh/5e/monsters/
 Bugs:
 - CR filter sends wrong request to backend
 - single creature in search has a smaller box (example 'abo' vs 'abol')
-- "Zombie" doesn't show on "Zombie" search
 
 Ian feedback Need:
 - Current hit point color sucks with white background
