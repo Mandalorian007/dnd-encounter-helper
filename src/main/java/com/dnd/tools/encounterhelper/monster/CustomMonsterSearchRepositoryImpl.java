@@ -20,10 +20,31 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
     queryBuilder.append("SELECT * FROM Monster om WHERE om.ID IN (");
     queryBuilder.append("SELECT DISTINCT(m.ID) FROM Monster m");
     queryBuilder.append(" INNER JOIN MONSTER_ARMOUR_CLASS a ON m.ID=a.MONSTER_ID");
-    queryBuilder.append(" WHERE LOWER(m.NAME) LIKE '%");
+
     String partialName = monsterSearch.getPartialName() == null ? "" : monsterSearch.getPartialName();
-    queryBuilder.append(partialName.toLowerCase());
-    queryBuilder.append("%'");
+    partialName = partialName.toLowerCase();
+
+    if(partialName.length() > 0) {
+      //Exact match
+      queryBuilder.append(" WHERE LOWER(m.NAME) = '");
+      queryBuilder.append(partialName);
+      queryBuilder.append("'");
+
+      //Match inside of name
+      queryBuilder.append(" OR LOWER(m.NAME) LIKE '%");
+      queryBuilder.append(partialName);
+      queryBuilder.append("%'");
+
+      //Match start of name
+      queryBuilder.append(" OR LOWER(m.NAME) LIKE '%");
+      queryBuilder.append(partialName);
+      queryBuilder.append("'");
+
+      //Match end of name
+      queryBuilder.append(" OR LOWER(m.NAME) LIKE '");
+      queryBuilder.append(partialName);
+      queryBuilder.append("%'");
+    }
 
     List<String> sizes = monsterSearch.getSizes();
     if(sizes != null && !sizes.isEmpty()) {
