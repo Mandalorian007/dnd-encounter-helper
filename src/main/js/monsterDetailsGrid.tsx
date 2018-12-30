@@ -308,6 +308,11 @@ class MonsterDetailsGrid extends React.Component<any, State> {
             speeds.push(obj);
         }
 
+         monster.immunities.sort(this.compareValues('condition'));
+         monster.resistances.sort(this.compareValues('note'));
+         monster.vulnerabilities.sort(this.compareValues('condition'));
+         monster.conditionImmunity.sort(this.compareValues('note'));
+
         return (
         <Table className={this.props.classes.table}>
             <TableHead>
@@ -492,13 +497,21 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                         <TableCell className={this.props.classes.tableCell} colSpan={6}>
                             <strong>Damage Vulnerabilities </strong>
                             {monster.vulnerabilities.map((item, index) =>
-                              {
-                                if(index + 1 === monster.vulnerabilities.length){
-                                    return <span>{item.damageType.toLowerCase()}</span>
-                                } else {
-                                    return <span>{item.damageType.toLowerCase()}, </span>
+                                {
+                                    if(index + 1 === monster.vulnerabilities.length){
+                                        return <span>{item.damageType.toLowerCase()} {item.condition}</span>
+                                    } else {
+                                        if(item.condition != monster.vulnerabilities[index +1].condition)
+                                        {
+                                            if(item.condition === null)
+                                                return <span>{item.damageType.toLowerCase()}; </span>
+                                            else
+                                                return <span>{item.damageType.toLowerCase()} {item.condition}; </span>
+                                        }
+                                        else
+                                            return <span>{item.damageType.toLowerCase()}, </span>
+                                    }
                                 }
-                              }
                             )}
                         </TableCell>
                     </TableRow>
@@ -508,13 +521,21 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                         <TableCell className={this.props.classes.tableCell} colSpan={6}>
                             <strong>Damage Resistances </strong>
                             {monster.resistances.map((item, index) =>
-                              {
-                                if(index + 1 === monster.resistances.length){
-                                    return <span>{item.damageType.toLowerCase()}</span>
-                                } else {
-                                    return <span>{item.damageType.toLowerCase()}, </span>
+                                {
+                                    if(index + 1 === monster.resistances.length){
+                                        return <span>{item.damageType.toLowerCase()} {item.note}</span>
+                                    } else {
+                                        if(item.note != monster.resistances[index +1].note)
+                                        {
+                                            if(item.note === null)
+                                                return <span>{item.damageType.toLowerCase()}; </span>
+                                            else
+                                                return <span>{item.damageType.toLowerCase()} {item.note}; </span>
+                                        }
+                                        else
+                                            return <span>{item.damageType.toLowerCase()}, </span>
+                                    }
                                 }
-                              }
                             )}
                         </TableCell>
                     </TableRow>
@@ -524,13 +545,21 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                         <TableCell className={this.props.classes.tableCell} colSpan={6}>
                             <strong>Damage Immunities </strong>
                             {monster.immunities.map((item, index) =>
-                              {
-                                if(index + 1 === monster.immunities.length){
-                                    return <span>{item.damageType.toLowerCase()}</span>
-                                } else {
-                                    return <span>{item.damageType.toLowerCase()}, </span>
+                                {
+                                    if(index + 1 === monster.immunities.length){
+                                        return <span>{item.damageType.toLowerCase()} {item.condition}</span>
+                                    } else {
+                                        if(item.condition != monster.immunities[index +1].condition)
+                                        {
+                                            if(item.condition === null)
+                                                return <span>{item.damageType.toLowerCase()}; </span>
+                                            else
+                                                return <span>{item.damageType.toLowerCase()} {item.condition}; </span>
+                                        }
+                                        else
+                                            return <span>{item.damageType.toLowerCase()}, </span>
+                                    }
                                 }
-                              }
                             )}
                         </TableCell>
                     </TableRow>
@@ -540,13 +569,21 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                         <TableCell className={this.props.classes.tableCell} colSpan={6}>
                             <strong>Condition Immunities </strong>
                             {monster.conditionImmunity.map((item, index) =>
-                              {
-                                if(index + 1 === monster.conditionImmunity.length){
-                                    return <span>{item.condition.toLowerCase()}</span>
-                                } else {
-                                    return <span>{item.condition.toLowerCase()}, </span>
+                                {
+                                    if(index + 1 === monster.conditionImmunity.length){
+                                        return <span>{item.condition.toLowerCase()} {item.note}</span>
+                                    } else {
+                                        if(item.note != monster.conditionImmunity[index +1].note)
+                                        {
+                                            if(item.note === null)
+                                                return <span>{item.condition.toLowerCase()}; </span>
+                                            else
+                                                return <span>{item.condition.toLowerCase()} {item.note}; </span>
+                                        }
+                                        else
+                                            return <span>{item.condition.toLowerCase()}, </span>
+                                    }
                                 }
-                              }
                             )}
                         </TableCell>
                     </TableRow>
