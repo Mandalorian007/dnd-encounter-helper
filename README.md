@@ -30,7 +30,7 @@ Upcoming features:
 Filter examples: https://donjon.bin.sh/5e/monsters/
 
 Bugs:
-- single creature in search has a smaller box (example 'abo' vs 'abol')
+
 
 Ian feedback Need:
 - Display all armour classes on tiles
