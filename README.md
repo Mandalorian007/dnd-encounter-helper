@@ -33,7 +33,6 @@ Bugs:
 
 
 Ian feedback Need:
-- Display all armour classes on tiles
 - Convert to fractions on Monster tiles
 
 Ian feedback Nice to Have:

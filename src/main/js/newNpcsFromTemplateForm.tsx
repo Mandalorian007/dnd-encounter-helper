@@ -13,6 +13,15 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
+import classNames from 'classnames';
+import Select from 'react-select';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Chip from '@material-ui/core/Chip';
+import MenuItem from '@material-ui/core/MenuItem';
+import CancelIcon from '@material-ui/icons/Cancel';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
+
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import Slider from 'rc-slider';
@@ -39,7 +48,113 @@ const styles = ({ palette, spacing }: Theme) => createStyles({
     gridList: {
         width: "100%",
     },
+    input: {
+        display: 'flex',
+        padding: 0,
+    },
+    valueContainer: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        flex: 1,
+        alignItems: 'center',
+        overflow: 'hidden',
+    },
+    chip: {
+        margin: `${spacing.unit / 2}px ${spacing.unit / 4}px`,
+    },
+    chipFocused: {
+        backgroundColor: emphasize(palette.type === 'light' ? palette.grey[300] : palette.grey[700], 0.08,),
+    },
+    placeholder: {
+        position: 'absolute',
+        left: 2,
+        fontSize: 16,
+    },
 });
+
+const sizeSuggestions = [{value: 'Tiny', label: 'Tiny'}, {value: 'Small', label: 'Small' }, {value: 'Medium', label: 'Medium' }, {value: 'Large', label: 'Large' }, {value: 'Huge', label: 'Huge' }, {value: 'Gargantuan', label: 'Gargantuan' }];
+
+const movementSuggestions = [{value: 'Walk', label: 'Walk'}, {value: 'Burrow', label: 'Burrow' }, {value: 'Climb', label: 'Climb' }, {value: 'Fly', label: 'Fly' }, {value: 'Swim', label: 'Swim' }];
+
+const typeSuggestions = [{value: 'Aberration', label: 'Aberration'}, {value: 'Beast', label: 'Beast' }, {value: 'Celestial', label: 'Celestial' }, {value: 'Construct', label: 'Construct' },
+{value: 'Dragon', label: 'Dragon' }, {value: 'Elemental', label: 'Elemental' }, {value: 'Fey', label: 'Fey' }, {value: 'Fiend', label: 'Fiend' }, {value: 'Giant', label: 'Giant' },
+{value: 'Humanoid', label: 'Humanoid' }, {value: 'Monstrosity', label: 'Monstrosity' }, {value: 'Ooze', label: 'Ooze' }, {value: 'Plant', label: 'Plant' }, {value: 'Undead', label: 'Undead' }];
+
+function inputComponent({ inputRef, ...props }) {
+  return <div ref={inputRef} {...props} />;
+}
+
+function Control(props) {
+  return (
+    <TextField
+      fullWidth
+      InputProps={{
+        inputComponent,
+        inputProps: {
+          className: props.selectProps.classes.input,
+          inputRef: props.innerRef,
+          children: props.children,
+          ...props.innerProps,
+        },
+      }}
+      {...props.selectProps.textFieldProps}
+    />
+  );
+}
+
+function Option(props) {
+  return (
+    <MenuItem
+      buttonRef={props.innerRef}
+      selected={props.isFocused}
+      component="div"
+      style={{
+        fontWeight: props.isSelected ? 500 : 400,
+      }}
+      {...props.innerProps}
+    >
+      {props.children}
+    </MenuItem>
+  );
+}
+
+function Placeholder(props) {
+  return (
+    <Typography
+      color="textSecondary"
+      className={props.selectProps.classes.placeholder}
+      {...props.innerProps}
+    >
+      {props.children}
+    </Typography>
+  );
+}
+
+function ValueContainer(props) {
+  return <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
+}
+
+function MultiValue(props) {
+  return (
+    <Chip
+      tabIndex={-1}
+      label={props.children}
+      className={classNames(props.selectProps.classes.chip, {
+        [props.selectProps.classes.chipFocused]: props.isFocused,
+      })}
+      onDelete={props.removeProps.onClick}
+      deleteIcon={<CancelIcon {...props.removeProps} />}
+    />
+  );
+}
+
+const components = {
+  Control,
+  MultiValue,
+  Option,
+  Placeholder,
+  ValueContainer,
+};
 
 interface State {
     monsterSearch: MonsterSearch;
@@ -50,6 +165,8 @@ interface State {
 interface MonsterSearch {
     partialName?: string;
     sizes?: Size[];
+    types?: Type[];
+    movements?: Speed[];
     hitPoints: Range;
     armourClass: Range;
     challengeRating: Range;
@@ -77,6 +194,8 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
             monsterSearch: {
                 partialName: null,
                 sizes: [],
+                types: [],
+                movements: [],
                 hitPoints: {
                     lowerBound: 1,
                     upperBound: 700,
@@ -112,6 +231,13 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         monsterSearchClone.challengeRating.lowerBound = apiChallengeRatingRange[0];
         monsterSearchClone.challengeRating.upperBound = apiChallengeRatingRange[apiChallengeRatingRange.length-1];
 
+        let newArray = [];
+        monsterSearch.sizes.map((item, index) => {
+              newArray.push(item.value);
+        });
+
+        monsterSearchClone.sizes = newArray;
+
         fetch(`${API_ROOT}/monsters/search`, {
             method: 'POST',
             headers: {
@@ -131,19 +257,25 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         this.refreshMonsterSearchState(monsterSearch);
     };
 
-    searchSizeAdjustment = (searchSize: Size) => {
+    searchSizeAdjustment = (sizes) => {
         let monsterSearch = this.state.monsterSearch;
-        let sizes = monsterSearch.sizes;
-
-        if (sizes.includes(searchSize)) {
-            sizes = sizes.filter(size => size != searchSize);
-        } else {
-            sizes.push(searchSize);
-        }
-
         monsterSearch.sizes = sizes;
         this.setState({monsterSearch: monsterSearch});
         this.refreshMonsterSearchState(monsterSearch);
+    };
+
+    searchTypeAdjustment = (types) => {
+        let monsterSearch = this.state.monsterSearch;
+        monsterSearch.types = types;
+        this.setState({monsterSearch: monsterSearch});
+        //this.refreshMonsterSearchState(monsterSearch);
+    };
+
+    searchMovementAdjustment = (movements) => {
+        let monsterSearch = this.state.monsterSearch;
+        monsterSearch.movements = movements;
+        this.setState({monsterSearch: monsterSearch});
+        //this.refreshMonsterSearchState(monsterSearch);
     };
 
     searchSliderAdjustment = (event, checked) => {
@@ -209,8 +341,10 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
     render() {
         const createSliderWithTooltip = Slider.createSliderWithTooltip;
         const RangeWithTooltip = createSliderWithTooltip(Slider.Range);
+        const { sizes } = this.state.monsterSearch;
+        const { types } = this.state.monsterSearch;
+        const { movements } = this.state.monsterSearch;
 
-        const sizes = ["Tiny", "Small", "Medium", "Large", "Huge", "Gargantuan"];
         return (
             <div>
                 <Grid container>
@@ -228,27 +362,56 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                     <Grid item xs={3}>
                         <FormControl fullWidth component={"fieldset" as "div"} className={this.props.classes.formControl}>
                             <InputLabel htmlFor="name">Monster Name</InputLabel>
-                            <Input id="name" onChange={this.searchNameAdjustment} style={{marginRight: "24px" }}/>
+                            <Input id="name" onChange={this.searchNameAdjustment} />
                         </FormControl>
-                        <FormControl component={"fieldset" as "div"} className={this.props.classes.formControl}>
-                            <FormLabel component={"legend" as "div"}>Size</FormLabel>
-                            <FormGroup>
-                                {
-                                    sizes.map((size: Size) => {
-                                        return (
-                                            <FormControlLabel
-                                                key={size}
-                                                control={
-                                                    <Checkbox id={size} onChange={ () => this.searchSizeAdjustment(size) }/>
-                                                }
-                                                label={size}
-                                            />
-                                        )
-                                    })
-                                }
-                            </FormGroup>
+                        <FormControl fullWidth component={"fieldset" as "div"} className={this.props.classes.formControl}>
+                            <Select
+                                classes={this.props.classes}
+                                textFieldProps={{
+                                    InputLabelProps: {
+                                        shrink: true,
+                                    },
+                                }}
+                                options={sizeSuggestions}
+                                components={components}
+                                value={sizes}
+                                onChange={this.searchSizeAdjustment}
+                                placeholder="Select multiple sizes"
+                                isMulti
+                            />
                         </FormControl>
-
+                        <FormControl fullWidth component={"fieldset" as "div"} className={this.props.classes.formControl}>
+                            <Select
+                                classes={this.props.classes}
+                                textFieldProps={{
+                                    InputLabelProps: {
+                                        shrink: true,
+                                    },
+                                }}
+                                options={typeSuggestions}
+                                components={components}
+                                value={types}
+                                onChange={this.searchTypeAdjustment}
+                                placeholder="Select multiple types"
+                                isMulti
+                            />
+                        </FormControl>
+                        <FormControl fullWidth component={"fieldset" as "div"} className={this.props.classes.formControl}>
+                            <Select
+                                classes={this.props.classes}
+                                textFieldProps={{
+                                    InputLabelProps: {
+                                        shrink: true,
+                                    },
+                                }}
+                                options={movementSuggestions}
+                                components={components}
+                                value={movements}
+                                onChange={this.searchMovementAdjustment}
+                                placeholder="Select multiple speeds"
+                                isMulti
+                            />
+                        </FormControl>
                         <List className={this.props.classes.ListClass}>
                             <ListItem className={this.props.classes.ListItemClass}>
                                 <FormLabel component={"legend" as "div"}>Hit Points</FormLabel>

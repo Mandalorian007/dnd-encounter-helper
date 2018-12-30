@@ -125,8 +125,36 @@ class MonsterGridListTile extends React.Component<any, State> {
                             <span>AC:
                                 {monster.armourClass.map((item, index) =>
                                     {
-                                        if (index === 0)
-                                            return " " + item.armourClass
+                                        if (index + 1 === monster.armourClass.length) {
+                                            if(item.armourSources != null && item.condition != null){
+                                                return item.armourClass + " (" + item.armourSources + ") " + item.condition
+                                            }
+                                            else if(item.armourSources === null && item.condition != null){
+                                                return item.armourClass + " " + item.condition
+                                            }
+                                            else if(item.armourSources != null && item.condition === null){
+                                                return item.armourClass + " (" + item.armourSources + ")"
+                                            }
+                                            else
+                                            {
+                                                return item.armourClass
+                                            }
+                                        }
+                                        else {
+                                            if(item.armourSources != null && item.condition != null){
+                                                return item.armourClass + " (" + item.armourSources + ") " + item.condition + ", "
+                                            }
+                                            else if(item.armourSources === null && item.condition != null){
+                                                return item.armourClass + " " + item.condition + ", "
+                                            }
+                                            else if(item.armourSources != null && item.condition === null){
+                                                return item.armourClass + " (" + item.armourSources + "), "
+                                            }
+                                            else
+                                            {
+                                                return item.armourClass + ", "
+                                            }
+                                        }
                                     }
                                 )}
                             </span>
