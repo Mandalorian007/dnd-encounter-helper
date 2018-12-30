@@ -25,7 +25,30 @@ Upcoming features:
 - CR scale
 - Filter by movement type (move, burrow, fly, swim)
 - Filter by alignment (need to add this if we do this)
+- Filter by types
+
+Filter examples: https://donjon.bin.sh/5e/monsters/
 
 Bugs:
 - CR filter sends wrong request to backend
 - single creature in search has a smaller box (example 'abo' vs 'abol')
+- "Zombie" doesn't show on "Zombie" search
+- On a new install component="fieldset" and component="legend" break during webpack (newNpcsFromTemplateForm.tsx)
+
+Ian feedback Need:
+- Current hit point color sucks with white background
+-- (Black, yellow, red) (either text or background of text box)
+- Auto show action information
+
+Ian feedback Nice to Have:
+- Mark turn over option
+- Condition tracking feature
+-- Condition expiry feature
+- Would like changeable art
+- Refactor combatant to be called Encounter
+- Display "Combatant" for Lair actions
+
+Universalize:
+- Dark mode
+- Refresh Initiative with round
+- Scrolling search
