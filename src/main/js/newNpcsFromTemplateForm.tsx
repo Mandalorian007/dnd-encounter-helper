@@ -19,22 +19,25 @@ import Slider from 'rc-slider';
 import {API_ROOT} from "./api-config";
 
 const styles = ({ palette, spacing }: Theme) => createStyles({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    overflow: 'hidden',
-    backgroundColor: palette.background.paper,
-  },
-   formControl: {
-      margin: spacing.unit * 3,
-      marginBottom: "auto",
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        overflow: 'hidden',
+        backgroundColor: palette.background.paper,
+    },
+    formControl: {
+        margin: spacing.unit * 3,
+        marginBottom: "auto",
     },
     ListClass: {
         marginLeft: "24px",
     },
-    ListItemClass:{
+    ListItemClass: {
         paddingBottom: "0px",
         paddingLeft: "0px",
+    },
+    gridList: {
+        width: "100%",
     },
 });
 
@@ -213,7 +216,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                 <Grid container>
                     <Grid item xs={9}>
                         <div className={this.props.classes.root}>
-                            <GridList>
+                            <GridList className={this.props.classes.gridList}>
                                 {
                                     this.state.monsters.map(monster => {
                                         return <MonsterGridListTile key={ monster.name } monster={ monster } createNpcs={this.props.createNpcs} navigateBack={this.props.navigateBack}/>
