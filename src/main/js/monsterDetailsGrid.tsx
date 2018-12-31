@@ -12,6 +12,7 @@ import TuneIcon from '@material-ui/icons/Tune';
 import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
 import Slider from 'rc-slider';
+import * as math from 'mathjs';
 
 const styles = createStyles({
   imageThumbnail: {
@@ -165,6 +166,13 @@ class MonsterDetailsGrid extends React.Component<any, State> {
 
     handleClose = () => {
         this.setState({anchorEl: null});
+    };
+
+    getRatio = (value) => {
+        if (value % 1 != 0)
+            return math.format(math.fraction(value), { fraction: 'ratio' });
+        else
+            return value;
     };
 
     onSliderChange = (monster, value) => {
@@ -642,7 +650,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
                         <strong>Challenge </strong>
                         <span>
-                            {monster.challengeRating.challengeRating}
+                            {this.getRatio(monster.challengeRating.challengeRating)}
                             {(monster.challengeRating.coven != null) ? " or " + monster.challengeRating.coven + " when part of a coven" : ""}
                             {(monster.challengeRating.lair != null) ? " or " + monster.challengeRating.lair + " when encountered in lair" : ""}
                         </span>

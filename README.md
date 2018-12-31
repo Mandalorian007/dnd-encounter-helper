@@ -28,9 +28,8 @@ Upcoming features:
 
 Filter examples: https://donjon.bin.sh/5e/monsters/
 
-Ian feedback Need:
-- Display all armour classes on tiles
-- Convert to fractions on Monster tiles
+Bugs:
+- if search for name other filters don't work
 
 Ian feedback Nice to Have:
 - Mark turn over option

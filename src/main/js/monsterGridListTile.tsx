@@ -11,6 +11,7 @@ import MonsterDetailsGrid from "./monsterDetailsGrid"
 import {Checkbox, FormControlLabel} from "@material-ui/core";
 import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import createStyles from "@material-ui/core/styles/createStyles";
+import * as math from 'mathjs';
 
 const styles = createStyles({
     titleBar: {
@@ -70,6 +71,13 @@ class MonsterGridListTile extends React.Component<any, State> {
         this.setState(this.initialState);
     };
 
+    getRatio = (value) => {
+        if (value % 1 != 0)
+            return math.format(math.fraction(value), { fraction: 'ratio' });
+        else
+            return value;
+    };
+
     handleSubmit = () => {
         const componentState = this.state;
         const monster = this.props.monster;
@@ -125,13 +133,23 @@ class MonsterGridListTile extends React.Component<any, State> {
                             <span>AC:
                                 {monster.armourClass.map((item, index) =>
                                     {
-                                        if (index === 0)
-                                            return " " + item.armourClass
+                                        if (index + 1 === monster.armourClass.length) {
+                                            if (index != 0)
+                                                return "(" + item.armourClass + ")"
+                                            else
+                                                return item.armourClass
+                                        }
+                                        else {
+                                            if (index != 0)
+                                                return "(" + item.armourClass + "), "
+                                            else
+                                                return item.armourClass + ", "
+                                        }
                                     }
                                 )}
                             </span>
                             <br/>
-                            <span>CR: {monster.challengeRating.challengeRating}</span>
+                            <span>CR: {this.getRatio(monster.challengeRating.challengeRating)}</span>
                         </div>
                     }
                 />
