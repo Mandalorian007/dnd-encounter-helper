@@ -21,16 +21,12 @@ Finally open your web browser and navigate to: `localhost:8080`
 
 
 Upcoming features:
-- Lair and Regional Information
 - CR scale
 - Filter by movement type (move, burrow, fly, swim)
 - Filter by alignment (need to add this if we do this)
 - Filter by types
 
 Filter examples: https://donjon.bin.sh/5e/monsters/
-
-Bugs:
-
 
 Ian feedback Need:
 - Display all armour classes on tiles
