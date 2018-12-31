@@ -80,6 +80,10 @@ const typeSuggestions = [{value: 'Aberration', label: 'Aberration'}, {value: 'Be
 {value: 'Dragon', label: 'Dragon' }, {value: 'Elemental', label: 'Elemental' }, {value: 'Fey', label: 'Fey' }, {value: 'Fiend', label: 'Fiend' }, {value: 'Giant', label: 'Giant' },
 {value: 'Humanoid', label: 'Humanoid' }, {value: 'Monstrosity', label: 'Monstrosity' }, {value: 'Ooze', label: 'Ooze' }, {value: 'Plant', label: 'Plant' }, {value: 'Undead', label: 'Undead' }];
 
+const alignmentSuggestions = [{value: 'Lawful Good', label: 'Lawful Good'}, {value: 'Neutral Good', label: 'Neutral Good' }, {value: 'Chaotic Good ', label: 'Chaotic Good ' },
+{value: 'Lawful Neutral', label: 'Lawful Neutral' }, {value: 'True Neutral', label: 'True Neutral' }, {value: 'Chaotic Neutral', label: 'Chaotic Neutral' },
+{value: 'Lawful Evil', label: 'Lawful Evil' }, {value: 'Neutral Evil', label: 'Neutral Evil' }, {value: 'Chaotic Evil', label: 'Chaotic Evil' }, {value: 'Unaligned', label: 'Unaligned' }];
+
 function inputComponent({ inputRef, ...props }) {
   return <div ref={inputRef} {...props} />;
 }
@@ -167,6 +171,7 @@ interface MonsterSearch {
     sizes?: Size[];
     types?: Type[];
     movements?: Speed[];
+    alignments?: Alignment[];
     hitPoints: Range;
     armourClass: Range;
     challengeRating: Range;
@@ -196,6 +201,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                 sizes: [],
                 types: [],
                 movements: [],
+                alignments: [],
                 hitPoints: {
                     lowerBound: 1,
                     upperBound: 700,
@@ -278,6 +284,13 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         //this.refreshMonsterSearchState(monsterSearch);
     };
 
+    searchAlignmentAdjustment = (alignments) => {
+        let monsterSearch = this.state.monsterSearch;
+        monsterSearch.alignments = alignments;
+        this.setState({monsterSearch: monsterSearch});
+        //this.refreshMonsterSearchState(monsterSearch);
+    };
+
     searchSliderAdjustment = (event, checked) => {
         let monsterSearch = this.state.monsterSearch;
         let toggleOptions = this.state.toggleOptions;
@@ -344,6 +357,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         const { sizes } = this.state.monsterSearch;
         const { types } = this.state.monsterSearch;
         const { movements } = this.state.monsterSearch;
+        const { alignments } = this.state.monsterSearch;
 
         return (
             <div>
@@ -409,6 +423,22 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                                 value={movements}
                                 onChange={this.searchMovementAdjustment}
                                 placeholder="Select multiple speeds"
+                                isMulti
+                            />
+                        </FormControl>
+                        <FormControl fullWidth component={"fieldset" as "div"} className={this.props.classes.formControl}>
+                            <Select
+                                classes={this.props.classes}
+                                textFieldProps={{
+                                    InputLabelProps: {
+                                        shrink: true,
+                                    },
+                                }}
+                                options={alignmentSuggestions}
+                                components={components}
+                                value={alignments}
+                                onChange={this.searchAlignmentAdjustment}
+                                placeholder="Select multiple alignments"
                                 isMulti
                             />
                         </FormControl>

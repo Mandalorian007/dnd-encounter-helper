@@ -30,7 +30,7 @@ Upcoming features:
 Filter examples: https://donjon.bin.sh/5e/monsters/
 
 Bugs:
-
+- if search for name other filters don't work
 
 Ian feedback Need:
 - Convert to fractions on Monster tiles
