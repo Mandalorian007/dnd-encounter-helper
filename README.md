@@ -21,7 +21,6 @@ Finally open your web browser and navigate to: `localhost:8080`
 
 
 Upcoming features:
-- Lair and Regional Information
 - CR scale
 - Filter by movement type (move, burrow, fly, swim)
 - Filter by alignment (need to add this if we do this)
@@ -31,8 +30,6 @@ Filter examples: https://donjon.bin.sh/5e/monsters/
 
 Bugs:
 - if search for name other filters don't work
-
-Ian feedback Need:
 
 Ian feedback Nice to Have:
 - Mark turn over option

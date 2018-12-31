@@ -106,4 +106,9 @@ public class Monster {
   private InnateSpellCasting innateSpellCasting;
   @Embedded
   private Spellcasting spellcasting;
+
+  @OneToMany(cascade = CascadeType.PERSIST)
+  private List<LairAction> lairActions;
+  @OneToMany(cascade = CascadeType.PERSIST)
+  private List<RegionalEffect> regionalEffects;
 }
