@@ -81,8 +81,9 @@ const typeSuggestions = [{value: 'Aberration', label: 'Aberration'}, {value: 'Be
 {value: 'Humanoid', label: 'Humanoid' }, {value: 'Monstrosity', label: 'Monstrosity' }, {value: 'Ooze', label: 'Ooze' }, {value: 'Plant', label: 'Plant' }, {value: 'Undead', label: 'Undead' }];
 
 const alignmentSuggestions = [{value: 'Lawful Good', label: 'Lawful Good'}, {value: 'Neutral Good', label: 'Neutral Good' }, {value: 'Chaotic Good ', label: 'Chaotic Good ' },
-{value: 'Lawful Neutral', label: 'Lawful Neutral' }, {value: 'True Neutral', label: 'True Neutral' }, {value: 'Chaotic Neutral', label: 'Chaotic Neutral' },
-{value: 'Lawful Evil', label: 'Lawful Evil' }, {value: 'Neutral Evil', label: 'Neutral Evil' }, {value: 'Chaotic Evil', label: 'Chaotic Evil' }, {value: 'Unaligned', label: 'Unaligned' }];
+{value: 'Lawful Neutral', label: 'Lawful Neutral' }, {value: 'Neutral', label: 'Neutral' }, {value: 'Chaotic Neutral', label: 'Chaotic Neutral' },
+{value: 'Lawful Evil', label: 'Lawful Evil' }, {value: 'Neutral Evil', label: 'Neutral Evil' }, {value: 'Chaotic Evil', label: 'Chaotic Evil' }, {value: 'Unaligned', label: 'Unaligned' },
+{value: 'ANY_NON_GOOD', label: 'ANY_NON_GOOD' }, {value: 'ANY_NON_LAWFUL', label: 'ANY_NON_LAWFUL' }, {value: 'ANY_CHAOTIC', label: 'ANY_CHAOTIC' }, {value: 'ANY_EVIL', label: 'ANY_EVIL' }, {value: 'ANY', label: 'ANY' }];
 
 function inputComponent({ inputRef, ...props }) {
   return <div ref={inputRef} {...props} />;
