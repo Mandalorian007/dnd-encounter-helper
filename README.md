@@ -26,11 +26,6 @@ Upcoming features:
 - Filter by alignment (need to add this if we do this)
 - Filter by types
 
-Filter examples: https://donjon.bin.sh/5e/monsters/
-
-Bugs:
-- if search for name other filters don't work
-
 Ian feedback Nice to Have:
 - Mark turn over option
 - Condition tracking feature

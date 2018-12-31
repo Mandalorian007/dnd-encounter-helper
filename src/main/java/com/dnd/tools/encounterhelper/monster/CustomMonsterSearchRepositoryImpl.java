@@ -26,7 +26,7 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
 
     if(partialName.length() > 0) {
       //Exact match
-      queryBuilder.append(" WHERE LOWER(m.NAME) = '");
+      queryBuilder.append(" WHERE (LOWER(m.NAME) = '");
       queryBuilder.append(partialName);
       queryBuilder.append("'");
 
@@ -43,7 +43,7 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
       //Match end of name
       queryBuilder.append(" OR LOWER(m.NAME) LIKE '");
       queryBuilder.append(partialName);
-      queryBuilder.append("%'");
+      queryBuilder.append("%')");
     }
 
     List<String> sizes = monsterSearch.getSizes();
