@@ -33,7 +33,6 @@ Bugs:
 - if search for name other filters don't work
 
 Ian feedback Need:
-- Convert to fractions on Monster tiles
 
 Ian feedback Nice to Have:
 - Mark turn over option

@@ -11,6 +11,7 @@ import MonsterDetailsGrid from "./monsterDetailsGrid"
 import {Checkbox, FormControlLabel} from "@material-ui/core";
 import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import createStyles from "@material-ui/core/styles/createStyles";
+import * as math from 'mathjs';
 
 const styles = createStyles({
     titleBar: {
@@ -68,6 +69,13 @@ class MonsterGridListTile extends React.Component<any, State> {
 
     handleClose = () => {
         this.setState(this.initialState);
+    };
+
+    getRatio = (value) => {
+        if (value % 1 != 0)
+            return math.format(math.fraction(value), { fraction: 'ratio' });
+        else
+            return value;
     };
 
     handleSubmit = () => {
@@ -159,7 +167,7 @@ class MonsterGridListTile extends React.Component<any, State> {
                                 )}
                             </span>
                             <br/>
-                            <span>CR: {monster.challengeRating.challengeRating}</span>
+                            <span>CR: {this.getRatio(monster.challengeRating.challengeRating)}</span>
                         </div>
                     }
                 />
