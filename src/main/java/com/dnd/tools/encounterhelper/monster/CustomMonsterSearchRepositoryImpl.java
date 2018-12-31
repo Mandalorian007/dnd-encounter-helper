@@ -64,6 +64,24 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
 
     }
 
+    List<String> types = monsterSearch.getTypes();
+    if(types != null && !types.isEmpty()) {
+      queryBuilder.append(" AND m.TYPE IN (");
+
+      types.stream()
+              .map(String::toUpperCase)
+              .forEach(type -> {
+                queryBuilder.append("'");
+                queryBuilder.append(type);
+                queryBuilder.append("',");
+              });
+
+      // remove last comma
+      queryBuilder.deleteCharAt(queryBuilder.length()-1);
+      queryBuilder.append(")");
+
+    }
+
     MonsterSearch.Range hitpoints = monsterSearch.getHitPoints();
     if(hitpoints != null) {
       queryBuilder.append(" AND (m.AVERAGE_HP BETWEEN ");
