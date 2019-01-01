@@ -8,9 +8,6 @@ import lombok.Data;
 public class MonsterSearch {
   private String partialName;
   private List<String> sizes;
-  private List<String> types;
-  private List<String> movements;
-  private List<String> alignments;
   private Range hitPoints;
   private Range armourClass;
   private Range challengeRating;
