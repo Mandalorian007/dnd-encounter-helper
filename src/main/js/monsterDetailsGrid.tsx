@@ -74,6 +74,13 @@ const styles = createStyles({
     fontWeight: 'bold',
     fontStyle: 'italic',
   },
+  VariantBlock: {
+      boxShadow: '0 0 4px 0 #988e7c',
+      border: '1px solid #656565',
+      background: '#e9ecda',
+      margin: '7px 15px',
+      padding: '5px 10px',
+  },
 });
 
 interface State {
@@ -157,6 +164,40 @@ class MonsterDetailsGrid extends React.Component<any, State> {
             );
 
             return itemRows;
+        }
+    };
+
+    getVariant  = (item) => {
+        if (item.type != null)
+        {
+            if (item.entry != null)
+            {
+                return (<span><span className={this.props.classes.EntryTitle}>{item.type}: {item.name} </span><div className={this.props.classes.InlineStats}>{item.entry}</div></span>);
+            }
+            else if (item.entries != null)
+            {
+                return(<span><span className={this.props.classes.EntryTitle}>{item.type}: {item.name} </span>
+                    {
+                        item.entries.map((items, index) => {
+                            return this.getVariant(items);
+                        })
+                    }
+                    </span>
+                );
+            }
+        }
+        else
+        {
+            if (item.entry != null)
+            {
+                return (<div className={this.props.classes.InlineStats}>{item.entry}</div>);
+            }
+            else if (item.entries != null)
+            {
+                return item.entries.map((items, index) => {
+                            return this.getVariant(items);
+                       });
+            }
         }
     };
 
@@ -693,6 +734,17 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                 : "" )}
                 {((Array.isArray(monster.legendaryAction) && monster.legendaryAction.length) ?
                     this.getActions(monster.legendaryAction, "Legendary Actions")
+                : "" )}
+                {((Array.isArray(monster.variants) && monster.variants.length) ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.VariantBlock} colSpan={6}>
+                            {
+                                monster.variants.map(action => {
+                                    return this.getVariant(action);
+                                })
+                            }
+                        </TableCell>
+                    </TableRow>
                 : "" )}
                 <TableRow className={this.props.classes.row}>
                     <TableCell className={this.props.classes.tableCell} colSpan={4}>
