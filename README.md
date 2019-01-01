@@ -27,7 +27,6 @@ Upcoming features:
 - Filter by types
 - lair actions details
 - regional effects details
-- innateSpellCasting details
 - spellcasting details
 
 Ian feedback Nice to Have:
