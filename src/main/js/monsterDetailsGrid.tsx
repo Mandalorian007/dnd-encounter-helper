@@ -726,6 +726,124 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                 {((monster.trait.length) ?
                      this.getActions(monster.trait, "Traits")
                 : "" )}
+                {((!monster.trait.length && monster.innateSpellCasting.headerEntries.length) ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={`this.props.classes.tableCell ${this.props.classes.titles}`} colSpan={6}>
+                            <span>Traits</span>
+                        </TableCell>
+                    </TableRow>
+                : "" )}
+                {((monster.innateSpellCasting.headerEntries.length) ?
+                    <TableRow className={this.props.classes.row}>
+                        <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                            <div className={this.props.classes.InlineStats}>
+                                <span className={this.props.classes.EntryTitle}>Innate Spellcasting. </span>
+                                {
+                                    monster.innateSpellCasting.headerEntries.map((item, index) => {
+                                        return <span>{item}<br/></span>
+                                    })
+                                }
+
+                                {((monster.innateSpellCasting.atWill.length) ?
+                                    <span><span>At will: </span>
+                                    {
+                                        monster.innateSpellCasting.atWill.map((item, index) => {
+                                            if (index + 1 === monster.innateSpellCasting.atWill.length)
+                                                return (<span>{item}<br /></span>);
+                                            else
+                                                return (<span>{item}, </span>);
+                                        })
+                                    }
+                                    </span>
+                                : "" )}
+                                {((monster.innateSpellCasting.one.length) ?
+                                    <span><span>1/day: </span>
+                                    {
+                                        monster.innateSpellCasting.one.map((item, index) => {
+                                            if (index + 1 === monster.innateSpellCasting.one.length)
+                                                return (<span>{item}<br /></span>);
+                                            else
+                                                return (<span>{item}, </span>);
+                                        })
+                                    }
+                                    </span>
+                                : "" )}
+                                {((monster.innateSpellCasting.oneEach.length) ?
+                                    <span><span>1/day each: </span>
+                                    {
+                                        monster.innateSpellCasting.oneEach.map((item, index) => {
+                                            if (index + 1 === monster.innateSpellCasting.oneEach.length)
+                                                return (<span>{item}<br /></span>);
+                                            else
+                                                return (<span>{item}, </span>);
+                                        })
+                                    }
+                                    </span>
+                                : "" )}
+                                {((monster.innateSpellCasting.two.length) ?
+                                    <span><span>2/day: </span>
+                                    {
+                                        monster.innateSpellCasting.two.map((item, index) => {
+                                            if (index + 1 === monster.innateSpellCasting.two.length)
+                                                return (<span>{item}<br /></span>);
+                                            else
+                                                return (<span>{item}, </span>);
+                                        })
+                                    }
+                                    </span>
+                                : "" )}
+                                {((monster.innateSpellCasting.twoEach.length) ?
+                                    <span><span>2/day each: </span>
+                                    {
+                                        monster.innateSpellCasting.twoEach.map((item, index) => {
+                                            if (index + 1 === monster.innateSpellCasting.twoEach.length)
+                                                return (<span>{item}<br /></span>);
+                                            else
+                                                return (<span>{item}, </span>);
+                                        })
+                                    }
+                                    </span>
+                                : "" )}
+                                {((monster.innateSpellCasting.three.length) ?
+                                    <span><span>3/day: </span>
+                                    {
+                                        monster.innateSpellCasting.three.map((item, index) => {
+                                            if (index + 1 === monster.innateSpellCasting.three.length)
+                                                return (<span>{item}<br /></span>);
+                                            else
+                                                return (<span>{item}, </span>);
+                                        })
+                                    }
+                                    </span>
+                                : "" )}
+                                {((monster.innateSpellCasting.threeEach.length) ?
+                                    <span><span>3/day each: </span>
+                                    {
+                                        monster.innateSpellCasting.threeEach.map((item, index) => {
+                                            if (index + 1 === monster.innateSpellCasting.threeEach.length)
+                                                return (<span>{item}<br /></span>);
+                                            else
+                                                return (<span>{item}, </span>);
+                                        })
+                                    }
+                                    </span>
+                                : "" )}
+                                {((monster.innateSpellCasting.footerEntries.length) ?
+                                    <span>
+                                    {
+                                        monster.innateSpellCasting.footerEntries.map((item, index) => {
+                                            if (index + 1 === monster.innateSpellCasting.footerEntries.length)
+                                                return (<span>{item}<br /></span>);
+                                            else
+                                                return (<span>{item}, </span>);
+                                        })
+                                    }
+                                    </span>
+                                : "" )}
+                            </div>
+                        </TableCell>
+                    </TableRow>
+                : "" )}
                 {((Array.isArray(monster.action) && monster.action.length) ?
                     this.getActions(monster.action, "Actions")
                 : "" )}
