@@ -238,12 +238,30 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         monsterSearchClone.challengeRating.lowerBound = apiChallengeRatingRange[0];
         monsterSearchClone.challengeRating.upperBound = apiChallengeRatingRange[apiChallengeRatingRange.length-1];
 
-        let newArray = [];
-        monsterSearch.sizes.map((item, index) => {
-              newArray.push(item.value);
-        });
+        let SizeArray = [];
+        let TypeArray = [];
+        let MovementArray = [];
+        let AlignmentArray = [];
 
-        monsterSearchClone.sizes = newArray;
+        monsterSearch.sizes.map((item, index) => {
+              SizeArray.push(item.value);
+        });
+        monsterSearchClone.sizes = SizeArray;
+
+        monsterSearch.types.map((item, index) => {
+            TypeArray.push(item.value);
+        });
+        monsterSearchClone.types = TypeArray;
+
+        monsterSearch.movements.map((item, index) => {
+            MovementArray.push(item.value);
+        });
+        monsterSearchClone.movements = MovementArray;
+
+        monsterSearch.alignments.map((item, index) => {
+            AlignmentArray.push(item.value);
+        });
+        monsterSearchClone.alignments = AlignmentArray;
 
         fetch(`${API_ROOT}/monsters/search`, {
             method: 'POST',
@@ -275,21 +293,21 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         let monsterSearch = this.state.monsterSearch;
         monsterSearch.types = types;
         this.setState({monsterSearch: monsterSearch});
-        //this.refreshMonsterSearchState(monsterSearch);
+        this.refreshMonsterSearchState(monsterSearch);
     };
 
     searchMovementAdjustment = (movements) => {
         let monsterSearch = this.state.monsterSearch;
         monsterSearch.movements = movements;
         this.setState({monsterSearch: monsterSearch});
-        //this.refreshMonsterSearchState(monsterSearch);
+        this.refreshMonsterSearchState(monsterSearch);
     };
 
     searchAlignmentAdjustment = (alignments) => {
         let monsterSearch = this.state.monsterSearch;
         monsterSearch.alignments = alignments;
         this.setState({monsterSearch: monsterSearch});
-        //this.refreshMonsterSearchState(monsterSearch);
+        this.refreshMonsterSearchState(monsterSearch);
     };
 
     searchSliderAdjustment = (event, checked) => {
