@@ -25,6 +25,10 @@ Upcoming features:
 - Filter by movement type (move, burrow, fly, swim)
 - Filter by alignment (need to add this if we do this)
 - Filter by types
+- lair actions details
+- regional effects details
+- innateSpellCasting details
+- spellcasting details
 
 Ian feedback Nice to Have:
 - Mark turn over option
