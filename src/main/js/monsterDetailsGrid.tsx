@@ -70,6 +70,13 @@ const styles = createStyles({
   InlineStats: {
      marginBottom: '1em',
   },
+  InlineList: {
+      margin: '0 0 10px',
+      padding: '0 20px',
+  },
+  InlineListItem: {
+    margin: '0 0 5px',
+  },
   EntryTitle: {
     fontWeight: 'bold',
     fontStyle: 'italic',
@@ -165,6 +172,38 @@ class MonsterDetailsGrid extends React.Component<any, State> {
 
             return itemRows;
         }
+    };
+
+    getLairActions = (actionList, subHeaderName) => {
+        const itemRows = [
+            <TableRow className={this.props.classes.row}>
+                <TableCell className={`this.props.classes.tableCell ${this.props.classes.titles}`} colSpan={6}>
+                    <span>{subHeaderName}</span>
+                </TableCell>
+            </TableRow>
+        ];
+        itemRows.push(
+            <TableRow className={this.props.classes.row}>
+                <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                    <div className={this.props.classes.InlineStats}>
+                    {
+                        actionList.map(item => {
+                            if (!item.actionList.length)
+                                return (<span>{item.action}<br/></span>);
+                            else
+                                return (<ul className={this.props.classes.InlineList}>{
+                                            item.actionList.map((items, index) => {
+                                                return  <li className={this.props.classes.InlineListItem}>{items}</li>
+                                            })
+                                       }</ul>);
+                        })
+                    }
+                    </div>
+                </TableCell>
+            </TableRow>
+        );
+
+        return itemRows;
     };
 
     getVariant  = (item) => {
@@ -852,6 +891,9 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                 : "" )}
                 {((Array.isArray(monster.legendaryAction) && monster.legendaryAction.length) ?
                     this.getActions(monster.legendaryAction, "Legendary Actions")
+                : "" )}
+                {((Array.isArray(monster.lairActions) && monster.lairActions.length) ?
+                    this.getLairActions(monster.lairActions, "Lair Actions")
                 : "" )}
                 {((Array.isArray(monster.variants) && monster.variants.length) ?
                     <TableRow className={this.props.classes.row}>
