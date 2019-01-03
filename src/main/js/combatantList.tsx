@@ -86,8 +86,6 @@ interface State {
     open: boolean;
     monster?: Monster;
     combatants?: any; //TODO figure out type
-    selected: number[];
-    endOfRound: boolean;
 }
 
 class CombatantList extends React.Component<any, State> {
@@ -101,29 +99,17 @@ class CombatantList extends React.Component<any, State> {
             open: false,
             monster: null,
             combatants: [],
-            selected: [],
-            endOfRound: false,
         };
     };
 
     componentWillReceiveProps = (nextProps) => {
         if(nextProps.combatants !== this.props.combatants){
-            let start = [];
-            nextProps.combatants.map((combatant, index) => {
-                if (index === 0)
-                    start.push(combatant.id);
-            })
-            this.setState({combatants: nextProps.combatants, endOfRound: false, selected: start});
+            this.setState({combatants: nextProps.combatants});
         }
     };
 
     componentWillMount = () => {
-        let start = [];
-        this.props.combatants.map((combatant, index) => {
-            if (index === 0)
-                start.push(combatant.id);
-        })
-        this.setState({combatants: this.props.combatants, endOfRound: false, selected: start});
+        this.setState({combatants: this.props.combatants});
     };
 
     handleOpen = () => {
@@ -197,24 +183,21 @@ class CombatantList extends React.Component<any, State> {
     };
 
     nextSelectedRow = () => {
-        if (this.state.selected.length) {
-            const oldRow = this.state.selected[0];
+        if (this.props.selected.length) {
+            const oldRow = this.props.selected[this.props.selected.length - 1];
             const newRow = this.combatantRows.findIndex(k => k == oldRow);
 
+            let array = this.props.selected;
+            array.push(this.combatantRows[newRow + 1]);
+
             if (newRow + 2 === this.combatantRows.length)
-                this.setState({selected: [this.combatantRows[newRow + 1]], endOfRound: true});
-            else if (newRow + 1 === this.combatantRows.length)
-                this.setState({selected: [this.combatantRows[0]]});
+                this.props.updateSelectedRow(array, true);
             else
-                this.setState({selected: [this.combatantRows[newRow + 1]]});
+                this.props.updateSelectedRow(array, this.props.endOfRound);
         }
         else {
-            this.setState({selected: [this.combatantRows[0]]});
+            this.props.updateSelectedRow([this.combatantRows[0]], this.props.endOfRound);
         }
-    };
-
-    isSelected = (id) => {
-        return this.state.selected.indexOf(id) !== -1;
     };
 
     combatantRows = [];
@@ -240,7 +223,7 @@ class CombatantList extends React.Component<any, State> {
                         <TableBody>
                             {this.state.combatants.map(combatant => {
                                 this.combatantRows.push(combatant.id);
-                                const isSelected = this.isSelected(combatant.id);
+                                const isSelected = this.props.selected[this.props.selected.length - 1] === combatant.id;
                                 return (
                                     <TableRow
                                         classes={{
@@ -284,8 +267,8 @@ class CombatantList extends React.Component<any, State> {
                         </TableBody>
                     </Table>
                 </Paper>
-                <Button onClick={this.handleOpen} color="primary" className={!this.state.endOfRound ? this.props.classes.newRound : ""} style={{marginTop: 10}}>New Round</Button>
-                <Button onClick={this.nextSelectedRow} color="secondary" className={this.state.endOfRound ? this.props.classes.newRound : ""} style={{marginTop: 10}}>Next Combatant</Button>
+                <Button onClick={this.handleOpen} color="primary" className={!this.props.endOfRound ? this.props.classes.newRound : ""} style={{marginTop: 10}}>New Round</Button>
+                <Button onClick={this.nextSelectedRow} color="secondary" className={this.props.endOfRound ? this.props.classes.newRound : ""} style={{marginTop: 10}}>Next Combatant</Button>
                 <NewRoundForm
                     combatants={this.props.combatants}
                     newRound={this.props.newRound}
