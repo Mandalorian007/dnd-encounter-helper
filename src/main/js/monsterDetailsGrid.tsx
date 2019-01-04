@@ -206,6 +206,63 @@ class MonsterDetailsGrid extends React.Component<any, State> {
         return itemRows;
     };
 
+    getRegionalEffects = (actionList, subHeaderName) => {
+        let regionalTable = null;
+
+        const itemRows = [
+            <TableRow className={this.props.classes.row}>
+                <TableCell className={`this.props.classes.tableCell ${this.props.classes.titles}`} colSpan={6}>
+                    <span>{subHeaderName}</span>
+                </TableCell>
+            </TableRow>
+        ];
+        itemRows.push(
+            <TableRow className={this.props.classes.row}>
+                <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                    <div className={this.props.classes.InlineStats}>
+                    {
+                        actionList.map(item => {
+                            if (!item.effects.length && item.regionalTable.tableDescription === null)
+                                return (<span>{item.effect}<br/></span>);
+                            else if (item.regionalTable.tableDescription != null)
+                                regionalTable = item;
+                            else
+                                return (
+                                    <ul className={this.props.classes.InlineList}>
+                                    {
+                                        item.effects.map((items, index) => {
+                                            return  <li className={this.props.classes.InlineListItem}>{items}</li>
+                                        })
+                                    }
+                                    </ul>);
+                        })
+                    }
+                    </div>
+                </TableCell>
+            </TableRow>
+        );
+
+        if (regionalTable != null) {
+            itemRows.push(
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={`this.props.classes.tableCell ${this.props.classes.titles}`} colSpan={6}>
+                        <span>{regionalTable.regionalTable.caption}</span>
+                    </TableCell>
+                </TableRow>);
+
+            itemRows.push(
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <div className={this.props.classes.InlineStats}>
+                            <span>{regionalTable.regionalTable.tableDescription}<br/></span>
+                        </div>
+                    </TableCell>
+                </TableRow>);
+        }
+
+        return itemRows;
+    };
+
     getVariant  = (item) => {
         if (item.type != null)
         {
@@ -894,6 +951,9 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                 : "" )}
                 {((Array.isArray(monster.lairActions) && monster.lairActions.length) ?
                     this.getLairActions(monster.lairActions, "Lair Actions")
+                : "" )}
+                {((Array.isArray(monster.regionalEffects) && monster.regionalEffects.length) ?
+                    this.getRegionalEffects(monster.regionalEffects, "Regional Effects")
                 : "" )}
                 {((Array.isArray(monster.variants) && monster.variants.length) ?
                     <TableRow className={this.props.classes.row}>
