@@ -41,6 +41,8 @@ const encounterStyles = ({ zIndex, palette, spacing, mixins }: Theme) => createS
 interface State {
     contentTarget: string;
     combatants: Combatant[];
+    selected: number[];
+    endOfRound: boolean;
 }
 
 class EncounterDrawer extends React.Component<any, State> {
@@ -53,6 +55,8 @@ class EncounterDrawer extends React.Component<any, State> {
         return {
             contentTarget: "combatant",
             combatants: [],
+            selected: [],
+            endOfRound: false,
         };
     };
 
@@ -63,7 +67,35 @@ class EncounterDrawer extends React.Component<any, State> {
     refreshCombatantsState = () => {
         fetch(`${API_ROOT}/combatants`)
             .then(results => results.json())
-            .then(data => this.setState({combatants: data}));
+            .then(data => {
+                let endOfRound = this.state.endOfRound;
+                let select = this.state.selected;
+                let counter = false;
+
+                data.map((combatant, index) => {
+                    //select first combatant when initalize app
+                    if (index === 0 && !select.length)
+                        select = [combatant.id];
+
+                    //if combatants added when last combatant was selected
+                    if (!this.state.selected.indexOf(combatant.id))
+                        endOfRound = false;
+
+                    //if current player dies
+                    if (combatant.id === this.state.selected[this.state.selected.length - 1])
+                        counter = true;
+
+                    //if player becomes last
+                    if ((index + 1 === data.length) && (combatant.id === this.state.selected[this.state.selected.length - 1]))
+                        endOfRound = true;
+                })
+
+                //continue if current player dies
+                if (!counter)
+                    this.state.selected.splice(-1, 1);
+
+                this.setState({combatants: data, selected: select, endOfRound: endOfRound})
+            });
     };
 
     createCombatant = (combatant) => {
@@ -140,7 +172,14 @@ class EncounterDrawer extends React.Component<any, State> {
             body: JSON.stringify(obj)
         }).catch(err => err)
             .then(results => results.json())
-            .then(data => this.setState({combatants: data}));
+            .then(data => {
+                let combatants = null;
+                data.map((combatant, index) => {
+                    if (index === 0)
+                        combatants = combatant.id;
+                    })
+                this.setState({combatants: data, selected: [combatants], endOfRound: false})
+            });
     };
 
     navigateBack = () => {
@@ -151,10 +190,14 @@ class EncounterDrawer extends React.Component<any, State> {
         this.setState({contentTarget: screen});
     };
 
+    updateSelectedRow = (row, round) => {
+        this.setState({selected: row, endOfRound: round});
+    };
+
     // Display assistance
     getContent = () => {
         if(this.state.contentTarget == "combatant") {
-            return <CombatantList combatants={this.state.combatants} newRound={this.newRound} updateCombatant={this.updateCombatant} deleteCombatant={this.deleteCombatant}/>;
+            return <CombatantList combatants={this.state.combatants} selected={this.state.selected} endOfRound={this.state.endOfRound} newRound={this.newRound} updateSelectedRow={this.updateSelectedRow} updateCombatant={this.updateCombatant} deleteCombatant={this.deleteCombatant}/>;
         }
         if(this.state.contentTarget == "new-combatant") {
             return <NewFixedStatCombatantForm createCombatant={this.createCombatant} navigateBack={this.navigateBack}/>;

@@ -25,12 +25,10 @@ Upcoming features:
 - Filter by movement type (move, burrow, fly, swim)
 - Filter by alignment (need to add this if we do this)
 - Filter by types
-- lair actions details
-- regional effects details
+- regional effects regionalTable
 - spellcasting details
 
 Ian feedback Nice to Have:
-- Mark turn over option
 - Condition tracking feature
 - Condition expiry feature
 - Would like changeable art
@@ -41,3 +39,6 @@ Universalize:
 - Dark mode
 - Refresh Initiative with round
 - Scrolling search
+
+Bugs:
+- Search for Fraz-Urb'luu multi appear and stay (think its from special characters)

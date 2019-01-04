@@ -46,6 +46,12 @@ const combatantStyles = ({ palette, spacing }: Theme) => createStyles({
             backgroundColor: palette.background.default,
         },
     },
+    selectedRow: {
+      backgroundColor: '#c2e4a3 !important',
+    },
+    newRound: {
+        display: 'none',
+    },
 });
 
 const tableStyle = ({ palette }: Theme) => createStyles({
@@ -98,7 +104,7 @@ class CombatantList extends React.Component<any, State> {
 
     componentWillReceiveProps = (nextProps) => {
         if(nextProps.combatants !== this.props.combatants){
-             this.setState({combatants: nextProps.combatants});
+            this.setState({combatants: nextProps.combatants});
         }
     };
 
@@ -176,7 +182,28 @@ class CombatantList extends React.Component<any, State> {
         }
     };
 
+    nextSelectedRow = () => {
+        if (this.props.selected.length) {
+            const oldRow = this.props.selected[this.props.selected.length - 1];
+            const newRow = this.combatantRows.findIndex(k => k == oldRow);
+
+            let array = this.props.selected;
+            array.push(this.combatantRows[newRow + 1]);
+
+            if (newRow + 2 === this.combatantRows.length)
+                this.props.updateSelectedRow(array, true);
+            else
+                this.props.updateSelectedRow(array, this.props.endOfRound);
+        }
+        else {
+            this.props.updateSelectedRow([this.combatantRows[0]], this.props.endOfRound);
+        }
+    };
+
+    combatantRows = [];
+
     render() {
+        this.combatantRows = [];
         return (
             <div>
                 <Paper className={this.props.classes.root}>
@@ -195,8 +222,18 @@ class CombatantList extends React.Component<any, State> {
                         </TableHead>
                         <TableBody>
                             {this.state.combatants.map(combatant => {
+                                this.combatantRows.push(combatant.id);
+                                const isSelected = this.props.selected[this.props.selected.length - 1] === combatant.id;
                                 return (
-                                    <TableRow className={this.props.classes.row} key={combatant.id}>
+                                    <TableRow
+                                        classes={{
+                                            root: this.props.classes.row,
+                                            selected: this.props.classes.selectedRow,
+                                        }}
+                                        key={combatant.id}
+                                        aria-checked={isSelected}
+                                        selected={isSelected}
+                                    >
                                         <CustomTableCell>
                                             <Avatar className={combatant.npc ? this.props.classes.npcStyle : this.props.classes.playerStyle}>
                                                 {combatant.npc ? 'N' : 'P'}</Avatar>
@@ -230,7 +267,8 @@ class CombatantList extends React.Component<any, State> {
                         </TableBody>
                     </Table>
                 </Paper>
-                <Button onClick={this.handleOpen} color="primary" style={{marginTop: 10}}>New Round</Button>
+                <Button onClick={this.handleOpen} color="primary" className={!this.props.endOfRound ? this.props.classes.newRound : ""} style={{marginTop: 10}}>New Round</Button>
+                <Button onClick={this.nextSelectedRow} color="secondary" className={this.props.endOfRound ? this.props.classes.newRound : ""} style={{marginTop: 10}}>Next Combatant</Button>
                 <NewRoundForm
                     combatants={this.props.combatants}
                     newRound={this.props.newRound}
