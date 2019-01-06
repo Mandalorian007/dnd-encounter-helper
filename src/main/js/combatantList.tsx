@@ -21,9 +21,10 @@ import {API_ROOT} from "./api-config";
 
 const combatantStyles = ({ palette, spacing }: Theme) => createStyles({
     root: {
-        width: '100%',
+        width: '90%',
         marginTop: spacing.unit,
         overflowX: 'auto',
+        marginLeft: 'auto',
     },
     table: {
         minWidth: 700,
@@ -51,6 +52,13 @@ const combatantStyles = ({ palette, spacing }: Theme) => createStyles({
     },
     newRound: {
         display: 'none',
+    },
+    nextCombatant: {
+        position: 'absolute',
+        left: '-17px',
+    },
+    relative: {
+        position: 'relative',
     },
 });
 
@@ -130,9 +138,13 @@ class CombatantList extends React.Component<any, State> {
         this.setState({monster: null});
     };
 
-    handleKeyPress = (combatantId, dataType, e) => {
+    handleKeyPress = (combatantId, combatantMaxHP, dataType, e) => {
         if (e.keyCode === 13) {
             let value = math.eval(e.target.value);
+
+            if (value > combatantMaxHP)
+                value = combatantMaxHP;
+
             this.handleChange(combatantId, dataType, value);
         }
     };
@@ -172,6 +184,11 @@ class CombatantList extends React.Component<any, State> {
             return '#FFFFFF';
     };
 
+    getPosition = () => {
+        let value = math.eval(72 * this.props.selected.length);
+        return value + 'px';
+    };
+
     getDetailContent = () => {
         if(this.state.monster != null) {
             return <MonsterDetailsGrid
@@ -205,7 +222,7 @@ class CombatantList extends React.Component<any, State> {
     render() {
         this.combatantRows = [];
         return (
-            <div>
+            <div className={this.props.classes.relative}>
                 <Paper className={this.props.classes.root}>
                     <Table className={this.props.classes.table}>
                         <TableHead>
@@ -246,7 +263,7 @@ class CombatantList extends React.Component<any, State> {
                                                                 value={combatant.armourClass} /></CustomTableCell>
                                         <CustomTableCell>
                                             <input type='text' id={"row" + combatant.id} style={{backgroundColor: this.getHighlight(combatant.currentHp, combatant.maxHp)}} onChange={(e) => this.handleChange(combatant.id, "currentHp", e.target.value)}
-                                                   value={combatant.currentHp} onKeyDown={(e) => this.handleKeyPress(combatant.id, "currentHp", e)} />
+                                                   value={combatant.currentHp} onKeyDown={(e) => this.handleKeyPress(combatant.id, combatant.maxHp, "currentHp", e)} />
                                             <span style={{paddingLeft: "10px"}}>/{combatant.maxHp}</span>
                                         </CustomTableCell>
                                         <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "passivePerception", e.target.value)}
@@ -267,8 +284,8 @@ class CombatantList extends React.Component<any, State> {
                         </TableBody>
                     </Table>
                 </Paper>
-                <Button onClick={this.handleOpen} color="primary" className={!this.props.endOfRound ? this.props.classes.newRound : ""} style={{marginTop: 10}}>New Round</Button>
-                <Button onClick={this.nextSelectedRow} color="secondary" className={this.props.endOfRound ? this.props.classes.newRound : ""} style={{marginTop: 10}}>Next Combatant</Button>
+                <Button onClick={this.handleOpen} color="primary" style={{marginTop: 10}}>New Round</Button>
+                <Button onClick={this.nextSelectedRow} color="secondary" className={this.props.endOfRound ? this.props.classes.newRound : this.props.classes.nextCombatant} style={{top: this.getPosition()}}>Next Combatant</Button>
                 <NewRoundForm
                     combatants={this.props.combatants}
                     newRound={this.props.newRound}
