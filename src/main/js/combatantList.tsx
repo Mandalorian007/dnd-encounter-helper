@@ -21,7 +21,7 @@ import {API_ROOT} from "./api-config";
 
 const combatantStyles = ({ palette, spacing }: Theme) => createStyles({
     root: {
-        width: '90%',
+        width: '95%',
         marginTop: spacing.unit,
         overflowX: 'auto',
         marginLeft: 'auto',
@@ -55,7 +55,7 @@ const combatantStyles = ({ palette, spacing }: Theme) => createStyles({
     },
     nextCombatant: {
         position: 'absolute',
-        left: '-17px',
+        left: '-5px',
     },
     relative: {
         position: 'relative',
@@ -185,7 +185,14 @@ class CombatantList extends React.Component<any, State> {
     };
 
     getPosition = () => {
-        let value = math.eval(72 * this.props.selected.length);
+        let x = 0;
+
+        if (this.props.selected.length > 1)
+            x = this.props.selected.length - 1;
+
+        let y = x * 71;
+        let value = y + 74;
+
         return value + 'px';
     };
 
@@ -285,7 +292,7 @@ class CombatantList extends React.Component<any, State> {
                     </Table>
                 </Paper>
                 <Button onClick={this.handleOpen} color="primary" style={{marginTop: 10}}>New Round</Button>
-                <Button onClick={this.nextSelectedRow} color="secondary" className={this.props.endOfRound ? this.props.classes.newRound : this.props.classes.nextCombatant} style={{top: this.getPosition()}}>Next Combatant</Button>
+                <Button onClick={this.nextSelectedRow} color="secondary" className={this.props.endOfRound ? this.props.classes.newRound : this.props.classes.nextCombatant} style={{top: this.getPosition()}}>Next</Button>
                 <NewRoundForm
                     combatants={this.props.combatants}
                     newRound={this.props.newRound}
