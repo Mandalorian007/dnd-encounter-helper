@@ -20,7 +20,6 @@
     "@types/react-dom": "^16.0.7",
     "classnames": "^2.2.6",
     "css-loader": "^1.0.0",
-    "material-ui": "^0.20.2",
     "mathjs": "^5.1.1",
     "postcss-loader": "^2.1.6",
     "rc-slider": "^8.6.1",
