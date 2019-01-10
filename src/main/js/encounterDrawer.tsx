@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import * as colors from '@material-ui/core/colors';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import CombatantList from "./combatantList";
 import NewFixedStatCombatantForm from "./newFixedStatCombatantForm";
 import NewNpcsFromTemplateForm from "./newNpcsFromTemplateForm";
@@ -49,7 +50,9 @@ interface State {
     combatants: Combatant[];
     selected: number[];
     endOfRound: boolean;
-    theme: any;
+    ThemeType: any;
+    PrimaryColor: any;
+    SecondaryColor: any;
 }
 
 class EncounterDrawer extends React.Component<any, State> {
@@ -64,7 +67,9 @@ class EncounterDrawer extends React.Component<any, State> {
             combatants: [],
             selected: [],
             endOfRound: false,
-            theme: 'light',
+            ThemeType: 'light',
+            PrimaryColor: "#3f51b5",
+            SecondaryColor: "#f50057",
         };
     };
 
@@ -224,10 +229,10 @@ class EncounterDrawer extends React.Component<any, State> {
     };
 
     handleToggle = (event) => {
-        if (this.state.theme == 'light') {
-            this.setState({theme: 'dark'});
+        if (this.state.ThemeType == 'light') {
+            this.setState({ThemeType: 'dark'});
         } else {
-            this.setState({theme: 'light'});
+            this.setState({ThemeType: 'light'});
         }
     };
 
@@ -235,8 +240,9 @@ class EncounterDrawer extends React.Component<any, State> {
         const { classes } = this.props;
         const theme = createMuiTheme({
             palette: {
-                type: this.state.theme,
-                primary: colors['darkblue'],
+                type: this.state.ThemeType,
+                primary: colors[this.state.PrimaryColor],
+                secondary: colors[this.state.SecondaryColor],
             },
             typography: {
                 useNextVariants: true,
@@ -246,6 +252,7 @@ class EncounterDrawer extends React.Component<any, State> {
         return (
     <MuiThemeProvider theme={theme}>
             <div className={classes.root}>
+                <CssBaseline />
                 <AppBar position="absolute" className={classes.appBar}>
                     <Toolbar>
                         <Typography variant="h6" color="inherit" className={classes.grow}>
@@ -256,7 +263,7 @@ class EncounterDrawer extends React.Component<any, State> {
                         </Typography>
                         <Switch
                             name="theme"
-                            checked={this.state.theme == 'light'}
+                            checked={this.state.ThemeType == 'light'}
                             onChange={this.handleToggle}
                         />
                     </Toolbar>
