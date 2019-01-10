@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import {Theme, withStyles, createStyles} from "@material-ui/core/styles";
+import {Theme, MuiThemeProvider, createMuiTheme, withStyles, createStyles} from "@material-ui/core/styles";
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,33 +9,39 @@ import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import * as colors from '@material-ui/core/colors';
 import CombatantList from "./combatantList";
 import NewFixedStatCombatantForm from "./newFixedStatCombatantForm";
 import NewNpcsFromTemplateForm from "./newNpcsFromTemplateForm";
 import {API_ROOT} from "./api-config";
 
 const encounterStyles = ({ zIndex, palette, spacing, mixins }: Theme) => createStyles({
-  root: {
-    flexGrow: 1,
-    zIndex: 1,
-    overflow: 'hidden',
-    position: 'relative',
-    display: 'flex',
-  },
-  appBar: {
-    zIndex: zIndex.drawer + 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    width: 240,
-  },
-  content: {
-    flexGrow: 1,
-    backgroundColor: palette.background.default,
-    padding: spacing.unit * 3,
-    minWidth: 0, // So the Typography noWrap works
-  },
-  toolbar: mixins.toolbar,
+    root: {
+        flexGrow: 1,
+        zIndex: 1,
+        overflow: 'hidden',
+        position: 'relative',
+        display: 'flex',
+    },
+    appBar: {
+        zIndex: zIndex.drawer + 1,
+    },
+    grow: {
+        flexGrow: 1,
+    },
+    drawerPaper: {
+        position: 'relative',
+        width: 240,
+    },
+    content: {
+        flexGrow: 1,
+        backgroundColor: palette.background.default,
+        padding: spacing.unit * 3,
+        minWidth: 0, // So the Typography noWrap works
+    },
+    toolbar: mixins.toolbar,
 });
 
 interface State {
@@ -43,6 +49,7 @@ interface State {
     combatants: Combatant[];
     selected: number[];
     endOfRound: boolean;
+    theme: any;
 }
 
 class EncounterDrawer extends React.Component<any, State> {
@@ -57,6 +64,7 @@ class EncounterDrawer extends React.Component<any, State> {
             combatants: [],
             selected: [],
             endOfRound: false,
+            theme: 'light',
         };
     };
 
@@ -215,15 +223,42 @@ class EncounterDrawer extends React.Component<any, State> {
         }
     };
 
+    handleToggle = (event) => {
+        if (this.state.theme == 'light') {
+            this.setState({theme: 'dark'});
+        } else {
+            this.setState({theme: 'light'});
+        }
+    };
+
     render() {
         const { classes } = this.props;
+        const theme = createMuiTheme({
+            palette: {
+                type: this.state.theme,
+                primary: colors['darkblue'],
+            },
+            typography: {
+                useNextVariants: true,
+            },
+        });
+
         return (
+    <MuiThemeProvider theme={theme}>
             <div className={classes.root}>
                 <AppBar position="absolute" className={classes.appBar}>
                     <Toolbar>
-                        <Typography variant="title" color="inherit" noWrap>
+                        <Typography variant="h6" color="inherit" className={classes.grow}>
                             D&D Encounter Helper
                         </Typography>
+                        <Typography color="inherit">
+                            Switch Theme
+                        </Typography>
+                        <Switch
+                            name="theme"
+                            checked={this.state.theme == 'light'}
+                            onChange={this.handleToggle}
+                        />
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -251,6 +286,7 @@ class EncounterDrawer extends React.Component<any, State> {
                     {this.getContent()}
                 </main>
             </div>
+    </MuiThemeProvider>
         )
     }
 }
