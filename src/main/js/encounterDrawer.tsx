@@ -11,7 +11,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import * as colors from '@material-ui/core/colors';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CombatantList from "./combatantList";
 import NewFixedStatCombatantForm from "./newFixedStatCombatantForm";
@@ -36,9 +37,12 @@ const encounterStyles = ({ zIndex, palette, spacing, mixins }: Theme) => createS
         position: 'relative',
         width: 240,
     },
+    spacing: {
+        margin: spacing.unit,
+        padding: '0 10px',
+    },
     content: {
         flexGrow: 1,
-        backgroundColor: palette.background.default,
         padding: spacing.unit * 3,
         minWidth: 0, // So the Typography noWrap works
     },
@@ -228,12 +232,11 @@ class EncounterDrawer extends React.Component<any, State> {
         }
     };
 
-    handleToggle = (event) => {
-        if (this.state.ThemeType == 'light') {
-            this.setState({ThemeType: 'dark'});
-        } else {
-            this.setState({ThemeType: 'light'});
-        }
+    handleChange = (event) => {
+        if (event.target.name == 'PrimaryColor')
+            this.setState({PrimaryColor : event.target.value });
+        if (event.target.name == 'ThemeType')
+            this.setState({ThemeType : event.target.value });
     };
 
     render() {
@@ -241,8 +244,12 @@ class EncounterDrawer extends React.Component<any, State> {
         const theme = createMuiTheme({
             palette: {
                 type: this.state.ThemeType,
-                primary: colors[this.state.PrimaryColor],
-                secondary: colors[this.state.SecondaryColor],
+                primary: {
+                    main: this.state.PrimaryColor,
+                },
+                secondary: {
+                    main: this.state.SecondaryColor,
+                },
             },
             typography: {
                 useNextVariants: true,
@@ -261,11 +268,29 @@ class EncounterDrawer extends React.Component<any, State> {
                         <Typography color="inherit">
                             Switch Theme
                         </Typography>
-                        <Switch
-                            name="theme"
-                            checked={this.state.ThemeType == 'light'}
-                            onChange={this.handleToggle}
-                        />
+                        <Select
+                            className={classes.spacing}
+                            value={this.state.PrimaryColor}
+                            onChange={this.handleChange}
+                            inputProps={{
+                                name: 'PrimaryColor',
+                            }}
+                        >
+                            <MenuItem value='#3f51b5'>Blue</MenuItem>
+                            <MenuItem value='#ff9800'>Orange</MenuItem>
+                            <MenuItem value='#e91e63'>Red</MenuItem>
+                        </Select>
+                        <Select
+                            className={classes.spacing}
+                            value={this.state.ThemeType}
+                            onChange={this.handleChange}
+                            inputProps={{
+                                name: 'ThemeType',
+                            }}
+                        >
+                            <MenuItem value='light'>Light</MenuItem>
+                            <MenuItem value='dark'>Dark</MenuItem>
+                        </Select>
                     </Toolbar>
                 </AppBar>
                 <Drawer
