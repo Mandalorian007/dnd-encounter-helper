@@ -26,7 +26,7 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
     //Name
     String partialName =
         monsterSearch.getPartialName() == null ? "" : monsterSearch.getPartialName();
-    partialName = partialName.toLowerCase();
+    partialName = partialName.toLowerCase().replaceAll("'", "''");
     if (partialName.length() > 0) {
       //Exact match
       queryBuilder.append(" WHERE (LOWER(m.NAME) = '");

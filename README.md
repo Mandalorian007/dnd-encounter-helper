@@ -22,11 +22,6 @@ Finally open your web browser and navigate to: `localhost:8080`
 
 Upcoming features:
 - CR scale
-- Filter by movement type (move, burrow, fly, swim)
-- Filter by alignment (need to add this if we do this)
-- Filter by types
-- regional effects regionalTable
-- spellcasting details
 
 Ian feedback Nice to Have:
 - Condition tracking feature
@@ -41,4 +36,3 @@ Universalize:
 - Scrolling search
 
 Bugs:
-- Search for Fraz-Urb'luu multi appear and stay (think its from special characters)
