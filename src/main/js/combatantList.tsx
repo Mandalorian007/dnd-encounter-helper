@@ -11,6 +11,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Clear';
 import InfoIcon from '@material-ui/icons/Info';
+import TextField from '@material-ui/core/TextField';
 import NewRoundForm from "./newRoundForm";
 import * as math from 'mathjs';
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
@@ -59,6 +60,11 @@ const combatantStyles = ({ palette, spacing }: Theme) => createStyles({
     },
     relative: {
         position: 'relative',
+    },
+    textField: {
+        backgroundColor: palette.background.paper,
+        border: '.5px solid',
+        width: '100px',
     },
 });
 
@@ -179,9 +185,9 @@ class CombatantList extends React.Component<any, State> {
         if (val <= 0.25)
             return '#FF0000';
         else if (val <= 0.50)
-            return 'orange';
+            return '#FFB93A';
         else
-            return '#FFFFFF';
+            return '';
     };
 
     getPosition = () => {
@@ -266,17 +272,23 @@ class CombatantList extends React.Component<any, State> {
                                             {combatant.name}
                                         </CustomTableCell>
                                         <CustomTableCell>{combatant.currentInitiative}</CustomTableCell>
-                                        <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "armourClass", e.target.value)}
-                                                                value={combatant.armourClass} /></CustomTableCell>
                                         <CustomTableCell>
-                                            <input type='text' id={"row" + combatant.id} style={{backgroundColor: this.getHighlight(combatant.currentHp, combatant.maxHp)}} onChange={(e) => this.handleChange(combatant.id, "currentHp", e.target.value)}
-                                                   value={combatant.currentHp} onKeyDown={(e) => this.handleKeyPress(combatant.id, combatant.maxHp, "currentHp", e)} />
+                                            <TextField onChange={(e) => this.handleChange(combatant.id, "armourClass", e.target.value)}
+                                                value={combatant.armourClass} className={this.props.classes.textField} />
+                                        </CustomTableCell>
+                                        <CustomTableCell>
+                                            <TextField id={"row" + combatant.id} className={this.props.classes.textField} style={{backgroundColor: this.getHighlight(combatant.currentHp, combatant.maxHp)}} onChange={(e) => this.handleChange(combatant.id, "currentHp", e.target.value)}
+                                                value={combatant.currentHp} onKeyDown={(e) => this.handleKeyPress(combatant.id, combatant.maxHp, "currentHp", e)} />
                                             <span style={{paddingLeft: "10px"}}>/{combatant.maxHp}</span>
                                         </CustomTableCell>
-                                        <CustomTableCell><input type='text' onChange={(e) => this.handleChange(combatant.id, "passivePerception", e.target.value)}
-                                                                value={combatant.passivePerception} /></CustomTableCell>
-                                        <CustomTableCell><textarea rows={3} onChange={(e) => this.handleChange(combatant.id, "comment", e.target.value)}
-                                                                   value={combatant.comment} /></CustomTableCell>
+                                        <CustomTableCell>
+                                            <TextField onChange={(e) => this.handleChange(combatant.id, "passivePerception", e.target.value)}
+                                                value={combatant.passivePerception} className={this.props.classes.textField} />
+                                        </CustomTableCell>
+                                        <CustomTableCell>
+                                            <TextField multiline rowsMax="3" onChange={(e) => this.handleChange(combatant.id, "comment", e.target.value)}
+                                                value={combatant.comment} className={this.props.classes.textField} style={{width: "300px"}} />
+                                        </CustomTableCell>
                                         <CustomTableCell>
                                             <Button variant="fab" color="secondary" className={this.props.classes.button} onClick={() => this.props.deleteCombatant(combatant.id)}>
                                                 <DeleteIcon />
