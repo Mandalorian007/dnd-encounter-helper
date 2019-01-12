@@ -170,6 +170,12 @@ public class MonsterConverter {
         speed.setBurrowCondition(jsonBurrow.getCondition());
       }
       //Climb
+      JsonSpeedData jsonClimb = jsonSpeed.getClimb();
+      if(jsonClimb != null) {
+        speed.setClimb(jsonClimb.getNumber());
+        speed.setClimbCondition(jsonClimb.getCondition());
+      }
+      //Fly
       JsonSpeedData jsonFly = jsonSpeed.getFly();
       if(jsonFly != null) {
         speed.setFly(jsonFly.getNumber());
@@ -577,6 +583,7 @@ public class MonsterConverter {
                   spellcasting.setNinthLevelSlot(ninthLevel.getSlots());
                   spellcasting.setNinthLevel(Arrays.asList(ninthLevel.getSpells()));
                 }
+                monster.setSpellcasting(spellcasting);
               } else {
                 throw new RuntimeException(
                     "Cannot properly parse spellcasting for: "
