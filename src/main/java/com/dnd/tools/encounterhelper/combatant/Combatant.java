@@ -1,10 +1,11 @@
 package com.dnd.tools.encounterhelper.combatant;
 
-import javax.persistence.GeneratedValue;
-import lombok.Data;
-
+import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import lombok.Data;
 
 @Data
 @Entity
@@ -24,5 +25,8 @@ public class Combatant {
     private int currentHp;
 
     private String comment;
+
+    @ElementCollection
+    private List<ConditionTracker> conditionTracker;
 
 }
