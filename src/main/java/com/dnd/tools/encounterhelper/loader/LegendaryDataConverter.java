@@ -6,6 +6,7 @@ import com.dnd.tools.encounterhelper.loader.jsonmodel.JsonRegionalTable;
 import com.dnd.tools.encounterhelper.monster.model.LairAction;
 import com.dnd.tools.encounterhelper.monster.model.RegionalEffect;
 import com.dnd.tools.encounterhelper.monster.model.RegionalTable;
+import java.util.Arrays;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,11 +31,11 @@ public class LegendaryDataConverter {
       regionalTable.setTableDescription(jsonRegionalTable.getTableDescription());
       regionalTable.setCaption(jsonRegionalTable.getCaption());
 
-      regionalTable.setColumn1Label(regionalTable.getColumn1Label());
-      regionalTable.setColumn2Label(regionalTable.getColumn2Label());
+      regionalTable.setColumn1Label(jsonRegionalTable.getColumn1Label());
+      regionalTable.setColumn2Label(jsonRegionalTable.getColumn2Label());
 
-      regionalTable.setColumn1Data(regionalTable.getColumn1Data());
-      regionalTable.setColumn2Data(regionalTable.getColumn2Data());
+      regionalTable.setColumn1Data(Arrays.asList(jsonRegionalTable.getColumn1Data()));
+      regionalTable.setColumn2Data(Arrays.asList(jsonRegionalTable.getColumn2Data()));
 
       regionalEffect.setRegionalTable(regionalTable);
     }
