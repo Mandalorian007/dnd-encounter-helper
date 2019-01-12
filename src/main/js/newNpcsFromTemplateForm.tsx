@@ -70,6 +70,9 @@ const styles = ({ palette, spacing }: Theme) => createStyles({
         left: 2,
         fontSize: 16,
     },
+    menu: {
+        backgroundColor: palette.background.paper,
+    },
 });
 
 const sizeSuggestions = [{value: 'Tiny', label: 'Tiny'}, {value: 'Small', label: 'Small' }, {value: 'Medium', label: 'Medium' }, {value: 'Large', label: 'Large' }, {value: 'Huge', label: 'Huge' }, {value: 'Gargantuan', label: 'Gargantuan' }];
@@ -113,6 +116,7 @@ function Option(props) {
       buttonRef={props.innerRef}
       selected={props.isFocused}
       component="div"
+      className={props.selectProps.classes.menu}
       style={{
         fontWeight: props.isSelected ? 500 : 400,
       }}

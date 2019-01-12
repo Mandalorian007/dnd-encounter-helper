@@ -31,11 +31,11 @@ const combatantStyles = ({ palette, spacing }: Theme) => createStyles({
     },
     npcStyle: {
         margin: 10,
-        backgroundColor: 'orange',
+        backgroundColor: '#ffb93a',
     },
     playerStyle: {
         margin: 10,
-        backgroundColor: 'blue',
+        backgroundColor: '#6363ff',
     },
     button: {
         margin: '10px',

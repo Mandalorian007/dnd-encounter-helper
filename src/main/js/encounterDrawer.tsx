@@ -235,6 +235,8 @@ class EncounterDrawer extends React.Component<any, State> {
     handleChange = (event) => {
         if (event.target.name == 'PrimaryColor')
             this.setState({PrimaryColor : event.target.value });
+        if (event.target.name == 'SecondaryColor')
+            this.setState({ SecondaryColor: event.target.value });
         if (event.target.name == 'ThemeType')
             this.setState({ThemeType : event.target.value });
     };
@@ -279,6 +281,18 @@ class EncounterDrawer extends React.Component<any, State> {
                             <MenuItem value='#3f51b5'>Blue</MenuItem>
                             <MenuItem value='#ff9800'>Orange</MenuItem>
                             <MenuItem value='#e91e63'>Red</MenuItem>
+                        </Select>
+                        <Select
+                            className={classes.spacing}
+                            value={this.state.SecondaryColor}
+                            onChange={this.handleChange}
+                            inputProps={{
+                                name: 'SecondaryColor',
+                            }}
+                        >
+                            <MenuItem value='#76ff03'>Green</MenuItem>
+                            <MenuItem value='#d500f9'>Purple</MenuItem>
+                            <MenuItem value='#f50057'>Red</MenuItem>
                         </Select>
                         <Select
                             className={classes.spacing}
