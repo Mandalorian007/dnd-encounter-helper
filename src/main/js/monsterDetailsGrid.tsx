@@ -498,7 +498,12 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                                 {(monster.type.subTypes != null && monster.type.subTypes != "") ? " (" + monster.type.subTypes + ")" : ""}
                                 {monster.alignment.map((item) =>
                                     {
-                                        return ", " + item.alignment
+                                       return item.alignment.toLowerCase().split('_').map((t, index) => {
+                                            if (index === 0)
+                                                return ", " + t;
+                                            else
+                                                return " " + t;
+                                        });
                                     }
                                 )}
                             </span>
