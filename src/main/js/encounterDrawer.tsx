@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import {Theme, withStyles, createStyles} from "@material-ui/core/styles";
+import {Theme, MuiThemeProvider, createMuiTheme, withStyles, createStyles} from "@material-ui/core/styles";
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,33 +9,44 @@ import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import CombatantList from "./combatantList";
 import NewFixedStatCombatantForm from "./newFixedStatCombatantForm";
 import NewNpcsFromTemplateForm from "./newNpcsFromTemplateForm";
 import {API_ROOT} from "./api-config";
 
 const encounterStyles = ({ zIndex, palette, spacing, mixins }: Theme) => createStyles({
-  root: {
-    flexGrow: 1,
-    zIndex: 1,
-    overflow: 'hidden',
-    position: 'relative',
-    display: 'flex',
-  },
-  appBar: {
-    zIndex: zIndex.drawer + 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    width: 240,
-  },
-  content: {
-    flexGrow: 1,
-    backgroundColor: palette.background.default,
-    padding: spacing.unit * 3,
-    minWidth: 0, // So the Typography noWrap works
-  },
-  toolbar: mixins.toolbar,
+    root: {
+        flexGrow: 1,
+        zIndex: 1,
+        overflow: 'hidden',
+        position: 'relative',
+        display: 'flex',
+    },
+    appBar: {
+        zIndex: zIndex.drawer + 1,
+    },
+    grow: {
+        flexGrow: 1,
+    },
+    drawerPaper: {
+        position: 'relative',
+        width: 240,
+    },
+    spacing: {
+        margin: spacing.unit,
+        padding: '0 10px',
+    },
+    content: {
+        flexGrow: 1,
+        padding: spacing.unit * 3,
+        minWidth: 0, // So the Typography noWrap works
+    },
+    toolbar: mixins.toolbar,
 });
 
 interface State {
@@ -43,6 +54,9 @@ interface State {
     combatants: Combatant[];
     selected: number[];
     endOfRound: boolean;
+    ThemeType: any;
+    PrimaryColor: any;
+    SecondaryColor: any;
 }
 
 class EncounterDrawer extends React.Component<any, State> {
@@ -57,6 +71,9 @@ class EncounterDrawer extends React.Component<any, State> {
             combatants: [],
             selected: [],
             endOfRound: false,
+            ThemeType: 'light',
+            PrimaryColor: "#3f51b5",
+            SecondaryColor: "#f50057",
         };
     };
 
@@ -215,15 +232,79 @@ class EncounterDrawer extends React.Component<any, State> {
         }
     };
 
+    handleChange = (event) => {
+        if (event.target.name == 'PrimaryColor')
+            this.setState({PrimaryColor : event.target.value });
+        if (event.target.name == 'SecondaryColor')
+            this.setState({ SecondaryColor: event.target.value });
+        if (event.target.name == 'ThemeType')
+            this.setState({ThemeType : event.target.value });
+    };
+
     render() {
         const { classes } = this.props;
+        const theme = createMuiTheme({
+            palette: {
+                type: this.state.ThemeType,
+                primary: {
+                    main: this.state.PrimaryColor,
+                },
+                secondary: {
+                    main: this.state.SecondaryColor,
+                },
+            },
+            typography: {
+                useNextVariants: true,
+            },
+        });
+
         return (
+    <MuiThemeProvider theme={theme}>
             <div className={classes.root}>
+                <CssBaseline />
                 <AppBar position="absolute" className={classes.appBar}>
                     <Toolbar>
-                        <Typography variant="title" color="inherit" noWrap>
+                        <Typography variant="h6" color="inherit" className={classes.grow}>
                             D&D Encounter Helper
                         </Typography>
+                        <Typography color="inherit">
+                            Switch Theme
+                        </Typography>
+                        <Select
+                            className={classes.spacing}
+                            value={this.state.PrimaryColor}
+                            onChange={this.handleChange}
+                            inputProps={{
+                                name: 'PrimaryColor',
+                            }}
+                        >
+                            <MenuItem value='#3f51b5'>Blue</MenuItem>
+                            <MenuItem value='#ff9800'>Orange</MenuItem>
+                            <MenuItem value='#e91e63'>Red</MenuItem>
+                        </Select>
+                        <Select
+                            className={classes.spacing}
+                            value={this.state.SecondaryColor}
+                            onChange={this.handleChange}
+                            inputProps={{
+                                name: 'SecondaryColor',
+                            }}
+                        >
+                            <MenuItem value='#76ff03'>Green</MenuItem>
+                            <MenuItem value='#d500f9'>Purple</MenuItem>
+                            <MenuItem value='#f50057'>Red</MenuItem>
+                        </Select>
+                        <Select
+                            className={classes.spacing}
+                            value={this.state.ThemeType}
+                            onChange={this.handleChange}
+                            inputProps={{
+                                name: 'ThemeType',
+                            }}
+                        >
+                            <MenuItem value='light'>Light</MenuItem>
+                            <MenuItem value='dark'>Dark</MenuItem>
+                        </Select>
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -251,6 +332,7 @@ class EncounterDrawer extends React.Component<any, State> {
                     {this.getContent()}
                 </main>
             </div>
+    </MuiThemeProvider>
         )
     }
 }
