@@ -74,7 +74,7 @@ const styles = ({ palette, spacing }: Theme) => createStyles({
     paper: {
         position: 'absolute',
         zIndex: 1,
-        marginTop: theme.spacing.unit,
+        marginTop: spacing.unit,
         left: 0,
         right: 0,
     },
@@ -88,10 +88,10 @@ const typeSuggestions = [{value: 'Aberration', label: 'Aberration'}, {value: 'Be
 {value: 'Dragon', label: 'Dragon' }, {value: 'Elemental', label: 'Elemental' }, {value: 'Fey', label: 'Fey' }, {value: 'Fiend', label: 'Fiend' }, {value: 'Giant', label: 'Giant' },
 {value: 'Humanoid', label: 'Humanoid' }, {value: 'Monstrosity', label: 'Monstrosity' }, {value: 'Ooze', label: 'Ooze' }, {value: 'Plant', label: 'Plant' }, {value: 'Undead', label: 'Undead' }];
 
-const alignmentSuggestions = [{value: 'Lawful Good', label: 'Lawful Good'}, {value: 'Neutral Good', label: 'Neutral Good' }, {value: 'Chaotic Good ', label: 'Chaotic Good ' },
-{value: 'Lawful Neutral', label: 'Lawful Neutral' }, {value: 'Neutral', label: 'Neutral' }, {value: 'Chaotic Neutral', label: 'Chaotic Neutral' },
-{value: 'Lawful Evil', label: 'Lawful Evil' }, {value: 'Neutral Evil', label: 'Neutral Evil' }, {value: 'Chaotic Evil', label: 'Chaotic Evil' }, {value: 'Unaligned', label: 'Unaligned' },
-{value: 'ANY_NON_GOOD', label: 'ANY_NON_GOOD' }, {value: 'ANY_NON_LAWFUL', label: 'ANY_NON_LAWFUL' }, {value: 'ANY_CHAOTIC', label: 'ANY_CHAOTIC' }, {value: 'ANY_EVIL', label: 'ANY_EVIL' }, {value: 'ANY', label: 'ANY' }];
+const alignmentSuggestions = [{value: 'LAWFUL_GOOD', label: 'Lawful Good'}, {value: 'NEUTRAL_GOOD', label: 'Neutral Good' }, {value: 'CHAOTIC_GOOD', label: 'Chaotic Good ' },
+{value: 'LAWFUL_NEUTRAL', label: 'Lawful Neutral' }, {value: 'NEUTRAL', label: 'Neutral' }, {value: 'CHAOTIC_NEUTRAL', label: 'Chaotic Neutral' },
+{value: 'LAWFUL_EVIL', label: 'Lawful Evil' }, {value: 'NEUTRAL_EVIL', label: 'Neutral Evil' }, {value: 'CHAOTIC_EVIL', label: 'Chaotic Evil' }, {value: 'UNALIGNED', label: 'Unaligned' },
+{value: 'ANY_NON_GOOD', label: 'Any Non Good' }, {value: 'ANY_NON_LAWFUL', label: 'Any Non Lawful' }, {value: 'ANY_CHAOTIC', label: 'Any Chaotic' }, {value: 'ANY_EVIL', label: 'Any Evil' }, {value: 'ANY', label: 'Any' }];
 
 function inputComponent({ inputRef, ...props }) {
   return <div ref={inputRef} {...props} />;
