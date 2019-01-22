@@ -82,7 +82,7 @@ const styles = ({ palette, spacing }: Theme) => createStyles({
 
 const sizeSuggestions = [{value: 'Tiny', label: 'Tiny'}, {value: 'Small', label: 'Small' }, {value: 'Medium', label: 'Medium' }, {value: 'Large', label: 'Large' }, {value: 'Huge', label: 'Huge' }, {value: 'Gargantuan', label: 'Gargantuan' }];
 
-const movementSuggestions = [{value: 'Walk', label: 'Walk'}, {value: 'Burrow', label: 'Burrow' }, {value: 'Climb', label: 'Climb' }, {value: 'Fly', label: 'Fly' }, {value: 'Swim', label: 'Swim' }];
+const speedSuggestions = [{value: 'Walk', label: 'Walk'}, {value: 'Burrow', label: 'Burrow' }, {value: 'Climb', label: 'Climb' }, {value: 'Fly', label: 'Fly' }, {value: 'Swim', label: 'Swim' }];
 
 const typeSuggestions = [{value: 'Aberration', label: 'Aberration'}, {value: 'Beast', label: 'Beast' }, {value: 'Celestial', label: 'Celestial' }, {value: 'Construct', label: 'Construct' },
 {value: 'Dragon', label: 'Dragon' }, {value: 'Elemental', label: 'Elemental' }, {value: 'Fey', label: 'Fey' }, {value: 'Fiend', label: 'Fiend' }, {value: 'Giant', label: 'Giant' },
@@ -188,7 +188,7 @@ interface MonsterSearch {
     partialName?: string;
     sizes?: Size[];
     types?: Type[];
-    movements?: Speed[];
+    speeds?: Speed[];
     alignments?: Alignment[];
     hitPoints: Range;
     armourClass: Range;
@@ -218,7 +218,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                 partialName: null,
                 sizes: [],
                 types: [],
-                movements: [],
+                speeds: [],
                 alignments: [],
                 hitPoints: {
                     lowerBound: 1,
@@ -257,7 +257,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
 
         let SizeArray = [];
         let TypeArray = [];
-        let MovementArray = [];
+        let SpeedArray = [];
         let AlignmentArray = [];
 
         monsterSearch.sizes.map((item, index) => {
@@ -270,10 +270,10 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         });
         monsterSearchClone.types = TypeArray;
 
-        monsterSearch.movements.map((item, index) => {
-            MovementArray.push(item.value);
+        monsterSearch.speeds.map((item, index) => {
+            SpeedArray.push(item.value);
         });
-        monsterSearchClone.movements = MovementArray;
+        monsterSearchClone.speeds = SpeedArray;
 
         monsterSearch.alignments.map((item, index) => {
             AlignmentArray.push(item.value);
@@ -313,9 +313,9 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         this.refreshMonsterSearchState(monsterSearch);
     };
 
-    searchMovementAdjustment = (movements) => {
+    searchSpeedAdjustment = (speeds) => {
         let monsterSearch = this.state.monsterSearch;
-        monsterSearch.movements = movements;
+        monsterSearch.speeds = speeds;
         this.setState({monsterSearch: monsterSearch});
         this.refreshMonsterSearchState(monsterSearch);
     };
@@ -392,7 +392,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         const RangeWithTooltip = createSliderWithTooltip(Slider.Range);
         const { sizes } = this.state.monsterSearch;
         const { types } = this.state.monsterSearch;
-        const { movements } = this.state.monsterSearch;
+        const { speeds } = this.state.monsterSearch;
         const { alignments } = this.state.monsterSearch;
 
         return (
@@ -454,10 +454,10 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                                         shrink: true,
                                     },
                                 }}
-                                options={movementSuggestions}
+                                options={speedSuggestions}
                                 components={components}
-                                value={movements}
-                                onChange={this.searchMovementAdjustment}
+                                value={speeds}
+                                onChange={this.searchSpeedAdjustment}
                                 placeholder="Select multiple speeds"
                                 isMulti
                             />

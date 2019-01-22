@@ -1,8 +1,6 @@
 import * as React from "react";
 
-import { withStyles } from "@material-ui/core/styles/index";
-import createStyles from "@material-ui/core/styles/createStyles";
-
+import {createStyles, Theme, withStyles} from "@material-ui/core/styles/index";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,9 +10,10 @@ import TuneIcon from '@material-ui/icons/Tune';
 import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
 import Slider from 'rc-slider';
+import classNames from 'classnames';
 import * as math from 'mathjs';
 
-const styles = createStyles({
+const styles = ({ palette }: Theme) => createStyles({
   imageThumbnail: {
     display: 'flex',
     margin: 'auto',
@@ -31,7 +30,6 @@ const styles = createStyles({
     fontSize: '1.8em',
   },
   name: {
-    color: '#922610',
     float: 'left',
     fontSize: '1.8em',
     fontVariant: 'small-caps',
@@ -59,11 +57,16 @@ const styles = createStyles({
   blue: {
     color:'#337ab7',
   },
+  red: {
+    color:'#922610',
+  },
+  ColorRow: {
+    background: '#cbbfaa80',
+  },
   titles: {
       fontSize: '1.2em',
       fontVariant: 'small-caps',
       borderBottom: '2px solid #922610',
-      color: '#922610',
       verticalAlign: 'bottom !important',
       paddingLeft: '0.2em',
   },
@@ -87,6 +90,13 @@ const styles = createStyles({
       background: '#e9ecda',
       margin: '7px 15px',
       padding: '5px 10px',
+  },
+  Caption: {
+    marginLeft: '5px',
+    padding: '0',
+    fontWeight: 'bold',
+    fontSize: '1.1em',
+    color: '#777',
   },
 });
 
@@ -142,7 +152,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
 
             const itemRows = [
                 <TableRow className={this.props.classes.row} key={rowId}>
-                    <TableCell className={`this.props.classes.tableCell ${this.props.classes.titles}`} colSpan={6}>
+                    <TableCell className={classNames(this.props.classes.tableCell, this.props.classes.titles, this.props.classes.red)} colSpan={6}>
                         <span>{subHeaderName}</span>
                     </TableCell>
                 </TableRow>
@@ -177,7 +187,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
     getLairActions = (actionList, subHeaderName) => {
         const itemRows = [
             <TableRow className={this.props.classes.row}>
-                <TableCell className={`this.props.classes.tableCell ${this.props.classes.titles}`} colSpan={6}>
+                <TableCell className={classNames(this.props.classes.tableCell, this.props.classes.titles, this.props.classes.red)} colSpan={6}>
                     <span>{subHeaderName}</span>
                 </TableCell>
             </TableRow>
@@ -211,7 +221,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
 
         const itemRows = [
             <TableRow className={this.props.classes.row}>
-                <TableCell className={`this.props.classes.tableCell ${this.props.classes.titles}`} colSpan={6}>
+                <TableCell className={classNames(this.props.classes.tableCell, this.props.classes.titles, this.props.classes.red)} colSpan={6}>
                     <span>{subHeaderName}</span>
                 </TableCell>
             </TableRow>
@@ -245,7 +255,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
         if (regionalTable != null) {
             itemRows.push(
                 <TableRow className={this.props.classes.row}>
-                    <TableCell className={`this.props.classes.tableCell ${this.props.classes.titles}`} colSpan={6}>
+                    <TableCell className={classNames(this.props.classes.tableCell, this.props.classes.titles, this.props.classes.red)} colSpan={6}>
                         <span>{regionalTable.regionalTable.caption}</span>
                     </TableCell>
                 </TableRow>);
@@ -258,6 +268,50 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                         </div>
                     </TableCell>
                 </TableRow>);
+
+            itemRows.push(
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={6}>
+                        <div className={this.props.classes.Caption}>
+                            <span>{regionalTable.regionalTable.caption}</span>
+                        </div>
+                    </TableCell>
+                </TableRow>);
+
+            itemRows.push(
+                <TableRow className={this.props.classes.row}>
+                    <TableCell className={this.props.classes.tableCell} colSpan={1}>
+                        <span className={this.props.classes.blue}>{regionalTable.regionalTable.column1Label}</span>
+                    </TableCell>
+                    <TableCell className={this.props.classes.tableCell} colSpan={5}>
+                        <span className={this.props.classes.red}>{regionalTable.regionalTable.column2Label}</span>
+                    </TableCell>
+                </TableRow>);
+
+            for (var i = 0; i < regionalTable.regionalTable.column1Data.length; i++) {
+                if (i % 2 == 0)
+                {
+                    itemRows.push(
+                        <TableRow className={classNames(this.props.classes.row, this.props.classes.ColorRow)}>
+                            <TableCell className={this.props.classes.tableCell} colSpan={1}>
+                                <span>{regionalTable.regionalTable.column1Data[i]}</span>
+                            </TableCell>
+                            <TableCell className={this.props.classes.tableCell} colSpan={5}>
+                                <span>{regionalTable.regionalTable.column2Data[i]}</span>
+                            </TableCell>
+                        </TableRow>);
+                } else {
+                    itemRows.push(
+                        <TableRow className={this.props.classes.row}>
+                            <TableCell className={this.props.classes.tableCell} colSpan={1}>
+                                <span>{regionalTable.regionalTable.column1Data[i]}</span>
+                            </TableCell>
+                            <TableCell className={this.props.classes.tableCell} colSpan={5}>
+                                <span>{regionalTable.regionalTable.column2Data[i]}</span>
+                            </TableCell>
+                        </TableRow>);
+                }
+            }
         }
 
         return itemRows;
@@ -484,7 +538,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
             <TableHead>
                 <TableRow className={this.props.classes.row}>
                     <TableCell className={this.props.classes.tableCell} colSpan={6}>
-                    <span className={this.props.classes.name}>{monster.name}</span>
+                    <span className={classNames(this.props.classes.name, this.props.classes.red)} >{monster.name}</span>
                     <img src={this.props.imageSrc} alt={monster.name} className={this.props.classes.popupImageThumbnail}/>
                     </TableCell>
                 </TableRow>
@@ -829,7 +883,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
                 : "" )}
                 {((!monster.trait.length && monster.innateSpellCasting.headerEntries.length) ?
                     <TableRow className={this.props.classes.row}>
-                        <TableCell className={`this.props.classes.tableCell ${this.props.classes.titles}`} colSpan={6}>
+                        <TableCell className={classNames(this.props.classes.tableCell, this.props.classes.titles, this.props.classes.red)} colSpan={6}>
                             <span>Traits</span>
                         </TableCell>
                     </TableRow>
