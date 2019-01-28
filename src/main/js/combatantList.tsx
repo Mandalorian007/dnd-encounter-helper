@@ -32,11 +32,13 @@ const combatantStyles = ({ palette, spacing }: Theme) => createStyles({
     },
     npcStyle: {
         margin: 10,
-        backgroundColor: '#ffb93a',
+        color: '#fafafa',
+        backgroundColor: palette.type === 'light' ? '#ffb93a' : 'rgb(169, 109, 0)',
     },
     playerStyle: {
         margin: 10,
-        backgroundColor: '#6363ff',
+        color: '#fafafa',
+        backgroundColor: palette.type === 'light' ? '#6363ff' : 'rgb(0, 0, 145)',
     },
     button: {
         margin: '10px',
@@ -49,7 +51,7 @@ const combatantStyles = ({ palette, spacing }: Theme) => createStyles({
         },
     },
     selectedRow: {
-      backgroundColor: '#c2e4a3 !important',
+      backgroundColor: palette.type === 'light' ? '#c2e4a3 !important' : 'rgb(52, 82, 24) !important',
     },
     newRound: {
         display: 'none',

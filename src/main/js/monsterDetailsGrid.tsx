@@ -55,10 +55,10 @@ const styles = ({ palette }: Theme) => createStyles({
     width: 'calc(100%/6)',
   },
   blue: {
-    color:'#337ab7',
+    color: palette.type === 'light' ? '#337ab7' : 'rgb(121, 176, 218)',
   },
   red: {
-    color:'#922610',
+    color: palette.type === 'light' ? '#922610' : 'rgb(241, 146, 127)',
   },
   ColorRow: {
     background: '#cbbfaa80',
@@ -66,7 +66,7 @@ const styles = ({ palette }: Theme) => createStyles({
   titles: {
       fontSize: '1.2em',
       fontVariant: 'small-caps',
-      borderBottom: '2px solid #922610',
+      borderBottom: palette.type === 'light' ? '2px solid #922610' : '2px solid rgb(241, 146, 127)',
       verticalAlign: 'bottom !important',
       paddingLeft: '0.2em',
   },
