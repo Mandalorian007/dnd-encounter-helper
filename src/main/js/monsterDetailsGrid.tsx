@@ -134,7 +134,7 @@ class MonsterDetailsGrid extends React.Component<any, State> {
 
             return (comparison);
         };
-    }
+    };
 
     getActions = (actionList, subHeaderName) => {
         const rowId = "row-data-" + subHeaderName;
