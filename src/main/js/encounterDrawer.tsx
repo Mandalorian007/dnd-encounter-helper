@@ -253,9 +253,6 @@ class EncounterDrawer extends React.Component<any, State> {
                     main: this.state.SecondaryColor,
                 },
             },
-            typography: {
-                useNextVariants: true,
-            },
         });
 
         return (
@@ -264,7 +261,7 @@ class EncounterDrawer extends React.Component<any, State> {
                 <CssBaseline />
                 <AppBar position="absolute" className={classes.appBar}>
                     <Toolbar>
-                        <Typography variant="h6" color="inherit" className={classes.grow}>
+                        <Typography color="inherit" className={classes.grow}>
                             D&D Encounter Helper
                         </Typography>
                         <Typography color="inherit">

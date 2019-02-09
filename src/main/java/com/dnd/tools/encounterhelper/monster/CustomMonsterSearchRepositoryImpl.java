@@ -2,6 +2,7 @@ package com.dnd.tools.encounterhelper.monster;
 
 import com.dnd.tools.encounterhelper.monster.model.Monster;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import lombok.RequiredArgsConstructor;
@@ -50,14 +51,18 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
     }
 
     //Sizes
-    List<String> sizes = monsterSearch.getSizes();
+    List<String> sizes = monsterSearch.getSizes().stream()
+        .map(String::toUpperCase)
+        .collect(Collectors.toList());
     if (sizes != null && !sizes.isEmpty()) {
       queryBuilder.append(" AND m.SIZE IN (");
       inBuilder(sizes, queryBuilder);
     }
 
     //Types
-    List<String> types = monsterSearch.getTypes();
+    List<String> types = monsterSearch.getTypes().stream()
+        .map(String::toLowerCase)
+        .collect(Collectors.toList());
     if (types != null && !types.isEmpty()) {
       queryBuilder.append(" AND m.TYPE IN (");
       inBuilder(types, queryBuilder);
@@ -84,7 +89,9 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
     }
 
     //Alignments
-    List<String> alignments = monsterSearch.getAlignments();
+    List<String> alignments = monsterSearch.getAlignments().stream()
+        .map(String::toUpperCase)
+        .collect(Collectors.toList());
     if (alignments != null && !alignments.isEmpty()) {
       queryBuilder.append(" AND al.ALIGNMENT IN (");
       inBuilder(alignments, queryBuilder);
@@ -138,7 +145,6 @@ public class CustomMonsterSearchRepositoryImpl implements CustomMonsterSearchRep
 
   private static void inBuilder(List<String> list, StringBuilder queryBuilder) {
     list.stream()
-        .map(String::toUpperCase)
         .forEach(item -> {
           queryBuilder.append("'");
           queryBuilder.append(item);

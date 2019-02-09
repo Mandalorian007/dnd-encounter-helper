@@ -188,7 +188,7 @@ interface MonsterSearch {
     partialName?: string;
     sizes?: Size[];
     types?: Type[];
-    movements?: Speed[];
+    speeds?: Speed[];
     alignments?: Alignment[];
     hitPoints: Range;
     armourClass: Range;
@@ -218,7 +218,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                 partialName: null,
                 sizes: [],
                 types: [],
-                movements: [],
+                speeds: [],
                 alignments: [],
                 hitPoints: {
                     lowerBound: 1,
@@ -270,10 +270,10 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         });
         monsterSearchClone.types = TypeArray;
 
-        monsterSearch.movements.map((item, index) => {
+        monsterSearch.speeds.map((item, index) => {
             MovementArray.push(item.value);
         });
-        monsterSearchClone.movements = MovementArray;
+        monsterSearchClone.speeds = MovementArray;
 
         monsterSearch.alignments.map((item, index) => {
             AlignmentArray.push(item.value);
@@ -315,7 +315,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
 
     searchMovementAdjustment = (movements) => {
         let monsterSearch = this.state.monsterSearch;
-        monsterSearch.movements = movements;
+        monsterSearch.speeds = movements;
         this.setState({monsterSearch: monsterSearch});
         this.refreshMonsterSearchState(monsterSearch);
     };
@@ -392,7 +392,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         const RangeWithTooltip = createSliderWithTooltip(Slider.Range);
         const { sizes } = this.state.monsterSearch;
         const { types } = this.state.monsterSearch;
-        const { movements } = this.state.monsterSearch;
+        const { speeds } = this.state.monsterSearch;
         const { alignments } = this.state.monsterSearch;
 
         return (
@@ -456,7 +456,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                                 }}
                                 options={movementSuggestions}
                                 components={components}
-                                value={movements}
+                                value={speeds}
                                 onChange={this.searchMovementAdjustment}
                                 placeholder="Select multiple speeds"
                                 isMulti
