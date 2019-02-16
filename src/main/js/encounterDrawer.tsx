@@ -87,7 +87,16 @@ class EncounterDrawer extends React.Component<any, State> {
             .then(data => {
                 let endOfRound = this.state.endOfRound;
                 let select = this.state.selected;
-                let counter = false;
+
+                select.forEach((value, index)=>{
+                    let x = 0;
+                    data.map(combatant => {
+                        if (value === combatant.id)
+                            x++;
+                    });
+                    if (x === 0)
+                        select.splice(index, 1);
+                });
 
                 data.map((combatant, index) => {
                     //select first combatant when initalize app
@@ -98,18 +107,10 @@ class EncounterDrawer extends React.Component<any, State> {
                     if (!this.state.selected.indexOf(combatant.id))
                         endOfRound = false;
 
-                    //if current player dies
-                    if (combatant.id === this.state.selected[this.state.selected.length - 1])
-                        counter = true;
-
                     //if player becomes last
                     if ((index + 1 === data.length) && (combatant.id === this.state.selected[this.state.selected.length - 1]))
                         endOfRound = true;
                 })
-
-                //continue if current player dies
-                if (!counter)
-                    this.state.selected.splice(-1, 1);
 
                 this.setState({combatants: data, selected: select, endOfRound: endOfRound})
             });
