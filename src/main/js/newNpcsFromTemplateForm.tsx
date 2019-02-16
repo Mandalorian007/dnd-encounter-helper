@@ -82,7 +82,7 @@ const styles = ({ palette, spacing }: Theme) => createStyles({
 
 const sizeSuggestions = [{value: 'Tiny', label: 'Tiny'}, {value: 'Small', label: 'Small' }, {value: 'Medium', label: 'Medium' }, {value: 'Large', label: 'Large' }, {value: 'Huge', label: 'Huge' }, {value: 'Gargantuan', label: 'Gargantuan' }];
 
-const movementSuggestions = [{value: 'Walk', label: 'Walk'}, {value: 'Burrow', label: 'Burrow' }, {value: 'Climb', label: 'Climb' }, {value: 'Fly', label: 'Fly' }, {value: 'Swim', label: 'Swim' }];
+const speedSuggestions = [{value: 'Walk', label: 'Walk'}, {value: 'Burrow', label: 'Burrow' }, {value: 'Climb', label: 'Climb' }, {value: 'Fly', label: 'Fly' }, {value: 'Swim', label: 'Swim' }];
 
 const typeSuggestions = [{value: 'Aberration', label: 'Aberration'}, {value: 'Beast', label: 'Beast' }, {value: 'Celestial', label: 'Celestial' }, {value: 'Construct', label: 'Construct' },
 {value: 'Dragon', label: 'Dragon' }, {value: 'Elemental', label: 'Elemental' }, {value: 'Fey', label: 'Fey' }, {value: 'Fiend', label: 'Fiend' }, {value: 'Giant', label: 'Giant' },
@@ -257,7 +257,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
 
         let SizeArray = [];
         let TypeArray = [];
-        let MovementArray = [];
+        let SpeedArray = [];
         let AlignmentArray = [];
 
         monsterSearch.sizes.map((item, index) => {
@@ -271,9 +271,9 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         monsterSearchClone.types = TypeArray;
 
         monsterSearch.speeds.map((item, index) => {
-            MovementArray.push(item.value);
+            SpeedArray.push(item.value);
         });
-        monsterSearchClone.speeds = MovementArray;
+        monsterSearchClone.speeds = SpeedArray;
 
         monsterSearch.alignments.map((item, index) => {
             AlignmentArray.push(item.value);
@@ -313,9 +313,9 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
         this.refreshMonsterSearchState(monsterSearch);
     };
 
-    searchMovementAdjustment = (movements) => {
+    searchSpeedAdjustment = (speeds) => {
         let monsterSearch = this.state.monsterSearch;
-        monsterSearch.speeds = movements;
+        monsterSearch.speeds = speeds;
         this.setState({monsterSearch: monsterSearch});
         this.refreshMonsterSearchState(monsterSearch);
     };
@@ -454,10 +454,10 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                                         shrink: true,
                                     },
                                 }}
-                                options={movementSuggestions}
+                                options={speedSuggestions}
                                 components={components}
                                 value={speeds}
-                                onChange={this.searchMovementAdjustment}
+                                onChange={this.searchSpeedAdjustment}
                                 placeholder="Select multiple speeds"
                                 isMulti
                             />
@@ -480,7 +480,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                         </FormControl>
                         <List className={this.props.classes.ListClass}>
                             <ListItem className={this.props.classes.ListItemClass}>
-                                <FormLabel component={"legend" as "div"}>Hit Points</FormLabel>
+                                <FormLabel>Hit Points</FormLabel>
                             </ListItem>
                             <ListItem style={{padding: "0px"}}>
                                 <FormControlLabel
@@ -502,7 +502,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                                 />
                             </ListItem>
                             <ListItem className={this.props.classes.ListItemClass}>
-                                <FormLabel component={"legend" as "div"}>Armour Class</FormLabel>
+                                <FormLabel>Armour Class</FormLabel>
                             </ListItem>
                             <ListItem style={{padding: "0px"}}>
                                 <FormControlLabel
@@ -524,7 +524,7 @@ class NewNpcsFromTemplateForm extends React.Component<any, State> {
                                 />
                             </ListItem>
                             <ListItem className={this.props.classes.ListItemClass}>
-                                <FormLabel component={"legend" as "div"}>Challenge Rating</FormLabel>
+                                <FormLabel>Challenge Rating</FormLabel>
                             </ListItem>
                             <ListItem style={{padding: "0px"}}>
                                 <FormControlLabel
